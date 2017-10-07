@@ -300,7 +300,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/python-os-path-模块/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Oracle-11G在用EXP-导出时，空表不能导出问题解决/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -319,7 +319,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/07/python-os-path-模块/" itemprop="url">python os.path 模块</a></h1>
+                <a class="post-title-link" href="/2017/10/07/Oracle-11G在用EXP-导出时，空表不能导出问题解决/" itemprop="url">Oracle 11G在用EXP 导出时，空表不能导出问题解决</a></h1>
         
 
         <div class="post-meta">
@@ -331,7 +331,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T17:54:29+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:19:48+08:00">
                 2017-10-07
               </time>
             
@@ -393,7 +393,13 @@
       
         
           
-            <p>os.path.abspath(path) #返回绝对路径<br>os.path.basename(path) #返回文件名<br>os.path.commonprefix(list) #返回list(多个路径)中，所有path共有的最长的路径。<br>os.path.dirname(path) #返回文件路径<br>os.path.exists(path)  #路径存在则返回True,路径损坏返回False<br>os.path.lexists  #路径存在则返回True,路径损坏也返回True<br>os.path.expanduser(path)  #把path中包含的”~”和”~user”转换成用户目录<br>os.path.expandvars(path)  #根据环境变量的值替换path中包含的”$name”和”${name}”<br>os.path.getatime(path)  #返回最后一次进入此path的时间。<br>os.path.getmtime(path)  #返回在此path下最后一次修改的时间。<br>os.path.getctime(path)  #返回path的大小<br>os.path.getsize(path)  #返回文件大小，如果文件不存在就返回错误<br>os.path.isabs(path)  #判断是否为绝对路径<br>os.path.isfile(path)  #判断路径是否为文件<br>os.path.isdir(path)  #判断路径是否为目录<br>os.path.islink(path)  #判断路径是否为链接<br>os.path.ismount(path)  #判断路径是否为挂载点（）<br>os.path.join(path1[, path2[, …]])  #把目录和文件名合成一个路径<br>os.path.normcase(path)  #转换path的大小写和斜杠<br>os.path.normpath(path)  #规范path字符串形式<br>os.path.realpath(path)  #返回path的真实路径<br>os.path.relpath(path[, start])  #从start开始计算相对路径<br>os.path.samefile(path1, path2)  #判断目录或文件是否相同<br>os.path.sameopenfile(fp1, fp2)  #判断fp1和fp2是否指向同一文件<br>os.path.samestat(stat1, stat2)  #判断stat tuple stat1和stat2是否指向同一个文件<br>os.path.split(path)  #把路径分割成dirname和basename，返回一个元组<br>os.path.splitdrive(path)   #一般用在windows下，返回驱动器名和路径组成的元组<br>os.path.splitext(path)  #分割路径，返回路径名和文件扩展名的元组<br>os.path.splitunc(path)  #把路径分割为加载点与文件<br>os.path.walk(path, visit, arg)  #遍历path，进入每个目录都调用visit函数，visit函数必须有<br>3个参数(arg, dirname, names)，dirname表示当前目录的目录名，names代表当前目录下的所有<br>文件名，args则为walk的第三个参数<br>os.path.supports_unicode_filenames  #设置是否支持unicode路径名</p>
+            <p>11G中有个新特性，当表无数据时，不分配segment，以节省空间　　<br><strong>解决方法：</strong><br>1、insert一行，再rollback就产生segment了。该方法是在在空表中插入数据，再删除，则产生segment。导出时则可导出空表。<br>2、设置deferred_segment_creation 参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">show parameter deferred_segment_creation</div><div class="line">NAME                               TYPE      VALUE</div><div class="line">----------------------------   ----------- ---------</div><div class="line">deferred_segment_creation        boolean     TRUE</div><div class="line"></div><div class="line">SQL&gt; alter system set deferred_segment_creation=false;</div><div class="line">系统已更改。 </div><div class="line"></div><div class="line">SQL&gt; show parameter deferred_segment_creation</div><div class="line">NAME                                  TYPE        VALUE</div><div class="line">--------------------------------- ------------ ---------</div><div class="line">deferred_segment_creation            boolean      FALSE</div></pre></td></tr></table></figure></p>
+<p>   该参数值默认是TRUE，当改为FALSE时，无论是空表还是非空表，都分配segment。</p>
+<p>需注意的是：该值设置后对以前导入的空表不产生作用，仍不能导出，只能对后面新增的表产生作用。如需导出之前的空表，只能用第一种方法。<br>搞了我好久，最后查到这个方法。<br>先查询一下当前用户下的所有空表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select table_name from user_tables where NUM_ROWS=0;</div></pre></td></tr></table></figure></p>
+<p>用以下这句查找空表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select &apos;alter table &apos;||table_name||&apos; allocate extent;&apos; from user_tables where num_rows=0</div></pre></td></tr></table></figure></p>
+<p>把查询结果导出，执行导出的语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&apos;ALTERTABLE&apos;||TABLE_NAME||&apos;ALLOCATEEXTENT;&apos;</div><div class="line">-----------------------------------------------------------</div><div class="line">alter table AQ$_AQ$_MEM_MC_H allocate extent;</div><div class="line">alter table AQ$_AQ$_MEM_MC_G allocate extent;</div><div class="line">alter table AQ$_AQ$_MEM_MC_I allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_T allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_H allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_G allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_I allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_T allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_H allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_G allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_I allocate extent;</div><div class="line">&apos;ALTERTABLE&apos;||TABLE_NAME||&apos;ALLOCATEEXTENT;&apos;</div><div class="line">-----------------------------------------------------------</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_T allocate extent;</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_H allocate extent;</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_G allocate extent;</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_I allocate extent;</div></pre></td></tr></table></figure></p>
+<p>然后再执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">exp 用户名/密码@数据库名 file=/home/oracle/exp.dmp log=/home/oracle/exp_smsrun.log</div></pre></td></tr></table></figure></p>
+<p><strong>成功！</strong></p>
 
           
         
@@ -442,7 +448,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/微服务化架构特征/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/我的异常/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -461,7 +467,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/07/微服务化架构特征/" itemprop="url">微服务化架构特征</a></h1>
+                <a class="post-title-link" href="/2017/10/07/我的异常/" itemprop="url">我的异常</a></h1>
         
 
         <div class="post-meta">
@@ -473,7 +479,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T17:04:31+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:17:26+08:00">
                 2017-10-07
               </time>
             
@@ -535,8 +541,11 @@
       
         
           
-            <p>服务化架构：一种架构风格，即微服务架构。<br>1.单个服务尽量专注一件事情，高内聚、低耦合；<br>2.进程隔离；<br>3.每个服务可以独立开发、测试、构建、部署；<br>4.小且灵活；</p>
-<p>微服务架构特征：<br>1.系统由多个服务组成，每个服务有明确的边界；<br>2.服务独立开发、编译、部署、测试、发布，有独立工程、独立版本、接口契约化，进程隔离；<br>3.服务小且灵活，由一个10人以下团队全生命周期负责，团队的目标负责产品的全生命周期，而不是负责一个短期的项目；<br>4.技术中立，不要求服务的编程语言统一。不同服务可以采用不同的编程语言实现，有利于逐步引入新技术。<br>5.智能服务端点和轻量级高性能通信机制。服务开发框架内置服务基本功能，如日志、度量、数据访问、输入校验、权限等，使得开发人员可以聚焦于业务服务的业务逻辑代码开发，降低了服务开发的门槛。<br>6.服务无状态，服务自动弹性伸缩。服务的无状态通过业务逻辑与数据分离，数据、会话保存在DB、Cache、对象存储等服务来实现；服务实例按需进行伸缩。<br>7.服务数据去中心化。每个服务拥有自己的数据库，服务不能直接访问其它服务的数据库，只能通过服务接口方案其它服务的数据。<br>8.服务去中心化治理。服务支持多版本并存、灰度发布、依赖关系管理、调用链分析快速故障定界。<br>9.Design for failure。任意服务节点失效、网络闪断等故障不影响业务正常运行。<br>10.重用、组合已有的服务实现新的业务功能服务。业务应用在实现功能时，会调用已有的服务，如Cache、MQ、IAM等公共服务，实现自己的业务功能。</p>
+            <p>#####1、Linux vsftp “上传 553 Could not create file” 问题：</p>
+<blockquote>
+<p>解决这个问题步骤：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1. setsebool -P ftpd_disable_trans 1</div><div class="line">2. service vsftpd restart</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h5 id="2、Java-OOM-java-lang-OutOfMemory-常见错误原因分析："><a href="#2、Java-OOM-java-lang-OutOfMemory-常见错误原因分析：" class="headerlink" title="2、Java OOM (java.lang.OutOfMemory)常见错误原因分析："></a>2、Java OOM (java.lang.OutOfMemory)常见错误原因分析：</h5><p>1.程序死循环，导致内存泄露，造成OOM。<br>2.读取大量信息（读文件内容，查询海量数据信息，构建对象加载大量信息，……等），堆内存空间分配不足造成OOM。</p>
 
           
         
@@ -585,7 +594,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/架构设计原则/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Linux-Telnet安装及配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -604,7 +613,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/07/架构设计原则/" itemprop="url">架构设计原则</a></h1>
+                <a class="post-title-link" href="/2017/10/07/Linux-Telnet安装及配置/" itemprop="url">Linux Telnet安装及配置</a></h1>
         
 
         <div class="post-meta">
@@ -616,7 +625,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T16:58:27+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:15:52+08:00">
                 2017-10-07
               </time>
             
@@ -678,8 +687,13 @@
       
         
           
-            <p>架构坚持组件化，持续重构，小而美。架构设计十大原则：</p>
-<p>1.<strong>全面解耦原则：</strong>对业务进行抽象建模，业务数据与业务逻辑解耦，软硬件解耦，平台和产品解耦，系统各部件解耦。模块、组件高内聚，低耦合。<br>2.<strong>服务化/组件化原则：</strong>以服务、数据为中心，构建服务化、组件化架构，具备灵活，按需组合的能力。<br>3.<strong>接口隔离及服务自治原则：</strong>通过接口隐藏服务/组件实现细节，服务/组件只能通过接口进行交互，接口契约化，标准化，跨版本兼容；服务/组件可独立发展、独立发布、独立升级，服务自治，可视、可管、可控、可测、可维，故障自愈。<br>4.<strong>弹性伸缩原则：</strong>构建全分布云化架构，或借鉴云化架构思想，每个服务具备横向扩展能力，支持按需使用，自动弹性伸缩，可动态替换、灵活部署，支撑高性能、高吞吐量、高并发、高可用业务场景。<br>5.<strong>安全可靠环保原则：</strong>构建最小权限，纵深防御、最小公共化、权限分离、不轻信、开放设计、完全仲裁、失效安全、保护薄弱环节、安全机制、经济性、用户接受度以及加强隐私保护的安全体系，确保系统、网络和数据的机密性、完整性、可用性、可追溯性；以业务系统零故障为导向；按需构筑分层分级的可靠性，通过故障的预流、预防、快速故障恢复、避免故障发生；系统资源使用有效最大化，实现节能、节地、节材、环保。<br>6.<strong>用户体验和自动化运维原则：</strong>面向业务获取和使用场景，构建实时、按需、在线、自助、社区化、方便易用的用户体验；支持远程、自动、智能、安全、高效地完成网规/网设、安装、部署、调测、验收、扩缩容、软件升级、打补丁、日常维护、问题处理。<br>7.<strong>开放生态原则：</strong>面向生态场景，按需开放平台设施、中间件、数据、业务逻辑、UI等能力；构建开放生态、支持分层、远程、自动、自助、简单高效地完成定制、集成、第三方应用开发。<br>8.<strong>高效开发原则：</strong>创建支持迭代、增量、持续交付的架构，支持部件独立开发、自动化编译构建、测试、集成验证、并易于高效修改和持续优化；支持开发组织小型化，扁平化，支持小团队独立高效并行开发。<br>9.<strong>柔性供应制造原则：</strong>模块化设计，模块/物料归一化、标准化，支持自动化、数字化、智能化、随需应变的柔性制造。<br>10.<strong>持续演进原则：</strong>架构并非一蹴而就，需要有效地管理架构需求；持续构建和发展架构，适应业务需求变化，适时引入业界最佳实践，及时重构，确保架构生命力和竞争力。</p>
+            <p>安装CentOS系统时，由于最开始没有选择安装Telnet服务，现在想从Windows上通过Telnet连接Linux。于是便只能重新安装，这里介绍从光盘中进行安装。<br>1、首先进入mnt目录创建一个文件夹，用于挂载光驱；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# cd /mnt</div><div class="line">[root@localhost ~]# mkdir cdrom</div><div class="line">[root@localhost ~]# mount /dev/cdrom /mnt/cdrom (或者 mount -t ext3 /dev/cdrom /mnt/cdrom)</div><div class="line">[root@localhost ~]# cd /mnt/cdrom</div></pre></td></tr></table></figure></p>
+<p>2、安装Telnet需要安装xinetd服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]# find -name xinetd*./Packages/xinetd-2.3.14-29.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/xinetd-2.3.14-29.el6.x86_64.rpm</div></pre></td></tr></table></figure></p>
+<p>3、安装Telnet服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]# find -name telnet*./Packages/telnet-0.17-46.el6.x86_64.rpm./Packages/telnet-server-0.17-46.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/telnet-0.17-46.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/telnet-server-0.17-46.el6.x86_64.rpm</div></pre></td></tr></table></figure></p>
+<p>4、修改Telnet服务配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]#vi /etc/xinetd.d</div></pre></td></tr></table></figure></p>
+<p>将disable = yes 更改 no，或者注释掉5.开放Telnet对外端口23。</p>
+<p>6、重启xinetd服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]#service xinetd restart</div></pre></td></tr></table></figure></p>
+<p>OK，于是在windows中，便可以通过telnet方式连接 Linux系统</p>
 
           
         
@@ -728,7 +742,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/metadata-Mgnt/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Lombok-安装，JavaBean中消除冗长的get-set方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -747,7 +761,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/07/metadata-Mgnt/" itemprop="url">元数据管理</a></h1>
+                <a class="post-title-link" href="/2017/10/07/Lombok-安装，JavaBean中消除冗长的get-set方法/" itemprop="url">Lombok 安装，JavaBean中消除冗长的get/set方法</a></h1>
         
 
         <div class="post-meta">
@@ -759,7 +773,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T16:49:33+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:49:23+08:00">
                 2017-10-07
               </time>
             
@@ -821,49 +835,19 @@
       
         
           
-            <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>元数据描述的是数据的背景、内容、数据结构及其生命周期管理。简而言之，元数据是“数据的背景”。通俗可以理解为<em>数据模型就是元数据</em>。</p>
-<p>元数据管理全景包括三部分内容：</p>
-<ul>
-<li>元数据模型</li>
-<li>元数据拓扑结构</li>
-<li>元数据管理方法论</li>
-</ul>
-<p>元数据管理最主要是能方便集成不同数据库、数据模型、OLAP和ETL(数据抽取、转换和装载)工具所包含的各式各样的元数据。<br>元数据包括<strong>业务规则、数据源、汇总级别、数据别名、数据转换规则、技术配置、数据访问权限、数据用途等</strong>。</p>
-<h3 id="企业元数据模型"><a href="#企业元数据模型" class="headerlink" title="企业元数据模型"></a>企业元数据模型</h3><p>在企业内部，业务和技术（IT）领域，彼此是一对一的关系，对元数据同样适用。业务元数据和IT/技术元数据也是一一对应。<br>不这两个分支相交的三层概念如下表详述：</p>
-<table>
-<thead>
-<tr>
-<th>分层</th>
-<th><strong>业务元数据</strong></th>
-<th><strong>IT/技术元数据 </strong>  </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>顶层</strong></td>
-<td>概念/主题域</td>
-<td>系统</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>中层</strong></td>
-<td>业务实体/业务交易</td>
-<td>技术对象</td>
-</tr>
-<tr>
-<td><strong>底层</strong></td>
-<td>业务术语</td>
-<td>技术元素</td>
-</tr>
-</tbody>
-</table>
-<p><strong>顶层</strong> ： 业务元数据中的最高概念层表示为‘主题域’戒者‘概念’。 例如HR (人力资源), CRM (客户关系管理)以及支付等等，往往在收集业务需求时界定。不乊对应，技术系统将根据每个主题域迚行开収，例如Oracle可以为HR主题域开収HRMS，也可以为CRM实施SIEBEL系统。这些形成了IT/技术元数据中的‘系统’层。</p>
-<p><strong>中层</strong>：每一个主题域可以被分解成业务实体戒者业务交易。客户、供应商、合作方、客户使用的仸何应用，以及诸如订单管理这样的业务交易等，形成了CRM中的业务实体。每个业务实体的细节通过技术对象来存储，比如用数据表、报表以及映射关系等。</p>
-<p><strong>底层</strong>：业务术诧形成了业务元数据最底层的抽象概念。对业务实体而言，比如某个应用，业务术诧可以是客户ID、客户姓名以及产品ID等等。而IT/技术的最底层是技术元素。元素级的细节信息，如列、字段戒转换形成了技术元素。</p>
-<p>前台元数据<br>后台元数据<br>过程元数据</p>
-<p>元数据集中式和分布式管理</p>
-<p>元数据配置管理</p>
-<p>BIDS元数据管理方法论：<br>元数据框架定义</p>
+            <p>在项目中引用Lombok lib，如果是通过Maven构建项目的，可以在pom.xml中增加对lib的依赖。</p>
+<pre><code>&lt;!-- 简化JavaBean get/set 方法 --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+    &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+    &lt;version&gt;1.16.10&lt;/version&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre><p>如果你使用eclipse/myeclipse进行开发，在项目中引用了对lombok的依赖，然后发现代码编译的时候，还是没有生成get/set方法。这个时候还需要在eclipse/myeclipse中安装lombok，安装步骤如下：<br>1、 将 lombok.jar 复制到 myeclipse.ini / eclipse.ini 所在的文件夹目录下；<br>2.、打开 eclipse.ini / myeclipse.ini，在最后面插入以下两行并保存：</p>
+<pre><code>-Xbootclasspath/a:lombok.jar        
+-javaagent:lombok.jar
+</code></pre><p>3、重启 eclipse / myeclipse</p>
+<p>最后在JavaBean中如何使用，请参考Lombok 注解在线帮助文档：<a href="http://projectlombok.org/features/index.html" target="_blank" rel="external">http://projectlombok.org/features/index.</a></p>
 
           
         
@@ -912,7 +896,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/02/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/CXF-开发和部署-webservice-客户端注意事项/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -931,7 +915,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/02/hello-world/" itemprop="url">Hello World</a></h1>
+                <a class="post-title-link" href="/2017/10/07/CXF-开发和部署-webservice-客户端注意事项/" itemprop="url">CXF 开发和部署 webservice 客户端注意事项</a></h1>
         
 
         <div class="post-meta">
@@ -943,8 +927,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-02T00:08:23+08:00">
-                2017-10-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:47:18+08:00">
+                2017-10-07
               </time>
             
 
@@ -1005,15 +989,18 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+            <p>在做招商银行项目时，需要我们的系统集成招商银行的邮件服务器。招商银行邮件服务器采用webservice方式进行集成。经过多方面的考虑后，决定采用第三方开源框架Apache CXF进行webservice客户端开发。</p>
+<p>该项目采用Apache CXF最新版本2.5.2版本，在使用该版本cxf开发时依赖的第三方包中与jaee.jar包有冲突；需要把jaee.jar中同名包下的文件进行删除。</p>
+<p>另外采用jboss部署web应用程序时，需要注意以下两点：</p>
+<blockquote>
+<p>1.将jaxb-api-2.2.3.jar,jaxws-api-2.1.jar包拷贝到jboss\lib\endorsed目录下；<br>2.将jaxb-api-2.2.3.jar,jaxws-api-2.1.jar包拷贝到jdk1.5\jre\lib\endorsed目录下。</p>
+</blockquote>
+<p>这里采用通过命令生成客户端代码进行调用：</p>
+<blockquote>
+<p>wsdl2java -d src -frontendjaxws21 -p com.easytrack.customization.cmb.integration.email -client <a href="http://99.1.101.169/coreservice/svc/coreservice.asmx?wsdl" target="_blank" rel="external">http://99.1.101.169/coreservice/svc/coreservice.asmx?wsdl</a></p>
+</blockquote>
+<p>最后根据生成的客户端代码适当的修改即可。</p>
+<p>在开发和部署时注意以上两点，同时注意引用的CXF第三方包与自己本项目包的冲突。</p>
 
           
         
@@ -1062,7 +1049,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/29/software-architecture/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Funsion-Charts-参数大全/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -1081,7 +1068,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/29/software-architecture/" itemprop="url">软件架构理解</a></h1>
+                <a class="post-title-link" href="/2017/10/07/Funsion-Charts-参数大全/" itemprop="url">Funsion Charts 参数大全</a></h1>
         
 
         <div class="post-meta">
@@ -1093,8 +1080,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-29T21:04:51+08:00">
-                2017-09-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:37:28+08:00">
+                2017-10-07
               </time>
             
 
@@ -1155,21 +1142,626 @@
       
         
           
-            <p><strong>系统架构</strong>：主要表述了契合一个环境的系统的基本元素及元素之间关系构成的结构集，在环境中体现出来的基本属性，以及设计与演进的原则。</p>
-<p>架构包括三个部分：</p>
-<ol>
-<li>组成系统的基本元素、元素之间关系构成的结构集</li>
-<li>基本属性</li>
-<li>设计与演进原则</li>
-</ol>
-<p><strong>架构的五维能力</strong>：架构支撑和反映了系统5个方面的基本能力，每个方面都反映了架构的一类关注点</p>
-<ul>
-<li>开发与演进类属性：支撑系统能够快速、高效、高质量开发出来，并能够方便修改、重用，持续演进，相应的基本属性包括<strong>可构建性、可测试性、可演进性、可重用性和易学习性</strong>。</li>
-<li>生态系统类属性：支撑系统构建开放、打造生态系统的能力，相应的基本属性包括<strong>开放性、可定制性、易集成性和兼容性</strong>。</li>
-<li>交付类属性：支撑系统快速交付、快速部署的能力，相应的基本属性包括可供应性、可制造性和可部署性。</li>
-<li>运行类属性：支撑系统运行维护的各种DFX属性，相应的基本属性包括<strong>可靠性、安全性、可服务性、性能、可伸缩性/可扩展性、节能减排和易用性</strong>。</li>
-<li>功能属性：支撑系统提供有价值的功能特性的能力。</li>
-</ul>
+            <h3 id="基础参数"><a href="#基础参数" class="headerlink" title="基础参数"></a>基础参数</h3><blockquote>
+<p>animation  是否动画显示数据，默认为1(True)<br>showNames   是否显示横向坐标轴(x轴)标签名称<br>rotateNames  是否旋转显示标签，默认为0(False):横向显示<br>showValues  是否在图表显示对应的数据值，默认为1(True)<br>yAxisMinValue  指定纵轴(y轴)最小值，数字<br>yAxisMaxValue  指定纵轴(y轴)最小值，数字<br>showLimits 是否显示图表限值(y轴最大、最小值)，默认为1(True)</p>
+</blockquote>
+<h3 id="图表标题和轴名称"><a href="#图表标题和轴名称" class="headerlink" title="图表标题和轴名称"></a>图表标题和轴名称</h3><blockquote>
+<p>caption  图表主标题<br>subCaption  图表副标题<br>xAxisName  横向坐标轴(x轴)名称<br>yAxisName  纵向坐标轴(y轴)名称</p>
+</blockquote>
+<h3 id="图表和画布的样式"><a href="#图表和画布的样式" class="headerlink" title="图表和画布的样式"></a>图表和画布的样式</h3><blockquote>
+<p>bgColor  图表背景色，6位16进制颜色值<br>canvasBgColor  画布背景色，6位16进制颜色值<br>canvasBgAlpha  画布透明度，[0-100]<br>canvasBorderColor  画布边框颜色，6位16进制颜色值<br>canvasBorderThickness  画布边框厚度，[0-100]<br>shadowAlpha  投影透明度，[0-100]<br>showLegend  是否显示系列名，默认为1(True)</p>
+</blockquote>
+<h3 id="字体属性"><a href="#字体属性" class="headerlink" title="字体属性"></a>字体属性</h3><blockquote>
+<p>baseFont  图表字体样式<br>baseFontSize  图表字体大小<br>baseFontColor  图表字体颜色，6位16进制颜色值<br>outCnvBaseFont  图表画布以外的字体样式<br>outCnvBaseFontSize  图表画布以外的字体大小<br>outCnvBaseFontColor  图表画布以外的字体颜色，6位16进制颜色值</p>
+</blockquote>
+<h3 id="分区线和网格"><a href="#分区线和网格" class="headerlink" title="分区线和网格"></a>分区线和网格</h3><blockquote>
+<p>numDivLines  画布内部水平分区线条数，数字<br>divLineColor  水平分区线颜色，6位16进制颜色值<br>divLineThickness 水平分区线厚度，[1-5]<br>divLineAlpha  水平分区线透明度，[0-100]<br>showAlternateHGridColor  是否在横向网格带交替的颜色，默认为0(False)<br>alternateHGridColor  横向网格带交替的颜色，6位16进制颜色值<br>alternateHGridAlpha  横向网格带的透明度，[0-100]<br>showDivLinues  是否显示Div行的值，默认？？<br>numVDivLines  画布内部垂直分区线条数，数字<br>vDivLineColor  垂直分区线颜色，6位16进制颜色值<br>vDivLineThickness  垂直分区线厚度，[1-5]<br>vDivLineAlpha  垂直分区线透明度，[0-100]<br>showAlternateVGridColor  是否在纵向网格带交替的颜色，默认为0(False)<br>alternateVGridColor  纵向网格带交替的颜色，6位16进制颜色值<br>alternateVGridAlpha  纵向网格带的透明度，[0-100]</p>
+</blockquote>
+<h3 id="数字格式"><a href="#数字格式" class="headerlink" title="数字格式"></a>数字格式</h3><blockquote>
+<p>numberPrefix 增加数字前缀<br>numberSuffix 增加数字后缀%为’%’<br>formatNumberScale 是否格式化数字,默认为1(True),自动的给你的数字加上K（千）或M（百万）；若取0,则不加K或M<br>decimalPrecision 指定小数位的位数，[0-10]例如：=’0’取整<br>divLineDecimalPrecision 指定水平分区线的值小数位的位数，[0-10]<br>limitsDecimalPrecision 指定y轴最大、最小值的小数位的位数，[0-10]<br>formatNumber 逗号来分隔数字(千位，百万位),默认为1(True)；若取0,则不加分隔符<br>decimalSeparator 指定小数分隔符,默认为’.’<br>thousandSeparato r指定千分位分隔符,默认为’,’<br>Tool-tip/Hover 标题<br>showhovercap 是否显示悬停说明框，默认为1(True)<br>hoverCapBgColor 悬停说明框背景色，6位16进制颜色值<br>hoverCapBorderColor  悬停说明框边框颜色，6位16进制颜色值<br>hoverCapSepChar  指定悬停说明框内值与值之间分隔符,默认为’,’</p>
+</blockquote>
+<h3 id="折线图的参数"><a href="#折线图的参数" class="headerlink" title="折线图的参数"></a>折线图的参数</h3><blockquote>
+<p>lineThickness 折线的厚度<br>anchorRadius 折线节点半径，数字<br>anchorBgAlpha 折线节点透明度，[0-100]<br>anchorBgColor 折线节点填充颜色，6位16进制颜色值<br>anchorBorderColor 折线节点边框颜色，6位16进制颜色值<br>Set  标签使用的参数<br>value  数据值<br>color  颜色<br>link 链接（本窗口打开[Url]，新窗口打开[n-Url]，调用JS函数[JavaScript:函数]）<br>name  横向坐标轴标签名称</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Linux-高频命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Linux-高频命令/" itemprop="url">Linux 高频命令</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:32:18+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>1. halt 命令  关闭系统</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ halt -p  关闭系统后关闭电源；</div></pre></td></tr></table></figure></p>
+<p><strong>2. reboot 重新启动系统</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ reboot</div></pre></td></tr></table></figure></p>
+<p><strong>3. shutdown  关闭并重启系统</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ shutdown</div></pre></td></tr></table></figure></p>
+<p><strong>4. service  管理系统服务</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ service smb start</div><div class="line"></div><div class="line">$ service smb stop</div><div class="line"></div><div class="line">$ service smb restart</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Effective-Java-随笔——第3、4条/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Effective-Java-随笔——第3、4条/" itemprop="url">Effective Java 随笔——第3、4条</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:31:09+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="第3条：用私有构造器或者枚举类型强化Singleton属性"><a href="#第3条：用私有构造器或者枚举类型强化Singleton属性" class="headerlink" title="第3条：用私有构造器或者枚举类型强化Singleton属性　　"></a>第3条：用私有构造器或者枚举类型强化Singleton属性　　</h3><p>　　Singleton指仅仅被实例化一次的类，通常被用来代表那些本质上唯一的系统组件。如果项目通过Spring构建，可以通过Spring来管理Bean，默认情况下在Bean的为单例模式。</p>
+<h3 id="第4条：通过私有构造器强化不可实例化的能力"><a href="#第4条：通过私有构造器强化不可实例化的能力" class="headerlink" title="第4条：通过私有构造器强化不可实例化的能力"></a>第4条：通过私有构造器强化不可实例化的能力</h3><p>　　有的类只有静态方法和静态域时，就可以定义私有构造器来明确说明该类不可实例化，一般多用于工具类。</p>
+<h3 id="第14条：在公有类中使用访问方法而非公有域"><a href="#第14条：在公有类中使用访问方法而非公有域" class="headerlink" title="第14条：在公有类中使用访问方法而非公有域"></a>第14条：在公有类中使用访问方法而非公有域</h3><p>　　简书面向对象设计的思想，对于可变类来说，应该用包含私有域的公有设值方法（setter）类代替。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class Point &#123;</div><div class="line">    private double x;</div><div class="line">    private double y;</div><div class="line">    </div><div class="line">    public double getX()&#123;</div><div class="line">           return x;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    public double getY()&#123;</div><div class="line">           return y;</div><div class="line">    &#125;</div><div class="line">   </div><div class="line">    public void setX(double x)&#123;</div><div class="line">            this.x = x;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">     public void setY(double y)&#123;</div><div class="line">            this.y = y;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>　　如果类可以在它所在的包外部进行访问，就提供访问方法 ，避免直接访问类的域。如果类是包级私有的，或者是私有的嵌套类，直接暴露它的数据域并没有本质的错误。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Redis学习笔记-list类型及操作1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Redis学习笔记-list类型及操作1/" itemprop="url">Redis学习笔记--list类型及操作1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:29:40+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>list 是一个链表结构，主要功能是push、pop、获取一个范围的所有值等等，操作中key 理解为链表的名字。</p>
+<p>Redis 的list 类型其实就是一个每个子元素都是string 类型的双向链表。链表的最大长度是(2的32 次方)。我们可以通过push,pop 操作从链表的头部或者尾部添加删除元素。这使得list既可以用作栈，也可以用作队列。</p>
+<p>有意思的是list 的pop 操作还有阻塞版本的，当我们[lr]pop 一个list 对象时，如果list 是空，或者不存在，会立即返回nil。但是阻塞版本的b[lr]pop 可以则可以阻塞，当然可以加超时时间，超时后也会返回nil。为什么要阻塞版本的pop 呢，主要是为了避免轮询。举个简单的例子如果我们用list 来实现一个工作队列。执行任务的thread 可以调用阻塞版本的pop 去获取任务这样就可以避免轮询去检查是否有任务存在。当任务来时候工作线程可以立即返回，也可以避免轮询带来的延迟。说了这么多，接下来看一下实际操作的方法吧：</p>
+<p><strong>lpush</strong><br>在key 对应list 的头部添加字符串元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lpush mylist &quot;world&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; lpush mylist &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<p>在此处我们先插入了一个world，然后在world 的头部插入了一个hello。其中lrange 是用于取mylist 的内容。</p>
+<hr>
+<p><strong>rpush</strong><br>在key 对应list 的尾部添加字符串元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist2 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist2 &quot;world&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>linsert</strong><br>在key 对应list 的特定位置之前或之后添加字符串元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist3 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist3 &quot;world&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; linsert mylist3 before &quot;world&quot; &quot;there&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist3 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;there&quot;</div><div class="line">3) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<p>在此处我们先插入了一个hello，然后在hello 的尾部插入了一个world，然后又在world 的前面插入了there。</p>
+<hr>
+<p><strong>lset</strong><br>设置list中下表的元素值（下标从0开始）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;two&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;three&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; lset mylist4 0 &quot;four&quot;</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; lset mylist4 -2 &quot;five&quot;</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist4 0 -1</div><div class="line">1) &quot;four&quot;</div><div class="line">2) &quot;five&quot;</div><div class="line">3) &quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>lrem</strong><br>从key对应list中删除count个和value相同的元素。<br>count&gt;0时，按从头到尾的顺序删除，具体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;foo&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; lrem mylist5 2 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;foo&quot;</div><div class="line">2) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>lrange</strong><br>lrange key start stop：返回存储在 key 的列表里指定范围内的元素。 start 和 end 偏移量都是基于0的下标，即list的第一个元素下标是0（list的表头），第二个元素下标是1，以此类推。</p>
+<p>偏移量也可以是负数，表示偏移量是从list尾部开始计数。 例如， -1 表示列表的最后一个元素，-2 是倒数第二个，以此类推。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">redis&gt; RPUSH mylist &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis&gt; RPUSH mylist &quot;two&quot;</div><div class="line">(integer) 2</div><div class="line">redis&gt; RPUSH mylist &quot;three&quot;</div><div class="line">(integer) 3</div><div class="line">redis&gt; LRANGE mylist 0 0</div><div class="line">1) &quot;one&quot;</div><div class="line">redis&gt; LRANGE mylist -3 2</div><div class="line">1) &quot;one&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">3) &quot;three&quot;</div><div class="line">redis&gt; LRANGE mylist -100 100</div><div class="line">1) &quot;one&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">3) &quot;three&quot;</div><div class="line">redis&gt; LRANGE mylist 5 10</div><div class="line">(empty list or set)</div><div class="line">redis&gt; </div><div class="line"></div><div class="line">#count&lt;0 时，按从尾到头的顺序删除，具体如下:</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;foo&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; lrem mylist6 -2 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div><div class="line"></div><div class="line">#count=0 时，删除全部，具体如下:</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;foo&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; lrem mylist7 0 &quot;hello&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist7 0 -1</div><div class="line">1) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Redis学习笔记-list类型及操作2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Redis学习笔记-list类型及操作2/" itemprop="url">Redis学习笔记--list类型及操作2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:28:53+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>ltrim</strong><br>保留指定key的值范围内的数据(<em>不在指定范围内的数据，将被删除</em>)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;two&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;three&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;four&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; ltrim mylist8 1 -1</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist8 0 -1</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;three&quot;</div><div class="line">3) &quot;four&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>lpop</strong><br>从list的头部删除元素，并返回删除元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lpop mylist</div><div class="line">&quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</div><div class="line">1) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>rpop</strong><br>从list的尾部删除元素，并返回删除元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt; rpop mylist2</div><div class="line">&quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>rpoplpush</strong><br>从第一个list 的尾部移除元素，并添加到第二个list 的头部，最后返回被移除的元素值，整个操作是原子的，如果第一个list 是空或者不存在返回nil。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">3) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line"></div><div class="line">redis 127.0.0.1:6379&gt; rpoplpush mylist5 mylist6</div><div class="line">&quot;hello&quot;</div><div class="line"></div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;hello&quot;</div><div class="line">3) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>lindex</strong><br>返回名称为key的list中index位置的元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lindex mylist5 0</div><div class="line">&quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lindex mylist5 1</div><div class="line">&quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>llen</strong><br>返回key 对应list 的长度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; llen mylist5</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
 
           
         
@@ -1209,7 +1801,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1255,7 +1847,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1277,7 +1869,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
