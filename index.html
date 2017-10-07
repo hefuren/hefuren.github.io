@@ -300,6 +300,1108 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Effective-Java-随笔（内部类、泛型、方法……）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Effective-Java-随笔（内部类、泛型、方法……）/" itemprop="url">Effective Java 随笔（内部类、泛型、方法……）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:26:16+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>第22条：优先考虑静态成员类</strong>　　<br>　　Java程序中共有四种不同的嵌套类，每一种都有自己的用途。如果一个嵌套类需要在单个方法之外仍然是可见的，或者它太长了，不适合于放在方法内部，就应该使用成员类。如果成员类的每个实例都需要一个指向其外围实例的引用，就要把成员类做成非静态的；否则，就做成静态的。假设这个嵌套类属于一个方法的内部，如果你只需要在一个地方创建实例，并且已经有了一个预置的类似可以说吗这个类的特征，就要把它做成匿名类；否则，就做成局部类。</p>
+<p><strong>泛型</strong><br><strong>第23条：请不要在新代码中使用原生态类型</strong><br>　　Java 1.5之后支持泛型，建议在代码中不要使用原生态类型。如果使用原生态类型，就失掉了泛型在安全性和表述性方面的所有优势。，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//不建议这样定义List</div><div class="line">private List list ;</div><div class="line"></div><div class="line">//支持泛型的对象，建议如下定义</div><div class="line">private List&lt;String&gt; list;</div></pre></td></tr></table></figure></p>
+<p><strong>第30条：用enum代替int常量</strong><br>　　在编程语言中还没有引入枚举类型之前，表示枚举类型的常用模式是声明一组具名的int常量，每个类型成员一个常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// The int enum pattern - severely dificient !</div><div class="line">public static final int APPLE_FUJI = 0;</div><div class="line">public static final int APPLE_PIPPIN =1</div><div class="line">......</div><div class="line"></div><div class="line">public static final int ORANGE_NAVEL = 0;</div><div class="line">public static final int ORANGE_TEMPLE =1;</div><div class="line">......</div></pre></td></tr></table></figure></p>
+<p>　　这种方法称作int枚举模式，存在诸多不足。它在类型安全性和使用方便性方面没有任何帮组。如果将apple传到想要的orange的方法中，编译器也不会出现警告。建议在诸如类似常量定义时，考虑使用 enum type。</p>
+<p><strong>方法</strong><br><em>**第38条：检查参数的有效性</em><br>　　每当编写方法或者构造器的时候，应该考虑它的参数有哪些限制。应该把这些限制写到文档中，并且在方法体的开头处，通过显示的简称来实施这些限制。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">  * Returns a BigInteger whose value is (this mod m). This method</div><div class="line">  * differs form the remainder method in that it always returns a </div><div class="line">  * non-negative BigInteger</div><div class="line">  *</div><div class="line">  * @param m the modeulus, thich must be positive</div><div class="line">  * @return this mod m</div><div class="line">  * @throws ArithmeticException if m is less than or equal to 0</div><div class="line">  */</div><div class="line">public BigInteger mod(BigInteger m)&#123;</div><div class="line">    if(m.signum() &lt;= 0)</div><div class="line">        throw new ArithmeticException(&quot;Modulus &lt;= 0 : &quot; + m );</div><div class="line"></div><div class="line">      ...... // Do the computation</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>通用程序设计</strong><br><strong>第49条：基本类型优先于装箱基本类型（基本类型的包装类）</strong><br>1.什么时候应该使用装箱基本类型呢？<br>　　第一是作为集合中的元素、健和值。你不能将基本类型放在集合中，因此必须使用装箱基本类型。这是一种更通用的特例。在参数化类型中，必须使用装箱基本类型作为类型参数，因为Java不能运行使用基本类型。<br>　　基本类型性能优于装箱基本类型，总之，当可以选择的时候，基本类型要优先于装箱基本类型。</p>
+<p><strong>第52条：通过接口引用对象</strong><br>　　应该优先使用接口而不是类的引用对象。<em>如果有合适的接口类型存在，那么对于参数、返回值、变量或域来说，就都应该使用接口类型进行声明。</em>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//Good - user interface as type</div><div class="line">List&lt;Subscriber&gt; subscribers = new ArrayList&lt;Subscriber&gt;();</div><div class="line"></div><div class="line">//Bad - user class as type</div><div class="line">ArrayList&lt;Subscriber&gt; subscribers = new ArrayList&lt;Subscriber&gt;();</div></pre></td></tr></table></figure></p>
+<p><em>如果没有合适的接口存在，完全可以用类而不是接口来引用对象。（建议使用类层次接口中提供了必要功能的最基础的类）</em></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Effective-Java-随笔：复合优于继承/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Effective-Java-随笔：复合优于继承/" itemprop="url">Effective Java 随笔：复合优于继承</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:25:09+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>第16条：复合优于继承</strong>　　<br>　　只有当子类真正是超类的子类型（subtype）时，才适合用继承。换句话说，对于两个类A和B，只有当两者之间确实存在“is-a”关系的时候，类B才应该扩展类A。如果你打算让类B扩展类A，就应该问问之间：每个B确实也是A吗？如果你不能确定这个问题的答案是肯定的，那么B就不应该扩展A。如果答案是否定的，通常情况下，B应该包含A的一个私有实例，并且暴露一个较小的、较简单的API：A本质上不是B的一部分，只是它的实现细节而已。</p>
+<p><strong>第17条：要么为继承而设计，并提供文档说明，要么就禁止继承</strong><br>　　专门为继承而设计，就需要具有良好的文档说明。该类的文档必须精确地描述覆盖每个方法所带来的影响，换句话说，<em>该类必须有文档说明它可覆盖（overridable）的方法的自用性（self-use）</em>。<br>　　为了允许继承，类还必须遵守其他一些约束。<em>构造器决不能调用可被覆盖的方法</em>，无论是直接调用还是间接调用。如果违反了这条规则，很有可能导致程序失败。<br>　　如果你决定在一个为了继承而设计的类中实现了Cloneable或者Serializable接口，就应该意识到，因为clone和readObject方法在行为非常类似于构造器，所以类似的限制规则也是适合用的：无论是clone还是readObject，都不可以调用覆盖的方法，不管是以直接还是间接的方式。对于readObject方法，覆盖版本的方法将在子类的状态被反序列化之前被允许；而对于clone方法，覆盖版本的方法则是在子类的clone方法有机会修正被克隆对象中的状态之前被允许。无论哪种情形，都不可避免将导致程序失败。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/虚拟机中-suse-linux-11配置静态IP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/虚拟机中-suse-linux-11配置静态IP/" itemprop="url">虚拟机中 suse linux 11配置静态IP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:22:52+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>环境：VMware Workstation Pro 12 + Suse linux 11 SP1</p>
+<p><strong>第一步：配置虚拟机网络适配器，这里我采用 NAT 方式</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/3164735-7e840ec0e91ff3b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-01.png"></p>
+<p><strong>第二步：在VMware虚拟网络编辑器中，配置NAT模式下的子网IP</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/3164735-74f9c07567139b75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-02.png"></p>
+<p><strong>第三步：在Suse linux 中通过界面配置静态IP</strong></p>
+<p>1、全局设置<br><img src="http://upload-images.jianshu.io/upload_images/3164735-f8bfd16d31fe237d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-03.png"></p>
+<p>2、IP设置<br><img src="http://upload-images.jianshu.io/upload_images/3164735-180ae18aafc65a1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-04.png"></p>
+<blockquote>
+<p><em>注意：配置静态IP是，IP网段要与网络虚拟机配置的网段一致。</em></p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/3164735-a2f5ff633d37f452.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-05.png"></p>
+<p>3、配置DNS<br><img src="http://upload-images.jianshu.io/upload_images/3164735-0364fab1590fd500.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-06.png"></p>
+<p>4、配置网关（<em>网关配置需要与虚拟机的虚拟网络配置的网关一致</em>）<br><img src="http://upload-images.jianshu.io/upload_images/3164735-856d9ab30e7590ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-07.png"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/【转】应用性能监控方法一览/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/【转】应用性能监控方法一览/" itemprop="url">【转】应用性能监控方法一览</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:19:25+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>转自<a href="http://www.infoq.com/cn/news/2015/08/monitoring-applications-category" target="_blank" rel="external">http://www.infoq.com/cn/news/2015/08/monitoring-applications-category</a></p>
+</blockquote>
+<p>　　在基于云的服务中，正常运行时间应该是最为重要的运维指标之一。服务如果频繁地中断，不仅会导致正常使用的中断，还会对品牌带来负面影响。99.9%或99.99%已经算不上高水准的高可用性了，用户期望的是100%的可用性。为了达到这一点，我们不仅需要遵循良好的设计模式并保持服务的可扩展性，同时还要保证硬件、应用服务器以及数据库服务器的健康运行。<br>近日，来自<a href="https://www.getzephyr.com/" target="_blank" rel="external">Zephyr</a>的CTO <a href="https://twitter.com/sxm20" target="_blank" rel="external">Shailesh Mangal</a>撰文<a href="https://developer.atlassian.com/blog/2015/08/monitoring-connect-applications/" target="_blank" rel="external">总结了各种监控类型以及所需的工具</a>。Zephyr致力于为开发和QA团队提供解决方案，帮助交付高质量的软件，他们所提供的企业级测试管理产品能够与各种工具集成，实现测试的实时管理。<br>在Shailesh Mangal的文章中，他总结了核心基础设施监控、应用级别监控、微服务监控以及多租户日志监控的工具以及各自的指标，为我们进行应用的全方位监控提供了指导。</p>
+<p><strong>核心基础设施监控（Core Infrastructure Monitoring**</strong>，CIM<strong>**）</strong><br>　　在目前的云基础设施中，出现硬件故障是难以避免的。核心基础设施监控会探测硬件瓶颈相关的早期迹象并捕获硬件故障信号，在出现更大的问题之前对其进行应对。基础设施监控的范围包括机器的健康状况、CPU使用、内存消耗以及网络带宽，基于这些监控信息，能够判断基础设施的当前状态，从而进行必要的扩展。<br>有众多的工具都能帮助我们获取硬件的健康状态。在大多数情况下，托管提供商（如<a href="http://aws.amazon.com/" target="_blank" rel="external">Amazon AWS</a>、<a href="https://www.heroku.com/" target="_blank" rel="external">Heroku</a>）的工具基本上就能满足这种监控的需要。</p>
+<p>CIM的指标包括：</p>
+<ul>
+<li>CPU的平均使用率</li>
+<li>CPU峰值的持续时间</li>
+<li>内存的平均使用情况</li>
+<li>带宽的输入输出情况</li>
+</ul>
+<p><strong>应用级别监控（Application Level Monitoring**</strong>，ALM<strong>**）</strong><br>　　应用级别的监控涉及到监控各种服务器的状态，如数据库服务器、应用服务器、分析服务器以及Hadoop集群，而要监控的参数则是与应用或工具相关的。<br>应用监控方面有不少伟大的工具，如<a href="https://www.datadoghq.com/" target="_blank" rel="external">Datadog</a>和<a href="http://newrelic.com/" target="_blank" rel="external">New Relic</a>。</p>
+<p>应用监控的指标包括：</p>
+<ul>
+<li>JVM进程的内存</li>
+<li>内部线程的数量</li>
+<li>磁盘IO</li>
+<li>索引的读取/写入操作</li>
+</ul>
+<p><strong>微服务监控（Micro Service Monitoring**</strong>，MSM<strong>**）</strong><br>　　微服务是现代云架构的组成部分，是实现水平扩展的关键。不管你运行的是传统的单块系统还是设计良好且组织精密的微服务，这些系统都会有不同的API端点，遵循不同的协议，满足不同的SLA需求。微服务监控就是要监控每个服务的吞吐量和性能，进而确保在任何时间都能满足SLA的需求。这种类型的监控一般都需要对应用进行instrument操作，让instrumentation是可配置的，通过收集器（collector）收集应用的状态，并阶段性地将这些状态发送到永久存储、分析器和预警系统中。此类监控往往会产生大量的数据，因此有可能会影响到性能，因此需要仔细设计。<br>微服务监控的工具方面，存储引擎可以选择<a href="http://graphite.wikidot.com/" target="_blank" rel="external">GraphiteDB</a>或<a href="https://influxdb.com/" target="_blank" rel="external">InfluxDB</a>，可视化工具可以选择<a href="https://www.elastic.co/products/kibana" target="_blank" rel="external">Kibana</a>或<a href="http://grafana.org/" target="_blank" rel="external">Grafana</a>。</p>
+<p>微服务监控的指标包括：</p>
+<ul>
+<li>请求所需的最大时间</li>
+<li>请求所需的平均时间</li>
+<li>每分钟请求的平均速度</li>
+<li>每天峰值的请求速度</li>
+</ul>
+<p><strong>多租户日志监控（Multitenant Log Monitoring**</strong>，MLM<strong>**）</strong><br>　　对于多租户部署的系统来讲，很大的一个挑战就是监控日志并推断系统的内部情况，或者当出现问题时识别出根本的原因。无数的客户端会产生大量的日志，因此对于日志隔离来说，有唯一的标识（如tenantId）是第一步。除此之外，日志还需要根据请求分组，如果请求要跨多个服务时，这一点尤为重要，每个服务都产生一些日志信息将会有助于识别问题。<br>多租户日志监控中有非常经典的工具，也就是ELK（<a href="https://www.elastic.co/products/elasticsearch" target="_blank" rel="external">Elasticsearch</a>, <a href="https://www.elastic.co/products/logstash" target="_blank" rel="external">Logstash</a>, <a href="https://www.elastic.co/products/kibana" target="_blank" rel="external">Kibana</a>）技术栈。</p>
+<p>多租户日志监控的指标包括：</p>
+<ul>
+<li>每个租户的日志</li>
+<li>每个请求的日志</li>
+<li>每天总的错误数量</li>
+</ul>
+<p>　　总而言之，好的监控要涉及到系统各个方面，从硬件、应用再到服务。如果需要构建多租户应用的话，使用配置恰当的ELK技术栈也有助于快速诊断问题。<br>目前，随着云服务和移动应用的发展，在国内外APM（Application Performance Management）相关的服务得到了空前的关注，希望Shailesh Mangal的这篇文章能够帮助读者对该领域有一个宏观的了解和掌握。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/java-lang-OutOfMemory总结分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/java-lang-OutOfMemory总结分析/" itemprop="url">java.lang.OutOfMemory总结分析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:17:18+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>　　在解决java内存溢出问题之前，需要对jvm（java虚拟机）的内存管理有一定的认识。jvm管理的内存大致包括三种不同类型的内存区域：</p>
+<ul>
+<li><strong>Permanent Generation space（永久保存区域）</strong>：永久保存区域主要存放Class（类）和Meta的信息，Class第一次被Load的时候被放入PermGen space区域，Class需要存储的内容主要包括方法和静态属性</li>
+<li><strong>Heap space(堆区域)</strong>：堆区域用来存放Class的实例（即对象），对象需要存储的内容主要是非静态属性。每次用new创建一个对象实例后，对象实例存储在堆区域中，这部分空间也被jvm的垃圾回收机制管理。</li>
+<li><strong>Java Stacks(Java栈）</strong>：Java栈跟大多数编程语言包括汇编语言的栈功能相似，主要基本类型变量以及方法的输入输出参数。Java程序的每个线程中都有一个独立的堆栈。</li>
+</ul>
+<p>　　容易发生内存溢出问题的内存空间包括：Permanent Generation space和Heap space。</p>
+<h4 id="第一种OutOfMemoryError：-PermGen-space"><a href="#第一种OutOfMemoryError：-PermGen-space" class="headerlink" title="第一种OutOfMemoryError： PermGen space"></a>第一种OutOfMemoryError： PermGen space</h4><p>　　发生这种问题的原意是程序中使用了大量的jar或class，使java虚拟机装载类的空间不够，与Permanent Generation space有关。解决这类问题有以下两种办法：<br><strong>1. </strong>增加Java虚拟机中的<strong>XX:PermSize</strong>和<strong>XX:MaxPermSize</strong>参数的大小，其中<strong>XX:PermSize</strong>是初始永久保存区域大小，<strong>XX:MaxPermSize</strong>是最大永久保存区域大小。<br>       如针对tomcat6.0，在catalina.sh 或catalina.bat文件中一系列环境变量名说明结束处（大约在70行左右） 增加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">JAVA_OPTS=&quot; -XX:PermSize=64M -XX:MaxPermSize=128m&quot;</div></pre></td></tr></table></figure></p>
+<p>　　如果是windows服务器还可以在系统环境变量中设置。感觉用tomcat发布sprint+struts+hibernate架构的程序时很容易发生这种内存溢出错误。使用上述方法，我成功解决了部署ssh项目的tomcat服务器经常宕机的问题。</p>
+<p><strong>2. </strong>清理应用程序中web-inf/lib下的jar。<br>　　如果tomcat部署了多个应用，很多应用都使用了相同的jar，可以将共同的jar移到tomcat共同的lib下，减少类的重复加载。这种方法是网上部分人推荐的，我没试过，但感觉减少不了太大的空间，最靠谱的还是第一种方法。</p>
+<h4 id="第二种OutOfMemoryError：-Java-heap-space"><a href="#第二种OutOfMemoryError：-Java-heap-space" class="headerlink" title="第二种OutOfMemoryError：  Java heap space"></a>第二种OutOfMemoryError：  Java heap space</h4><p>　　发生这种问题的原因是java虚拟机创建的对象太多，在进行垃圾回收之间，虚拟机分配的到堆内存空间已经用满了，与Heap space有关。解决这类问题有两种思路：<br><strong>1. </strong>检查程序，看是否有死循环或不必要地重复创建大量对象。找到原因后，修改程序和算法。<br><strong>2.</strong> 增加Java虚拟机中Xms（初始堆大小）和Xmx（最大堆大小）参数的大小。如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">set JAVA_OPTS= -Xms256m -Xmx1024m</div></pre></td></tr></table></figure></p>
+<h4 id="第三种OutOfMemoryError：unable-to-create-new-native-thread"><a href="#第三种OutOfMemoryError：unable-to-create-new-native-thread" class="headerlink" title="第三种OutOfMemoryError：unable to create new native thread"></a>第三种OutOfMemoryError：unable to create new native thread</h4><p>　　这种错误在Java线程个数很多的情况下容易发生，我暂时还没遇到过，发生原意和解决办法可以参考：</p>
+<p><strong>从JVM层面去解决</strong>：减小thread stack的大小，JVM默认thread stack的大小为1024，这样当线程多时导致Native virtual memory被耗尽，实际上当thread stack的大小为128K 或 256K时是足够的，所以我们如果明确指定thread stack为128K 或 256K即可，具体使用-Xss，例如在JVM启动的JVM_OPT中添加如下配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Xss128k</div></pre></td></tr></table></figure></p>
+<p><strong>减小heap或permgen初始分配的大小</strong>：如果JVM启动的JVM_OPT中有如下配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Xms1303m -Xmx1303m -XX:PermSize=256m -XX:MaxPermSize=256m</div></pre></td></tr></table></figure>
+<p>我们可以删除或减小初始化最小值的配置，如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-Xms256m -Xmx1303m -XX:PermSize=64m -XX:MaxPermSize=256m  </div><div class="line">-Xmx1303m -XX:MaxPermSize=256m</div></pre></td></tr></table></figure></p>
+<p><strong>升级JVM到最新的版本</strong>：最新版本的JVM一般在内存优化方面做的更好，升级JVM到最新的版本可能会缓解测问题。</p>
+<p><strong>从操作系统层面去解决</strong>：使用64位操作系统，如果使用32位操作系统遇到unable to create new native thread，建议使用64位操作系统。</p>
+<p><strong>增大OS对线程的限制</strong>：在Linux操作系统设定nofile和nproc，具体编辑/etc/security/limits.conf添加如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">soft    nofile          2048  </div><div class="line">hard    nofile          8192</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">soft    nproc           2048  </div><div class="line">hard    nproc           8192</div></pre></td></tr></table></figure>
+<p>如果使用Red Hat Enterprise Linux 6，编辑/etc/security/limits.d/90-nproc.conf，添加如下配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># cat /etc/security/limits.d/90-nproc.conf  </div><div class="line">*          soft    nproc     1024  </div><div class="line">root       soft    nproc     unlimited  </div><div class="line">  </div><div class="line">user       -       nproc     2048</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Ubuntu下apt-get命令详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Ubuntu下apt-get命令详解/" itemprop="url">Ubuntu下apt-get命令详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:15:43+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在Ubuntu下，apt-get近乎是最常用的shell命令之一了，因为他是Ubuntu通过新立得安装软件的常用工具命令。<br>本文列举了常用的APT命令参数：<br>apt-cache search package 搜索软件包</p>
+<p>apt-cache show package  获取包的相关信息，如说明、大小、版本等</p>
+<p><strong>sudo apt-get install package 安装包</strong></p>
+<p>sudo apt-get install package –reinstall   重新安装包</p>
+<p>sudo apt-get -f install   修复安装</p>
+<p><strong>sudo apt-get remove package 删除包</strong></p>
+<p>sudo apt-get remove package –purge 删除包，包括配置文件等</p>
+<p><strong>sudo apt-get update  更新源</strong></p>
+<p><strong>sudo apt-get upgrade 更新已安装的包</strong></p>
+<p>sudo apt-get dist-upgrade 升级系统</p>
+<p>apt-cache depends package 了解使用该包依赖那些包</p>
+<p>apt-cache rdepends package 查看该包被哪些包依赖</p>
+<p>sudo apt-get build-dep package 安装相关的编译环境</p>
+<p><strong>apt-get source package  下载该包的源代码</strong></p>
+<p>sudo apt-get clean &amp;&amp; sudo apt-get autoclean 清理无用的包</p>
+<p>sudo apt-get check 检查是否有损坏的依赖</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Linux-modprobe命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Linux-modprobe命令/" itemprop="url">Linux modprobe命令</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:13:57+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Linux modprobe命令用于自动处理可载入模块。<br>modprobe可载入指定的个别模块，或是载入一组相依的模块。modprobe会根据depmod所产生的相依关系，决定要载入哪些模块。若在载入过程中发生错误，在modprobe会卸载整组的模块。</p>
+<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">modprobe [-acdlrtvV][--help][模块文件][符号名称 = 符号值]</div></pre></td></tr></table></figure></p>
+<p><strong>参数</strong>：</p>
+<blockquote>
+<ul>
+<li>-a或–all 　载入全部的模块。</li>
+<li>-c或–show-conf 　显示所有模块的设置信息。</li>
+<li>-d或–debug 　使用排错模式。</li>
+<li>-l或–list 　显示可用的模块。</li>
+<li>-r或–remove 　模块闲置不用时，即自动卸载模块。</li>
+<li>-t或–type 　指定模块类型。</li>
+<li>-v或–verbose 　执行时显示详细的信息。</li>
+<li>-V或–version 　显示版本信息。</li>
+<li>-help 　显示帮助。</li>
+</ul>
+</blockquote>
+<p>实例<br>安装软驱模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@w3cschool.cc ~]# modprobe -v floppy</div></pre></td></tr></table></figure></p>
+<p>卸载软驱模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@w3cschool.cc ~]# modprobe -v -r floppy</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/索引失效/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -776,1123 +1878,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Effective-Java-随笔——第2条：遇到多个构造器参数时要考虑用构建器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Effective-Java-随笔——第2条：遇到多个构造器参数时要考虑用构建器/" itemprop="url">Effective Java 随笔——第2条：遇到多个构造器参数时要考虑用构建器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:01:04+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>　　静态工厂和构造器有一个共同的局限性：它们都不能很好地扩展到大量的可选参数。如果一个构造器的参数有10,11,12，…或更多时。一长串类型相同的参数会导致一些微妙的错误，如果不小心颠倒了其中两个参数的顺序，编译器也不会出错，但是程序在运行时会出现错误的行为。<br>　　遇到许多构造参数的时候，<strong>还有第二种代替办法，及JavaBean模式</strong>，在这种模式下调用一个无惨构造器来创建对象，调用setter方法来设置每个必要的参数，以及每个相关的可选参数。</p>
-<blockquote>
-<p>Effective Java一书中提到：JavaBean模式自身有着很严重的缺点，因为构造过程分到了几个调用中，<strong>在构造过程中JavaBean可能处于不一致的状态。</strong>类无法仅仅通过检验构造器参数的有效性来保证一致性。视图使用处于不一致的对象，将会导致失败。这种失败与包含错误的代码大相径庭。与此相关的另一点不足在于，<strong>JavaBean模式阻止了把类做成不可变的可能，</strong>这就需要程序员付出额外的努力来确保它的线程是安全的。</p>
-</blockquote>
-<p><em>附注：个人在使用中，还没有发现这个问题，如有了解的大神，还请不吝赐教。</em></p>
-<p>　　最佳替代方法<strong>Builder模式</strong>，既能保证像重叠构造器模式那样的安全性，也能保证像JavaBean模式那么好的可读性。Builder模式，不直接生成想要的对象，而是让客户端在builder对象上调用类似于setter的方法，来深圳每个相关的可选参数。最后，客户端调用无参的builder方法生成不可变的对象。这个builder是它构建的类的静态成员类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">public class NutritionFacts &#123;</div><div class="line">    private final int servingSize;</div><div class="line">    private final int servings;</div><div class="line">    private final int calories;</div><div class="line">    private final int fat;</div><div class="line">    private final int sodium;</div><div class="line">    private final int carbohydrate;</div><div class="line"></div><div class="line">    public static class Builder &#123;</div><div class="line">        // Required parameters</div><div class="line">        private final int servingSize;</div><div class="line">        private final int servings;</div><div class="line"></div><div class="line">        // Optional parameters - initialized to default values</div><div class="line">        private int calories      = 0;</div><div class="line">        private int fat           = 0;</div><div class="line">        private int carbohydrate  = 0;</div><div class="line">        private int sodium        = 0;</div><div class="line"></div><div class="line">        public Builder(int servingSize, int servings) &#123;</div><div class="line">            this.servingSize = servingSize;</div><div class="line">            this.servings    = servings;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public Builder calories(int val)</div><div class="line">            &#123; calories = val;      return this; &#125;</div><div class="line">        public Builder fat(int val)</div><div class="line">            &#123; fat = val;           return this; &#125;</div><div class="line">        public Builder carbohydrate(int val)</div><div class="line">            &#123; carbohydrate = val;  return this; &#125;</div><div class="line">        public Builder sodium(int val)</div><div class="line">            &#123; sodium = val;        return this; &#125;</div><div class="line"></div><div class="line">        public NutritionFacts build() &#123;</div><div class="line">            return new NutritionFacts(this);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private NutritionFacts(Builder builder) &#123;</div><div class="line">        servingSize  = builder.servingSize;</div><div class="line">        servings     = builder.servings;</div><div class="line">        calories     = builder.calories;</div><div class="line">        fat          = builder.fat;</div><div class="line">        sodium       = builder.sodium;</div><div class="line">        carbohydrate = builder.carbohydrate;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        NutritionFacts cocaCola = new NutritionFacts.Builder(240, 8).</div><div class="line">            calories(100).sodium(35).carbohydrate(27).build();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>　　此处Builder类作为一个静态内部类。我们最终要获得的是NutritionFacts对象，从他的构造函数可以看出，是通过builder对象来对他的属性进行初始化的。而builder对象的属性是通过多个setter方法设置的。 </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Effective-Java-随笔——第1条：使用静态工厂方法替代构造函数/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Effective-Java-随笔——第1条：使用静态工厂方法替代构造函数/" itemprop="url">Effective Java 随笔——第1条：使用静态工厂方法替代构造函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:58:02+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="第1条：使用静态工厂方法替代构造函数"><a href="#第1条：使用静态工厂方法替代构造函数" class="headerlink" title="第1条：使用静态工厂方法替代构造函数"></a>第1条：使用静态工厂方法替代构造函数</h3><p>　　对于类而言，为了让客户端获取它自身的一个实例，最常用的方法就是提供一个公有的构造器，还有一种就是方法。类可以提供一个公有的<em>静态工程方法(static factory method)</em>，它只是一个返回类的实例的静态方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">// 通过isMale字段标识性别</div><div class="line">class Person &#123;    </div><div class="line">    private bool isMale;        </div><div class="line">    // 不容易理解参数的含义    </div><div class="line">   public Person(bool _isMale) &#123;        </div><div class="line">        this.isMale = isMale;    </div><div class="line">    &#125;</div><div class="line"> &#125;</div><div class="line">// 采用静态工厂方法替代构造函数</div><div class="line">class Person &#123;    </div><div class="line">    private bool isMale;        </div><div class="line">    // 一目了然    </div><div class="line">    public static Man() &#123;        </div><div class="line">        Persion p = new Persion();        </div><div class="line">        p.isMale = true;        </div><div class="line">        return p;    </div><div class="line">    &#125;    </div><div class="line">    public static Woman() &#123;</div><div class="line">        Persion p = new Persion();</div><div class="line">        p.isMale = false;</div><div class="line">        return p;    </div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>静态工厂方法的优势：</strong></p>
-<ul>
-<li><strong>静态工厂方法与构造器不同的第一大优势在于，它们有名称。</strong> 如果构造器的参数本身没有确切的描述正被返回的对象，那么具有适当名称的静态工厂会更容易使用，更易于阅读。</li>
-<li><strong>静态工厂方法与构造器不同的第二大优势在于，不必在每次调用它们的时候创建一个新的对象。</strong> 这使得不可变类可以使用预先构建好的实例，或者将构建好的实例缓存起来，进行重复利用，从而避免创建不必要的重复对象。<em>（如果程序经常请求创建相同的对象，并且创建对象的代价很高，则这项技术可以极大地提升性能。）</em></li>
-<li><strong>静态工厂方法与构造器不同的第三大优势在于，它们可以返回原返回类型的任何子类型的对象。</strong> 这样我们在选择返回对象的类时就有了更大的灵活性。</li>
-<li><strong>静态工厂方法的第四大优势在于，在创建参数化类型实例的时候，它们使代码变得更加简洁。</strong></li>
-</ul>
-<p><strong>静态工厂方法的缺点：</strong></p>
-<ul>
-<li>缺点1：类如果不含公有的或者受保护的构造器，就不能被子类化。</li>
-<li>缺点2：它们与其他的静态方法实际上没有任何区别。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/【转】如何理解HTTP协议的“无连接，无状态”/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/【转】如何理解HTTP协议的“无连接，无状态”/" itemprop="url">【转】如何理解HTTP协议的“无连接，无状态”</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:56:08+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>原文摘自：<a href="http://blog.csdn.net/tennysonsky/article/details/44562435" target="_blank" rel="external">http://blog.csdn.net/tennysonsky/article/details/44562435</a></p>
-</blockquote>
-<p>HTTP 是一个属于应用层的面向对象的协议，HTTP 协议一共有五大特点：1、支持客户/服务器模式；2、简单快速；3、灵活；<strong>4、无连接；5、无状态</strong>。</p>
-<p><strong>无连接</strong><br><strong>无连接的含义</strong>是限制每次连接只处理一个请求。服务器处理完客户的请求，并收到客户的应答后，即断开连接。采用这种方式可以节省传输时间。</p>
-<p>早期这么做的原因是 HTTP 协议产生于互联网，因此服务器需要处理同时面向全世界数十万、上百万客户端的网页访问，但每个客户端（即浏览器）与服务器之间交换数据的间歇性较大（即传输具有突发性、瞬时性），并且网页浏览的联想性、发散性导致两次传送的数据关联性很低，大部分通道实际上会很空闲、无端占用资源。因此 HTTP 的设计者有意利用这种特点将协议设计为<strong>请求时建连接、请求完释放连接，以尽快将资源释放出来服务其他客户端</strong>。</p>
-<p>随着时间的推移，网页变得越来越复杂，里面可能嵌入了很多图片，这时候每次访问图片都需要建立一次 TCP 连接就显得很低效。后来，Keep-Alive 被提出用来解决这效率低的问题。</p>
-<p><strong>Keep-Alive 功能使客户端到服务器端的连接持续有效，当出现对服务器的后继请求时，Keep-Alive 功能避免了建立或者重新建立连接</strong>。市场上的大部分 Web 服务器，包括 iPlanet、IIS 和 Apache，都支持 HTTP Keep-Alive。对于提供静态内容的网站来说，这个功能通常很有用。但是，对于负担较重的网站来说，这里存在另外一个问题：虽然为客户保留打开的连接有一定的好处，但它同样影响了性能，因为在处理暂停期间，本来可以释放的资源仍旧被占用。当Web服务器和应用服务器在同一台机器上运行时，Keep-Alive 功能对资源利用的影响尤其突出。 </p>
-<p>这样一来，客户端和服务器之间的 HTTP 连接就会被保持，不会断开（超过 Keep-Alive 规定的时间，意外断电等情况除外），当客户端发送另外一个请求时，就使用这条已经建立的连接。</p>
-<p><strong>无状态</strong><br><strong>无状态</strong>是指协议对于事务处理没有记忆能力，服务器不知道客户端是什么状态。即我们给服务器发送 HTTP 请求之后，服务器根据请求，会给我们发送数据过来，但是，发送完，不会记录任何信息。HTTP 是一个无状态协议，这意味着每个请求都是独立的，Keep-Alive 没能改变这个结果。缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就较快。HTTP 协议这种特性有优点也有缺点，优点在于解放了服务器，每一次请求“点到为止”不会造成不必要连接占用，缺点在于每次请求会传输大量重复的内容信息。客户端与服务器进行动态交互的 Web 应用程序出现之后，HTTP 无状态的特性严重阻碍了这些应用程序的实现，毕竟交互是需要承前启后的，简单的购物车程序也要知道用户到底在之前选择了什么商品。于是，两种用于保持 HTTP 连接状态的技术就应运而生了，一个是 Cookie，而另一个则是 Session。</p>
-<p><strong>Cookie可以保持登录信息到用户下次与服务器的会话，换句话说，下次访问同一网站时，用户会发现不必输入用户名和密码就已经登录了</strong>（当然，不排除用户手工删除Cookie）。而还有一些Cookie在用户退出会话的时候就被删除了，这样可以有效保护个人隐私。Cookies 最典型的应用是判定注册用户是否已经登录网站，用户可能会得到提示，是否在下一次进入此网站时保留用户信息以便简化登录手续，这些都是 Cookies 的功用。另一个重要应用场合是“购物车”之类处理。用户可能会在一段时间内在同一家网站的不同页面中选择不同的商品，这些信息都会写入 Cookies，以便在最后付款时提取信息。</p>
-<p><strong>与 Cookie 相对的一个解决方案是 Session，它是通过服务器来保持状态的。</strong>当客户端访问服务器时，服务器根据需求设置 Session，将会话信息保存在服务器上，同时将标示 Session 的 SessionId 传递给客户端浏览器，浏览器将这个 SessionId 保存在内存中，我们称之为无过期时间的 Cookie。浏览器关闭后，这个 Cookie 就会被清掉，它不会存在于用户的 Cookie 临时文件。以后浏览器每次请求都会额外加上这个参数值，服务器会根据这个 SessionId，就能取得客户端的数据信息。如果客户端浏览器意外关闭，服务器保存的 Session 数据不是立即释放，此时数据还会存在，只要我们知道那个 SessionId，就可以继续通过请求获得此 Session 的信息，因为此时后台的 Session 还存在，当然我们可以设置一个 Session 超时时间，一旦超过规定时间没有客户端请求时，服务器就会清除对应 SessionId 的 Session 信息。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/postgreSQL常用命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/postgreSQL常用命令/" itemprop="url">postgreSQL常用命令</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:33:46+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>安装CentOS系统时，由于最开始没有选择安装Telnet服务，现在想从Windows上通过Telnet连接Linux。于是便只能重新安装，这里介绍从光盘中进行安装。<br>1、首先进入mnt目录创建一个文件夹，用于挂载光驱；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# cd /mnt</div><div class="line">[root@localhost ~]# mkdir cdrom</div><div class="line">[root@localhost ~]# mount /dev/cdrom /mnt/cdrom (或者 mount -t ext3 /dev/cdrom /mnt/cdrom)</div><div class="line">[root@localhost ~]# cd /mnt/cdrom</div></pre></td></tr></table></figure></p>
-<p>2、安装Telnet需要安装xinetd服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]# find -name xinetd*./Packages/xinetd-2.3.14-29.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/xinetd-2.3.14-29.el6.x86_64.rpm</div></pre></td></tr></table></figure></p>
-<p>3、安装Telnet服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]# find -name telnet*./Packages/telnet-0.17-46.el6.x86_64.rpm./Packages/telnet-server-0.17-46.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/telnet-0.17-46.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/telnet-server-0.17-46.el6.x86_64.rpm</div></pre></td></tr></table></figure></p>
-<p>4、修改Telnet服务配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]#vi /etc/xinetd.d</div></pre></td></tr></table></figure></p>
-<p>将disable = yes 更改 no，或者注释掉5.开放Telnet对外端口23。</p>
-<p>6、重启xinetd服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]#service xinetd restart</div></pre></td></tr></table></figure></p>
-<p>OK，于是在windows中，便可以通过telnet方式连接 Linux系统</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/JBoss-的端口设置修改-备忘/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/JBoss-的端口设置修改-备忘/" itemprop="url">JBoss 的端口设置修改(备忘)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:31:10+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h6 id="JBOSS默认的各种设置文件中通常定义了以下几个端口"><a href="#JBOSS默认的各种设置文件中通常定义了以下几个端口" class="headerlink" title="JBOSS默认的各种设置文件中通常定义了以下几个端口:"></a>JBOSS默认的各种设置文件中通常定义了以下几个端口:</h6><p><strong>1: The ports found in the default configuration Port Type Service</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">。1099 TCP org.jboss.naming.NamingService</div><div class="line">。1098 TCP org.jboss.naming.NamingService</div><div class="line">。1162 UDP org.jboss.jmx.adaptor.snmp.trapd.TrapdService</div><div class="line">。4444 TCP org.jboss.invocation.jrmp.server.JRMPInvoker</div><div class="line">。4445 TCP org.jboss.invocation.pooled.server.PooledInvoker</div><div class="line">。8009 TCP org.jboss.web.tomcat.tc4.EmbeddedTomcatService</div><div class="line">。8009 TCP org.jboss.web.tomcat.tc4.EmbeddedTomcatService</div><div class="line">。8083 TCP org.jboss.web.WebService</div><div class="line">。8090 TCP org.jboss.web.OILServerILService</div><div class="line">。8092 TCP org.jboss.mq.il.oil2.OIL2ServerILService</div><div class="line">。8093 TCP org.jboss.mq.il.uil2.UILServerILService</div><div class="line">。0a TCP org.jboss.mq.il.rmi.RMIServerILService</div><div class="line">。0b UDP org.jboss.jmx.adaptor.snmp.agent.SnmpAgentService</div><div class="line">a, This service binds to an anonymous TCP port and does not support configuration of the port or bind interface currently(3.2.2).</div><div class="line">b, This service binds to an anonymous UDP port and does not support configuration of the port or bind interface.(3.2.2).</div></pre></td></tr></table></figure></p>
-<p><strong>2: Additional ports found in the all configuration Port Type Service</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">。1100 TCP org.jboss.ha.jndi.HANamingService</div><div class="line">。0a TCP org.jboss.ha.jndi.HANamingService</div><div class="line">。1102 UDP org.jboss.ha.jndi.HANamingService</div><div class="line">。3528 TCP org.jboss.invocation.iiop.IIOPInvoker</div><div class="line">。45566b TCP org.jboss.ha.framework.server.ClusterPartition</div><div class="line">a, Currently anonymous but can be set via the RmiPort attribute</div><div class="line">b, Plus two additional anonymous UDP ports, one can be set using the rcv_port, </div><div class="line"> and the other cannot be seen。</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/AD用户帐户属性对照表/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/AD用户帐户属性对照表/" itemprop="url">AD用户帐户属性对照表</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:29:23+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>用户帐户属性对照表,一部分经常用到,免得到处找,列在下面参考参考:<br><strong>“常规”标签</strong></p>
-<blockquote>
-<p>姓 Sn<br>名 Givename<br>英文缩写 Initials<br>显示名称 displayName<br>描述 Description<br>办公室 physicalDeliveryOfficeName<br>电话号码 telephoneNumber<br>电话号码：其它 otherTelephone 多个以英文分号分隔<br>电子邮件 Mail<br>网页 wWWHomePage<br>网页：其它 url 多个以英文分号分隔</p>
-</blockquote>
-<p><strong>“地址”标签</strong></p>
-<blockquote>
-<p>国家/地区 C 如：中国CN，英国GB<br>省/自治区 St<br>市/县 L<br>街道 streetAddress<br>邮政信箱 postOfficeBox<br>邮政编码 postalCode</p>
-</blockquote>
-<p><strong>“帐户”标签</strong></p>
-<blockquote>
-<p>用户登录名 userPrincipalName 形如：<a href="mailto:pccai1983@hotamil.com" target="_blank" rel="external"></a><a href="mailto:pccai1983@hotmail.com" target="_blank" rel="external">pccai1983@hotmail.com</a><br>用户登录名（以前版本） sAMAccountName 形如：S1<br>登录时间 logonHours<br>登录到 userWorkstations 多个以英文逗号分隔<br>用户帐户控制 userAccountControl (启用：512，禁用：514， 密码永不过期：66048)<br>帐户过期 accountExpires</p>
-</blockquote>
-<p><strong>“配置文件”标签</strong></p>
-<blockquote>
-<p>配置文件路径 profilePath<br>登录脚本 scriptPath<br>主文件夹：本地路径 homeDirectory<br>连接 homeDrive<br>到 homeDirectory</p>
-</blockquote>
-<p><strong>“电话”标签</strong></p>
-<blockquote>
-<p>家庭电话 homePhone (若是其它，在前面加other。)<br>寻呼机 Pager 如：otherhomePhone。<br>移动电话 mobile 若多个以英文分号分隔。<br>传真 FacsimileTelephoneNumber<br>IP电话 ipPhone<br>注释 Info</p>
-</blockquote>
-<p><strong>“单位”标签</strong></p>
-<blockquote>
-<p>职务 Title<br>部门 Department<br>公司 Company</p>
-</blockquote>
-<p><strong>“隶属于”标签</strong></p>
-<blockquote>
-<p>隶属于　 memberOf　 用户组的DN不需使用引号， 多个用分号分隔<br>“拨入”标签 远程访问权限（拨入或VPN） msNPAllowDialin<br>允许访问 值：TRUE<br>拒绝访问 值：FALSE<br>回拨选项 msRADIUSServiceType<br>由呼叫方设置或回拨到 值：4<br>总是回拨到 msRADIUSCallbackNumber<br>“环境”、“会话”、“远程控制”、“终端服务配置文件”、“COM+”标签</p>
-</blockquote>
-<p><strong>属性</strong></p>
-<table>
-<thead>
-<tr>
-<th>显示名称</th>
-<th>属性名称</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>First Name</td>
-<td><strong> giveName </strong> </td>
-</tr>
-<tr>
-<td>last Name</td>
-<td><strong> sn </strong></td>
-</tr>
-<tr>
-<td>Initials</td>
-<td><strong> initials </strong></td>
-</tr>
-<tr>
-<td>Description</td>
-<td><strong> description </strong></td>
-</tr>
-<tr>
-<td>Office</td>
-<td><strong> physicalDeliveryOfficeName </strong></td>
-</tr>
-<tr>
-<td>Telephone Number</td>
-<td><strong> telephoneNumber </strong></td>
-</tr>
-<tr>
-<td>Telephone: Other</td>
-<td><strong> otherTelephone</strong></td>
-</tr>
-<tr>
-<td>E-Mail</td>
-<td><strong>mail</strong></td>
-</tr>
-<tr>
-<td>Web Page</td>
-<td><strong> wwwHomePage </strong></td>
-</tr>
-<tr>
-<td>Web Page : Other</td>
-<td><strong> url </strong></td>
-</tr>
-</tbody>
-</table>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/PostgreSQL在2003系统和Win7系统启动注意事项/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/PostgreSQL在2003系统和Win7系统启动注意事项/" itemprop="url">PostgreSQL在2003系统和Win7系统启动注意事项</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:22:16+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>PostgreSQL在2003和Win7系统注册成功后，但是无法启动数据库。解决办法是，修改修改pgsql\data目录下pg_hba.conf文件。</p>
-<blockquote>
-<p>win2003 修改如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># IPv4 local connections:</div><div class="line">host    all         all         127.0.0.1/32          trust</div><div class="line">#host    all         all         ::1/128               trust</div><div class="line"># IPv6 local connections:</div><div class="line">#host    all         all         ::1/128               trust</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p>win7修改如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># IPv4 local connections:</div><div class="line">host    all         all         127.0.0.1/32          trust</div><div class="line">host    all         all         ::1/128               trust</div><div class="line"># IPv6 local connections:</div><div class="line">#host    all         all         ::1/128               trust</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1938,7 +1928,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1960,7 +1950,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
