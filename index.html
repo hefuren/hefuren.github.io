@@ -219,11 +219,21 @@
       
         
         <li class="menu-item menu-item-projectmgnt">
-          <a href="/categories/projectMgnt/" rel="section">
+          <a href="/categories/项目管理/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
             
             项目管理
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ai">
+          <a href="/categories/AI/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            menu.AI
           </a>
         </li>
       
@@ -300,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Redis学习笔记-list类型及操作/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Docker-学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -319,7 +329,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/08/Redis学习笔记-list类型及操作/" itemprop="url">Redis学习笔记--list类型及操作</a></h1>
+                <a class="post-title-link" href="/2017/10/08/Docker-学习笔记/" itemprop="url">Docker 学习笔记</a></h1>
         
 
         <div class="post-meta">
@@ -331,153 +341,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:25:52+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>list 是一个链表结构，主要功能是push、pop、获取一个范围的所有值等等，操作中key 理解为链表的名字。</p>
-<p>Redis 的list 类型其实就是一个每个子元素都是string 类型的双向链表。链表的最大长度是(2的32 次方)。我们可以通过push,pop 操作从链表的头部或者尾部添加删除元素。这使得list既可以用作栈，也可以用作队列。</p>
-<p>有意思的是list 的pop 操作还有阻塞版本的，当我们[lr]pop 一个list 对象时，如果list 是空，或者不存在，会立即返回nil。但是阻塞版本的b[lr]pop 可以则可以阻塞，当然可以加超时时间，超时后也会返回nil。为什么要阻塞版本的pop 呢，主要是为了避免轮询。举个简单的例子如果我们用list 来实现一个工作队列。执行任务的thread 可以调用阻塞版本的pop 去获取任务这样就可以避免轮询去检查是否有任务存在。当任务来时候工作线程可以立即返回，也可以避免轮询带来的延迟。说了这么多，接下来看一下实际操作的方法吧：</p>
-<p><strong>lpush</strong><br>在key 对应list 的头部添加字符串元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lpush mylist &quot;world&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; lpush mylist &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>在此处我们先插入了一个world，然后在world 的头部插入了一个hello。其中lrange 是用于取mylist 的内容。</p>
-<hr>
-<p><strong>rpush</strong><br>在key 对应list 的尾部添加字符串元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist2 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist2 &quot;world&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>linsert</strong><br>在key 对应list 的特定位置之前或之后添加字符串元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist3 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist3 &quot;world&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; linsert mylist3 before &quot;world&quot; &quot;there&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist3 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;there&quot;</div><div class="line">3) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>在此处我们先插入了一个hello，然后在hello 的尾部插入了一个world，然后又在world 的前面插入了there。</p>
-<hr>
-<p><strong>lset</strong><br>设置list中下表的元素值（下标从0开始）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;two&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;three&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; lset mylist4 0 &quot;four&quot;</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; lset mylist4 -2 &quot;five&quot;</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist4 0 -1</div><div class="line">1) &quot;four&quot;</div><div class="line">2) &quot;five&quot;</div><div class="line">3) &quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>lrem</strong><br>从key对应list中删除count个和value相同的元素。<br>count&gt;0时，按从头到尾的顺序删除，具体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;foo&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; lrem mylist5 2 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;foo&quot;</div><div class="line">2) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>lrange</strong><br>lrange key start stop：返回存储在 key 的列表里指定范围内的元素。 start 和 end 偏移量都是基于0的下标，即list的第一个元素下标是0（list的表头），第二个元素下标是1，以此类推。</p>
-<p>偏移量也可以是负数，表示偏移量是从list尾部开始计数。 例如， -1 表示列表的最后一个元素，-2 是倒数第二个，以此类推。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">redis&gt; RPUSH mylist &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis&gt; RPUSH mylist &quot;two&quot;</div><div class="line">(integer) 2</div><div class="line">redis&gt; RPUSH mylist &quot;three&quot;</div><div class="line">(integer) 3</div><div class="line">redis&gt; LRANGE mylist 0 0</div><div class="line">1) &quot;one&quot;</div><div class="line">redis&gt; LRANGE mylist -3 2</div><div class="line">1) &quot;one&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">3) &quot;three&quot;</div><div class="line">redis&gt; LRANGE mylist -100 100</div><div class="line">1) &quot;one&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">3) &quot;three&quot;</div><div class="line">redis&gt; LRANGE mylist 5 10</div><div class="line">(empty list or set)</div><div class="line">redis&gt; </div><div class="line"></div><div class="line">#count&lt;0 时，按从尾到头的顺序删除，具体如下:</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;foo&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; lrem mylist6 -2 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div><div class="line"></div><div class="line">#count=0 时，删除全部，具体如下:</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;foo&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; lrem mylist7 0 &quot;hello&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist7 0 -1</div><div class="line">1) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>ltrim</strong><br>保留指定key的值范围内的数据(<em>不在指定范围内的数据，将被删除</em>)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;two&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;three&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;four&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; ltrim mylist8 1 -1</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist8 0 -1</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;three&quot;</div><div class="line">3) &quot;four&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>lpop</strong><br>从list的头部删除元素，并返回删除元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lpop mylist</div><div class="line">&quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</div><div class="line">1) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>rpop</strong><br>从list的尾部删除元素，并返回删除元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt; rpop mylist2</div><div class="line">&quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>rpoplpush</strong><br>从第一个list 的尾部移除元素，并添加到第二个list 的头部，最后返回被移除的元素值，整个操作是原子的，如果第一个list 是空或者不存在返回nil。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">3) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line"></div><div class="line">redis 127.0.0.1:6379&gt; rpoplpush mylist5 mylist6</div><div class="line">&quot;hello&quot;</div><div class="line"></div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;hello&quot;</div><div class="line">3) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>lindex</strong><br>返回名称为key的list中index位置的元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lindex mylist5 0</div><div class="line">&quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lindex mylist5 1</div><div class="line">&quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>llen</strong><br>返回key 对应list 的长度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; llen mylist5</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Redis学习笔记-hashes类型及操作/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/Redis学习笔记-hashes类型及操作/" itemprop="url">Redis学习笔记--hashes类型及操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:25:02+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T14:59:49+08:00">
                 2017-10-08
               </time>
             
@@ -539,332 +403,25 @@
       
         
           
-            <p>Redis hash是一个string类型的field和value的映射表。它的添加、删除操作都是O(1)（平均）。hash特别适合用于存储对象。相较于将对象的每个字段存成单个string类型。将一个对象存储在hash类型中会占用更少的内存，并且可以更方便的存取整个对象。</p>
-<p><strong>hset</strong><br>设置hash field 为指定值，如果key 不存在，则先创建。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hset myhash field1 Hello</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>hsetnx</strong><br>设置hash field 为指定值，如果key 不存在，则先创建。如果field 已经存在，返回0，nx 是not exist 的意思。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hsetnx myhash field &quot;Hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; hsetnx myhash field &quot;Hello&quot;</div><div class="line">(integer) 0</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>第一次执行是成功的，但第二次执行相同的命令失败，原因是field 已经存在了。</p>
-<p><strong>hmset</strong><br>同时设置hash的多个field。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hmset myhash field1 Hello field2 World</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>hget</strong><br>获取指定的hash field.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hget myhash field1</div><div class="line">&quot;Hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt; hget myhash field2</div><div class="line">&quot;World&quot;</div><div class="line">redis 127.0.0.1:6379&gt; hget myhash field3   #由于数据库没有field3，所以取到的是一个空值nil</div><div class="line">(nil)</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>hmget</strong><br>获取全部指定的hash filed。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hmget myhash field1 field2 field3</div><div class="line">1) &quot;Hello&quot;</div><div class="line">2) &quot;World&quot;</div><div class="line">3) (nil)</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>hincrby</strong><br>指定的hash filed加上给定值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hset myhash field3 20</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; hget myhash field3</div><div class="line">&quot;20&quot;</div><div class="line">redis 127.0.0.1:6379&gt; hincrby myhash field3 -8</div><div class="line">(integer) 12</div><div class="line">redis 127.0.0.1:6379&gt; hget myhash field3</div><div class="line">&quot;12&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>hexists</strong><br>测试指定的field是否存在。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hexists myhash field1</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; hexists myhash field9</div><div class="line">(integer) 0</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>hlen</strong><br>返回指定的hash的field数量。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hlen myhash</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>hdel</strong><br>删除指定hash的field，删除成功返回1，否则返回0。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hlen myhash</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; hdel myhash field1</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; hlen myhash</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>hvals</strong><br>返回hash的所有value。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hvals myhash</div><div class="line">1) &quot;World&quot;</div><div class="line">2) &quot;Hello&quot;</div><div class="line">3) &quot;12&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>说明这个hash 中有3 个field</p>
-<p><strong>hgetall</strong><br>获取某个hash中全部的filed及value。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; hgetall myhash</div><div class="line">1) &quot;field2&quot;</div><div class="line">2) &quot;World&quot;</div><div class="line">3) &quot;field&quot;</div><div class="line">4) &quot;Hello&quot;</div><div class="line">5) &quot;field3&quot;</div><div class="line">6) &quot;12&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>一下子将myhash 中所有的field 及对应的value 都取出来了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Redis学习笔记-strings类型及操作/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/Redis学习笔记-strings类型及操作/" itemprop="url">Redis学习笔记--strings类型及操作1</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:23:56+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>set</strong><br>设置key 对应的值为string 类型的value。例如我们添加一个name= HongWan 的键值对，可以这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; set name HongWan</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>setnx</strong><br>设置key 对应的值为string 类型的value。如果key 已经存在，返回0，nx 是not exist 的意思。例如我们添加一个name= HongWan_new 的键值对，可以这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan&quot;</div><div class="line">redis 127.0.0.1:6379&gt; setnx name HongWan_new</div><div class="line">(integer) 0</div><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>setex</strong><br>设置key 对应的值为string 类型的value，并指定此键值对应的有效期。例如我们添加一个haircolor= red 的键值对，并指定它的有效期是10 秒，可以这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; setex haircolor 10 red</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; get haircolor</div><div class="line">&quot;red&quot;</div><div class="line">redis 127.0.0.1:6379&gt; get haircolor</div><div class="line">(nil)</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>可见由于最后一次的调用是10 秒以后了，所以取不到haicolor 这个键对应的值。</p>
-<p><strong>setrange</strong><br>设置指定key 的value 值的子字符串。例如我们希望将HongWan 的126 邮箱替换为gmail 邮箱，那么我们可以这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan@126.com&quot;</div><div class="line">redis 127.0.0.1:6379&gt; setrange name 8 gmail.com</div><div class="line">(integer) 17</div><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan@gmail.com&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>其中的8 是指从下标为8（包含8）的字符开始替换</p>
-<p><strong>mset</strong><br>一次设置多个key 的值，成功返回ok 表示所有的值都设置了，失败返回0 表示没有任何值被设置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; mset key1 HongWan1 key2 HongWan2</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; get key1</div><div class="line">&quot;HongWan1&quot;</div><div class="line">redis 127.0.0.1:6379&gt; get key2</div><div class="line">&quot;HongWan2&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>msetnx</strong><br>一次设置多个key 的值，成功返回ok 表示所有的值都设置了，失败返回0 表示没有任何值被设置，但是不会覆盖已经存在的key。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; get key1</div><div class="line">&quot;HongWan1&quot;</div><div class="line">redis 127.0.0.1:6379&gt; get key2</div><div class="line">&quot;HongWan2&quot;</div><div class="line">redis 127.0.0.1:6379&gt; msetnx key2 HongWan2_new key3 HongWan3</div><div class="line">(integer) 0</div><div class="line">redis 127.0.0.1:6379&gt; get key2</div><div class="line">&quot;HongWan2&quot;</div><div class="line">redis 127.0.0.1:6379&gt; get key3</div><div class="line">(nil)</div></pre></td></tr></table></figure></p>
-<p>可以看出如果这条命令返回0，那么里面操作都会回滚，都不会被执行。</p>
-<p><strong>get</strong><br>获取key 对应的string 值,如果key 不存在返回nil。例如我们获取一个库中存在的键name，可以很快得到它对应的value<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div><div class="line"></div><div class="line">//我们获取一个库中不存在的键name1，那么它会返回一个nil 以表时无此键值对</div><div class="line">redis 127.0.0.1:6379&gt; get name1 </div><div class="line">(nil)</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>getset</strong><br>设置key 的值，并返回key 的<strong>旧值</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan&quot;</div><div class="line">redis 127.0.0.1:6379&gt; getset name HongWan_new</div><div class="line">&quot;HongWan&quot;</div><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan_new&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div><div class="line"></div><div class="line">#接下来我们看一下如果key 不存的时候会什么样儿?</div><div class="line">redis 127.0.0.1:6379&gt; getset name1 aaa  //可见，如果key 不存在，那么将返回nil</div><div class="line">(nil)  </div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>getrange</strong><br>获取指定key 的value 值的子字符串。具体样例如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan@126.com&quot;</div><div class="line"></div><div class="line">#字符串左面下标是从0 开始的</div><div class="line">redis 127.0.0.1:6379&gt; getrange name 0 6</div><div class="line">&quot;HongWan&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div><div class="line"></div><div class="line">#字符串右面下标是从-1 开始的</div><div class="line">redis 127.0.0.1:6379&gt; getrange name -7 -1</div><div class="line">&quot;126.com&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div><div class="line"></div><div class="line">#当下标超出字符串长度时，将默认为是同方向的最大下标</div><div class="line">redis 127.0.0.1:6379&gt; getrange name 7 100</div><div class="line">&quot;@126.com&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>mget</strong><br>一次获取多个key 的值，如果对应key 不存在，则对应返回nil。具体样例如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; mget key1 key2 key3</div><div class="line">1) &quot;HongWan1&quot;</div><div class="line">2) &quot;HongWan2&quot;</div><div class="line">3) (nil)   //key3 由于没有这个键定义，所以返回nil。</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>incr</strong><br>对key 的值做加加操作,并返回新的值。注意incr 一个不是int 的value 会返回错误，incr 一个不存在的key，则设置key 为1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; set age 20</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; incr age</div><div class="line">(integer) 21</div><div class="line">redis 127.0.0.1:6379&gt; get age</div><div class="line">&quot;21&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>incrby</strong><br>同incr 类似，加指定值 ，key 不存在时候会设置key，并认为原来的value 是 0<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; get age</div><div class="line">&quot;21&quot;</div><div class="line">redis 127.0.0.1:6379&gt; incrby age 5</div><div class="line">(integer) 26</div><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan@gmail.com&quot;</div><div class="line">redis 127.0.0.1:6379&gt; get age</div><div class="line">&quot;26&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>decr</strong><br>对key 的值做的是减减操作，decr 一个不存在key，则设置key 为-1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; get age</div><div class="line">&quot;26&quot;</div><div class="line">redis 127.0.0.1:6379&gt; decr age</div><div class="line">(integer) 25</div><div class="line">redis 127.0.0.1:6379&gt; get age</div><div class="line">&quot;25&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>decrby</strong><br>同decr，减指定值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; get age</div><div class="line">&quot;25&quot;</div><div class="line">redis 127.0.0.1:6379&gt; decrby age 5</div><div class="line">(integer) 20</div><div class="line">redis 127.0.0.1:6379&gt; get age</div><div class="line">&quot;20&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div><div class="line"></div><div class="line">#decrby 完全是为了可读性，我们完全可以通过incrby 一个负值来实现同样效果，反之一样。</div><div class="line">redis 127.0.0.1:6379&gt; get age</div><div class="line">&quot;20&quot;</div><div class="line">redis 127.0.0.1:6379&gt; incrby age -5</div><div class="line">(integer) 15</div><div class="line">redis 127.0.0.1:6379&gt; get age</div><div class="line">&quot;15&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>append</strong><br>给指定key 的字符串值追加value,返回新字符串值的长度。例如我们向name 的值追加一个@126.com 字符串，那么可以这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; append name @126.com</div><div class="line">(integer) 15</div><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan@126.com&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>strlen</strong><br>取指定key 的value 值的长度。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; get name</div><div class="line">&quot;HongWan_new&quot;</div><div class="line">redis 127.0.0.1:6379&gt; strlen name</div><div class="line">(integer) 11</div><div class="line">redis 127.0.0.1:6379&gt; get age</div><div class="line">&quot;15&quot;</div><div class="line">redis 127.0.0.1:6379&gt; strlen age</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Redis学习笔记1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/Redis学习笔记1/" itemprop="url">Redis学习笔记1</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:23:13+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>####初识Redis<br>Redis是一个开源使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、key-value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。</p>
-<p>####数据类型<br>作为Key-Value型数据库，Redis也提供键（key）和键值（Value）的映射关系。但是，除了常规的数值或字符串，Redis的键值还可以是以下形式之一：</p>
+            <p><strong>Docker 的核心组件</strong></p>
 <ul>
-<li>List （列表）</li>
-<li>Set（集合）</li>
-<li>Sorted sets （有序集合）</li>
-<li>Hashes （哈希表）<br>键值的数据类型决定了该键值支持的操作。Redis支持诸如列表、集合或有序集合的交集、并集、查集等高级原子操作；同时，如果键值的类型是普通数字，Redis则提供自增等原子操作。</li>
+<li>Docker客户端和服务器</li>
+<li>Docker 镜像</li>
+<li>Registry</li>
+<li>Docker容器</li>
 </ul>
-<p>####持久化<br>通常，Redis将数据存储在内存中，或被配置为使用虚拟内存。通过两种方式可以实现数据持久化：使用截图的方式，将内存的数据不断写入磁盘；或使用类似MySQL的日志方式，记录每次更新的日志。前者性能较高，但是可能会引起一定程度的数据丢失；后者相反。</p>
-<p>####操作数据库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">#插入数据</div><div class="line">&gt; set name wwl</div><div class="line">OK</div><div class="line"></div><div class="line">#查询数据</div><div class="line">&gt; get name</div><div class="line">&quot;wwl&quot;</div><div class="line"></div><div class="line">#删除键值</div><div class="line">&gt; del name</div><div class="line"></div><div class="line">#验证键值是否存在</div><div class="line">&gt; exists name</div><div class="line">(integer)0</div></pre></td></tr></table></figure></p>
+<p><strong>Docker客户端和服务器</strong>：Docker是一个客户-服务器（C/S）架构的呈现。Docker客户端只需向Docker服务器或守护进程发出请求，服务器或守护进程将完成所有工作并返回结果。Docker提供一个命令行工具docker以及一整套RESTful API。你可以在同一台宿主机上运行Docker守护进程和客户端，可以从本地的Docker客户端连接到允许在另一台宿主机上远程Docker守护进程。</p>
+<p><strong>Docker 镜像</strong>：用户基于镜像来允许自己的容器，镜像也是Docker生命周期的“构建”部分。镜像是基于联合(Union)文件系统的一种层次的结果，由一系列指令一步步构建出来的。<em>例如：添加一个文件；执行一个命令；打开一个端口。</em>也可以把镜像当做容器的“源代码”。镜像体积很小，非常“便携”，易于分享、存储和更新。</p>
+<p><strong>Registry</strong>：Docker用Registry来保存用户构建的镜像。Registry分为公共和私有两种。Docker运营的公共Registry叫做Docker Hub。用户可以在Docker Hub注册账号，分享并保存自己的镜像。你也可以架设自己的私有Registry。</p>
+<p>#####安装Docker</p>
+<blockquote>
+<p>建议读者了解一下如何使用Puppet 或 Chef这样的工具来安装Docker，而不是纯手动安装。例如，可以在网上找到安装Docker的Puppet模块和Chef cookbook。</p>
+</blockquote>
+<p>docker支持很多Linux环境，OS X和Microsoft Windows也能安装Docker。在OS X系统和Windows系统中可以用Boot2Docker工具安装Docker。</p>
+<blockquote>
+<p>Boot2Docker是一个极小的虚拟机，同时提供了一个包装脚本对该虚拟机进行管理。该虚拟机运行一个守护进程，并在OS X或Windows中提供一个本地的Docker守护进程。Docker的客户端工具docker可以作为这些平台的原生程序安装，并连接到在Boot2Docker虚拟机中运行的Docker守护进程。</p>
+</blockquote>
+<p><strong>docker不支持32位CPU。</strong></p>
 
           
         
@@ -913,7 +470,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/MongoDB学习笔记-管理/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/大数据学习随记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -932,7 +489,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/08/MongoDB学习笔记-管理/" itemprop="url">MongoDB学习笔记--管理</a></h1>
+                <a class="post-title-link" href="/2017/10/08/大数据学习随记/" itemprop="url">大数据学习随记</a></h1>
         
 
         <div class="post-meta">
@@ -944,7 +501,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:21:09+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T14:58:09+08:00">
                 2017-10-08
               </time>
             
@@ -1006,25 +563,29 @@
       
         
           
-            <h4 id="启动和停止MongoDB"><a href="#启动和停止MongoDB" class="headerlink" title="启动和停止MongoDB"></a>启动和停止MongoDB</h4><p><strong>从命令行启动：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#启动MongoDB服务器，让其作为守护进程监听5586端口，并将所有输出记录到mongodb.log</div><div class="line">$ ./mongod --port 5586 --fork --logpath mongodb.log</div></pre></td></tr></table></figure></p>
-<p><strong>停止MongoDB：</strong></p>
-<p>如果服务器是作为前台经常运行在终端的，就直接按“Ctrl-C”。否则，就用kill这种命令发出信号。如果mongod的PID是10014,就可以通过命令停止MongoDB：<br><strong> kill -2 10014 (SIGINT) 或者 kill 10014 (SIGINT) </strong></p>
-<p>另一种稳妥的方式就是使用 <em>shutdown</em>命令，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; use admin</div><div class="line">switched to db admin</div><div class="line">&gt; db.shutdownServer();</div><div class="line">server should be down......</div></pre></td></tr></table></figure></p>
-<h4 id="备份与恢复"><a href="#备份与恢复" class="headerlink" title="备份与恢复"></a>备份与恢复</h4><p>mongodump 和 mongorestore命名，对MongoDB进行备份与恢复。和大多数MongoDB的命令工具一样，mongodump也可以通过运行 –help选项查看所有选项 ：$ ./mongodump  –help</p>
-<p>备份与恢复命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//如果你想备份数据库test</div><div class="line">$ ./mongodump -d test -o test/ </div><div class="line"></div><div class="line">//如果你想恢复数据库test</div><div class="line">$ ./mongorestore -d test -c user test/test/user.bson  //利用mongorestore表恢复刚才利用mongodump备份的数据</div></pre></td></tr></table></figure></p>
-<p>虽然用mongodump和mongorestore能不停机备份，但是我们却失去了获取实时数据视图的能力。MongoDB的fsync命令能在MongoDB运行时复制数据目录还不会毁坏数据。</p>
-<p>fsync命令会强制服务器将所有暖冲区写入磁盘。还可以选择上锁阻止对数据库的进一步写入，直到释放锁为止。写入锁是让fsync在备份时发挥作用的关键。下面的例子展示了如何在shell中操作，强制执行了fsync并获得了写入锁：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&gt; user admin</div><div class="line">switched to db admin</div><div class="line">&gt; db.runCommand(&#123;&quot;fsync&quot;:1,&quot;lock&quot;:1&#125;);</div><div class="line">&#123;</div><div class="line">   &quot;info&quot;:&quot;now locked against writes, use db.$cmd.sys.unlock.findOne() to unlock&quot;,</div><div class="line">    &quot;ok&quot;:1</div><div class="line">&#125;</div><div class="line"></div><div class="line">#备份好，就要解锁</div><div class="line">&gt; db.$cmd.sys.unlock.findOne();</div><div class="line">&#123;&quot;ok&quot;:1,&quot;info&quot;:&quot;unlock requested&quot;&#125;</div><div class="line"></div><div class="line">&gt; db.currentOp(); #运行currentOp是为了确保已经解锁了。</div><div class="line">&#123;&quot;inprog&quot;:[]&#125;</div></pre></td></tr></table></figure></p>
-<p>有了fsync命令，就能够非常灵活地备份，不用停掉服务器，也不用牺牲备份的实时性。要付出的代价就是一些写入操作暂时被阻塞。</p>
-<h4 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h4><p>修复所有数据库最简单的方式就是加上 –repair: mongod –repair来启动服务器。修复数据库实际过程实际上非常简单：将所有的文档导出然后马上导入。忽略那些无效的文档。完成以后，会建立索引。</p>
-<blockquote>
-<p>修复数据库还能起到压缩数据的作用。闲置的空间（比如删除体积较大的集合或者删除大量文档后腾出的空间）在修复后被重新回收。</p>
-<hr>
-<p>修复损坏的数据是不得已时的最后一招，尽可能稳妥的停掉服务器，利用复制功能实现故障恢复，经常做备份，这些才是最有效管理数据的手段。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; use test</div><div class="line">switched to db test</div><div class="line">&gt; db.repairDatabase()</div><div class="line">&#123;&quot;ok&quot;:1&#125;</div></pre></td></tr></table></figure>
-<h4 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h4><p><strong>主从复制</strong><br>主从复制是MongoDB最常用的复制方式。可用于备份、故障恢复、读扩展等。最基本的设置方式就是建立一个主节点和一个或者多个从节点，每个从节点要知道主节点的地址。运行<strong>mongod –master</strong>就启动了主服务器。运行<strong>mongod –slave –source master_address</strong>则启动了从服务器，其中<em>master_address</em>就是上面的主节点的地址。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># 设置主节点，并绑定端口10000</div><div class="line">$ mkdir -p ~/dbs/master</div><div class="line">$ ./mongod --dbpath ~/dbs/master --port 10000 --master</div><div class="line"></div><div class="line">#设置从节点，选择不同的目录和端口（示例配置从节点与主节点在同一台服务器上）</div><div class="line">$ mkdir -p ~/dbs/slave</div><div class="line">$ ./mongod --dbpath ~/dbs/slave --port 10001 --slave --source localhost:10000</div></pre></td></tr></table></figure>
-<p><strong>副本集</strong><br>简单地说，副本集就是有自动故障恢复功能的主从集群。主从集群和副本集最为明显的区别是副本集没有固定的“主节点”：整个集群会选举出一个“主节点”，当其不能工作时则变更到其他节点。副本集中会有一个活跃节点和一个或多个备份节点。副本集最美妙的地方就是所有东西都是自动化的。</p>
+            <p>作者：勾满誉<br>链接：<a href="https://www.zhihu.com/question/52187221/answer/129439263" target="_blank" rel="external">https://www.zhihu.com/question/52187221/answer/129439263</a><br>来源：知乎<br>著作权归作者所有，转载请联系作者获得授权。</p>
+<p>大数据开发一共几个流程，大概概括起来有：</p>
+<p>收集、清洗、数仓（建模）、OLAP、可视化</p>
+<p>这里边：</p>
+<p>收集一般的技术是：Kafka、Flume、高性能HTTP开发（可能）、Avro协议（可能）、Thrift协议（可能），取决于所在公司的技术栈。</p>
+<p>清洗：Spark、HiveSQL/SparkSQL、MapReduce（已经过时）</p>
+<p>存储：HDFS、Alluxio（分布式内存存储）、Redis（高速缓存）、mongoDB（文档型数据库）…</p>
+<p>流式计算：Spark Streaming / Storm</p>
+<p>数仓建模：Hive、MongoDB、HBase</p>
+<p>OLAP：MySQL（常用），PostgreSQL（GreenPlum）MyCAT（小众）…</p>
+<p>数据可视化：一般来说这活不归你管， 技术有 echarts.js hicharts.js d3.js …</p>
+<p>看眼花了吧？</p>
+<p>其实很好理解， 从上到下就是：数据要怎么存， 数据要怎么查…</p>
+<p>你需要学的是：</p>
+<p>计算机体系基础： 内存、CPU、指令、等等这些概念，得有个感觉，不然别人一说，你都不知道咋回事，尴尬了。看《深入理解计算机系统》。</p>
+<p>网络基础： 这个我还真不知道有什么书， 《TCP/IP详解》有点深了，不过你有时间，慢慢啃下来挺好， 而且第一本就够用，书也不厚。</p>
+<p>数据库基础：RMDBS里的MySQL其实我不推荐，但是这玩意已经烂大街了，是个公司就用，不学也得学。postgreSQL很不错，但是用的人少。</p>
+<p>Java系的语言你必须得会， 重要的就是Java和Scala， Java用来做传统的开发（你总要写几个接口， 这个时候最常用的就是SpringMVC/Mybatis，这俩兄弟玩明白就行了， 但是什么J2EE，什么Hibernate，什么HTML5，跟你一点关系也！没！有！）。</p>
+<p>Scala是我特别推崇的一门语言， 灵活、高效， Java搞懂了就把它也学了，以后写Spark，甚至用Play写Web，都很爽。</p>
+<p>Python是必学的一门语言， 灵活的脚本， 以后想早点下班回家，少不了它。</p>
+<p>Hadoop生态体系你必须得懂， 不需要一个组件一个组件的文档去看， 先看个大概，知道啥玩意是干啥的， 然后用的时候再去看文档。 Hadoop想自己装是有点蛋疼，跟你导师申请个阿里云几台机， 慢慢折腾去吧。</p>
+<p>哦对了， 你想折腾Hadoop，Linux的基础必须得学，至少Shell得用的溜溜的，不然hadoop你怎么装… cd / mv/ cp/ mkdir / chmod / ls / ssh / touch / vim / awk / sed / ifconfig / du / df / 这乱七八糟一大堆命令，一个一个学了吧， linux的各种概念，文件、管道、bash、配置，你得整懂吧？学吧！趁着研究生时间多，短投资大回报！</p>
+<p>作为研究生，建议你多看一看机器学习，说到底大数据还是一个“基础设施”，但要创造价值，还得靠机器学习（数据挖掘的意思就是 机器学习 on 大数据）。</p>
 
           
         
@@ -1073,7 +634,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/MongoDB学习笔记/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/HBase学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -1092,7 +653,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/08/MongoDB学习笔记/" itemprop="url">MongoDB学习笔记</a></h1>
+                <a class="post-title-link" href="/2017/10/08/HBase学习笔记/" itemprop="url">HBase学习笔记</a></h1>
         
 
         <div class="post-meta">
@@ -1104,7 +665,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:20:17+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T14:57:02+08:00">
                 2017-10-08
               </time>
             
@@ -1166,28 +727,966 @@
       
         
           
-            <p><strong>1、$where查询</strong></p>
-<blockquote>
-<p>　　不是非常必要时，一定要避免使用“$where”查询，因为它们在速度上要比常规查询慢很多。每个文档要从<strong>BSON转换成Javascript对象</strong>，然后通过“$where”的表达式来运行。同样<strong>还不能利用索引</strong>。所以，只在走投无路时才考虑“$where”这种用法。<br>　　<strong>将常规查询作为前置过滤</strong>，与“$where”组合使用可以不牺牲性能。如果可能的话，用索引根据非“$where”子句进行过滤，“$where”只用于对结果进行调优。</p>
-</blockquote>
-<p><strong>2、游标</strong><br>　　数据库使用<em>游标</em>来返回find的执行结果，客户端对游标的实现通常能够对最终结果进行有效的控制。可以限制结果的数量，略过部分结果，根据任意方向任意键的组合对结果进行各种排序，或者是执行其他一些功能强大的操作。<br>　　要想从shell中创建一个游标，首先要对集合填充一些文档，然后对其执行查询，并将结果分配给一个局部变量（用var声明的变量就是局部变量）。要迭代结果，可以使用游标的next方法，也可以使用hasNext来查看有没有其他结果。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt; var cursor =  db.collection.find();</div><div class="line">&gt; while (cursor.hasNext())&#123;</div><div class="line">       obj = cursor.next();</div><div class="line">       // do stuff</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>3、索引</strong><br>建立索引的方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">db.people.ensureIndex(&#123;&quot;username&quot;:1&#125;)  #以username为索引 </div><div class="line">db.people.ensureIndex(&#123;&quot;date&quot;:1,&quot;username&quot;:1&#125;) #以date,username为索引</div><div class="line">db.people.ensureIndex(&#123;&quot;comments.date&quot;:1&#125;) #索引内嵌文档中的键和普通的键创建索引没有什么区别</div><div class="line">db.people.ensureIndex(&#123;&quot;username&quot;:1&#125;,&#123;&quot;background&quot;:true&#125;) #建立索引既耗时也费力，还需要消耗很多资源。使用&#123;&quot;background&quot;:true&#125;选项可以使这个过程在后台完成，同时正常处理请求</div></pre></td></tr></table></figure></p>
-<p>建立索引时要考虑如下问题：</p>
+            <h4 id="HBase的表、行、列和单元格的概念："><a href="#HBase的表、行、列和单元格的概念：" class="headerlink" title="HBase的表、行、列和单元格的概念："></a>HBase的表、行、列和单元格的概念：</h4><p>最基本的单位是列（column），一列或多列形成一行（row），并由唯一的行键来确定存储。反过来，一个表（Table）中有若干行，其中每列可能有多个版本，在每一个单元格（cell）中存储了不同的值。</p>
+<p>除了每个单元格可以保留若干个版本的数据这一点，整个结构看起来像典型的数据库的描述。所有的行按照行键字典序进行排序存储。</p>
+<p>一行由若干列组成，若干列又构成一个列族（column family），一个列族的所有列存储在同一个底层的存储文件里，这个存储文件叫做HFile。</p>
+<p>所有的列和行的信息都会通过列族在表中定义，每一列的值或单元格的值都具有时间戳，默认由系统指定，也可以由用户显示设置。</p>
+<p>数据存储模式：（Table,RowKey,Family,Column,Timestamp）→Value<br>行数据的存取操作是原子的（atomic），可以读写任意数目的列，目前还不支持跨行事务和跨表事务。</p>
+<h4 id="自动分区"><a href="#自动分区" class="headerlink" title="自动分区"></a>自动分区</h4><p>HBase中扩展和负载均衡的基本单元称为region，region本质上是以行键排序的连续存储的区间。<br>每一个region只能由一台region 服务器（region server）加载，每一台region服务器可以同时加载多个region。</p>
+<h4 id="存储API"><a href="#存储API" class="headerlink" title="存储API"></a>存储API</h4><p>API提供了建表、删表、增加列族和删除列族操作，同时还提供了修改表和列族数据的功能，如压缩和设置块大小等。</p>
+<p>HBase可以通过add 方法对每一个put操作，这个只适合小数据量的操作，如果有个应用程序需要每秒存储上千行数据到HBase表中，这样的处理不合适。<br>HBase的API配备一个客户端的写缓冲区（write buffer），缓冲区负责收集put操作，然后调用RPC操作一次性将put送往服务器。全局交换机控制着该缓冲区是否在使用，以下是其方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">void setAutoFlush(boolean autoFlush)</div><div class="line">boolean isAutoFlush()</div></pre></td></tr></table></figure></p>
+<p>默认情况下，客户端缓冲区是禁用的。可以通过将自动刷写（autoflush）设置为false来激活缓冲区，调用如下：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">table.setAutoFlush(false)</div></pre></td></tr></table></figure></p>
+<p>激活客户端缓冲区之后，用户可以像单行put那样，将数据存储到HBase中，此时的操作不会产生RPC调用，因为存储的put实例保持在客户端进程的内存中。当需要强制把数据写到服务端时，可以调用另外一个API函数 flushCommits()方法将所有的修改传送到远程服务器。</p>
+<p>HBase批量处理操作：事实上，许多基于列表的操作，如delete(List<delist> deletes)或者get(List<get> gets)，都是基于batch()方法实现的。它们都是一些为了方便用户使用而保留的方法。如果你是新手，<strong>推荐使用batch()方法</strong>进行所有操作。</get></delist></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">void batch(List&lt;Row&gt; actions, Object[] results) throws IOException,InterruptedException</div><div class="line">Object[] batch(List&lt;Row&gt; actions) throws IOException,InterruptedException</div></pre></td></tr></table></figure>
+<p>batch()请求是同步的，会把操作直接发送到服务器端，这个过程没有什么延迟或其他中间操作。这与put()调用明显不同，所以请慎重挑选需要的方法。<br>两种方法的共同点：<br>get、put、delete都支持。如果只选时出现问题，客户端将抛出异常并报告问题。它们都不使用客户端写缓冲区。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Python学习笔记-操作PostgreSQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/Python学习笔记-操作PostgreSQL/" itemprop="url">Python学习笔记-操作PostgreSQL</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T14:56:05+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>python操作数据库PostgreSQL</p>
+<p><strong>1.简述　</strong>　<br>　　python可以操作多种数据库，诸如SQLite、MySql、PostgreSQL等，这里不对所有的数据库操作方法进行赘述，只针对目前项目中用到的PostgreSQL做一下简单介绍，主要包括python操作数据库插件的选择、安装、简单使用方法、测试连接数据库成功。<br><strong>2.数据库操作插件的选择</strong><br>　　PostgreSQL至少有三个python接口程序可以实现访问，包括PsyCopg、PyPgSQL、PyGreSQL(PoPy已经整合在PyGreSQL中)，三个接口程序各有利弊，需要根据实践选择最适合项目的方式。<br>　　推荐使用PsyCopg，对python开发框架的兼容性都很好，本文中我们只讨论这个插件。<br><strong>3.PsyCopg的下载</strong><br><strong>　　</strong>官网下载psycopg2-2.5.1.tar.gz：<a href="http://initd.org/psycopg/" target="_blank" rel="external">http://initd.org/psycopg/</a></p>
+<p><strong>4.PsyCopg的安装</strong><br>　　直接exe，根据提示安装即可.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/机器学习概念/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/机器学习概念/" itemprop="url">机器学习概念</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T14:54:22+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index">
+                    <span itemprop="name">AI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>定义：</strong>对于某类任务 <strong>T</strong> 和性能度量<strong>P</strong>，如果一个计算机程序在<strong>T</strong> 上以<strong>P</strong> 衡量的性能随着经验<strong>E</strong> 而自我完善，那么我们称这个计算机程序在从经验<strong>E</strong> 学习。</p>
+<p>学习系统设计，包括：<br>1.要学习的知识的确切类型<br>2.对于这个目标知识的表示<br>3.一种学习机制</p>
+<p><strong>目标函数的选择是一个关键的设计问题。</strong></p>
+<p><strong>机器学习的一些观点和问题：</strong><br>　　在机器学习方面，一个有效的观点是机器学习问题经常归结于搜索问题，即对非常大的假设空间进行搜索，以确定最佳拟合观察到的数据和学习器已有知识的假设。例如，考虑一下上面的西洋跳棋学习程序输出的假设空间。这个假设空间包含所有可由权w0 到w6 的不同值的评估函数。于是学习器的任务就是搜索这个大的空间，寻找与训练数据最佳拟合的假设。针对拟合权值的LMS 算法通过迭代调整权值实现了这个目的，每当假设的评估函数预测出一个与训练数据有偏差的值时就对每个权值进行校正。当学习器考虑的假设表示定义了一个连续的参数化的潜在假设空间时，这个算法很有效。</p>
+<p>机器学习方面普遍问题：</p>
 <ul>
-<li>会做什么样的查询？其中哪些键需要索引？</li>
-<li>每个键的索引方向是怎样的？</li>
-<li>如何应对扩展？有没有种不同的键的排列可以使常用数据更多地保留在内存中？<br>要是能回答这些问题，说明你已经做好了索引的准备了。</li>
+<li>从特定的训练数据学习一般的目标函数存在什么样的算法？如果提供了充足的训练数据，什么样的条件下会使特定的算法收敛到期望的函数？那个算法对哪些问题和表述的性能最好？</li>
+<li>多少训练数据是充足的？怎样找到学习到的假设的置信度与训练数据的数量及提供给学习器的假设空间特性之间的一般关系？</li>
+<li>学习器拥有的先验知识是怎样引导从样例进行泛化的过程的？当先验知识仅仅是近似正确时，它们会有帮助吗？</li>
+<li>对于选择有用的后续训练经验，什么样的策略最好？这个策略的选择会怎样影响学习问题的复杂性？</li>
+<li>怎样把学习任务简化为一个或多个函数逼近问题？换一种方式，系统该试图学习哪些函数？这个过程本身能自动化吗？</li>
+<li>学习器怎样自动地改变表示法来提高表示和学习目标函数的能力？</li>
 </ul>
-<p>创建索引的缺点就是每次插入、更新和删除时都会产生额外的开销。这是因为数据库不但需要执行这些操作，还要将这些操作在集合的索引中标记。因此，要尽可能少创建索引。每个集合默认的最大索引个数为64个。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/贝叶斯法则/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/贝叶斯法则/" itemprop="url">贝叶斯法则</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T14:52:54+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index">
+                    <span itemprop="name">AI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="什么是贝叶斯法则？"><a href="#什么是贝叶斯法则？" class="headerlink" title="什么是贝叶斯法则？"></a>什么是贝叶斯法则？</h4><p>　　<a href="http://wiki.mbalib.com/wiki/%E8%B4%9D%E5%8F%B6%E6%96%AF" target="_blank" rel="external">贝叶斯</a>的统计学中有一个基本的工具叫<strong>贝叶斯法则</strong>、也称为<strong>贝叶斯公式</strong>， 尽管它是一个数学公式，但其原理毋需数字也可明了。如果你看到一个人总是做一些好事，则那个人多半会是一个好人。这就是说，当你不能准确知悉一个事物的本质时，你可以依靠与事物特定本质相关的事件出现的多少去判断其本质属性的概率。 用数学语言表达就是：支持某项属性的事件发生得愈多，则该属性成立的可能性就愈大。<br>　　<strong>贝叶斯法则</strong>又被称为<strong>贝叶斯定理、贝叶斯规则</strong>是概率统计中的应用所观察到的现象对有关<a href="http://wiki.mbalib.com/wiki/%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83" target="_blank" rel="external">概率分布</a>的主观判断（即<a href="http://wiki.mbalib.com/wiki/%E5%85%88%E9%AA%8C%E6%A6%82%E7%8E%87" target="_blank" rel="external">先验概率</a>）进行修正的标准方法。<br>　　所谓贝叶斯法则，是指当分析样本大到接近总体数时，样本中事件发生的概率将接近于总体中事件发生的概率。<br>　　但<a href="http://wiki.mbalib.com/wiki/%E8%A1%8C%E4%B8%BA%E7%BB%8F%E6%B5%8E%E5%AD%A6" target="_blank" rel="external">行为经济学</a>家发现，人们在决策过程中往往并不遵循贝叶斯规律，而是给予最近发生的事件和最新的经验以更多的权值，在决策和做出判断时过分看重近期的事件。面对复杂而笼统的问题，人们往往走捷径，依据可能性而非根据概率来决策。这种对经典模型的系统性偏离称为“偏差”。由于心理偏差的存在，投资者在决策判断时并非绝对理性，会行为偏差，进而影响<a href="http://wiki.mbalib.com/wiki/%E8%B5%84%E6%9C%AC%E5%B8%82%E5%9C%BA" target="_blank" rel="external">资本市场</a>上价格的变动。但长期以来，由于缺乏有力的替代工具，<a href="http://wiki.mbalib.com/wiki/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%AE%B6" target="_blank" rel="external">经济学家</a>不得不在分析中坚持贝叶斯法则。</p>
+<h4 id="贝叶斯法则的定理"><a href="#贝叶斯法则的定理" class="headerlink" title="贝叶斯法则的定理"></a>贝叶斯法则的定理</h4><p>　　通常，事件A在事件B(发生)的条件下的概率，与事件B在事件A的条件下的概率是不一样的；然而，这两者是有确定的关系,贝叶斯法则就是这种关系的陈述。</p>
+<p>　　作为一个规范的原理，贝叶斯法则对于所有概率的解释是有效的；然而，频率主义者和贝叶斯主义者对于在应用中概率如何被赋值有着不同的看法：频率主义者根据<a href="http://wiki.mbalib.com/wiki/%E9%9A%8F%E6%9C%BA%E4%BA%8B%E4%BB%B6" target="_blank" rel="external">随机事件</a>发生的频率，或者总体样本里面的个数来赋值概率；贝叶斯主义者要根据未知的命题来赋值概率。一个结果就是，贝叶斯主义者有更多的机会使用贝叶斯法则。</p>
+<p>　　贝叶斯法则是关于随机事件A和B的<a href="http://wiki.mbalib.com/wiki/%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87" target="_blank" rel="external">条件概率</a>和边缘概率的。<br><img src="http://upload-images.jianshu.io/upload_images/3164735-d203a62a4051617a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>　　其中L(A|B)是在B发生的情况下A发生的可能性。<br>　　在贝叶斯法则中，每个名词都有约定俗成的名称：</p>
+<ul>
+<li><p>Pr(A)是A的<a href="http://wiki.mbalib.com/wiki/%E5%85%88%E9%AA%8C%E6%A6%82%E7%8E%87" target="_blank" rel="external">先验概率</a>或边缘概率。之所以称为”先验”是因为它不考虑任何B方面的因素。</p>
+</li>
+<li><p>Pr(A|B)是已知B发生后A的<a href="http://wiki.mbalib.com/wiki/%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87" target="_blank" rel="external">条件概率</a>，也由于得自B的取值而被称作A的<a href="http://wiki.mbalib.com/wiki/%E5%90%8E%E9%AA%8C%E6%A6%82%E7%8E%87" target="_blank" rel="external">后验概率</a>。</p>
+</li>
+<li><p>Pr(B|A)是已知A发生后B的条件概率，也由于得自A的取值而被称作B的<a href="http://wiki.mbalib.com/wiki/%E5%90%8E%E9%AA%8C%E6%A6%82%E7%8E%87" target="_blank" rel="external">后验概率</a>。</p>
+</li>
+<li><p>Pr(B)是B的先验概率或边缘概率，也作标准化常量（normalized constant）。</p>
+</li>
+</ul>
+<p>　　<strong>按这些术语，Bayes法则可表述为：</strong><br>　　<strong>后验概率 = (相似度 * 先验概率)/标准化常量</strong></p>
+<p>　　也就是说，后验概率与先验概率和相似度的乘积成正比。<br>　　另外，比例Pr(B|A)/Pr(B)也有时被称作标准相似度（standardised likelihood），Bayes法则可表述为：<br>　　<strong>后验概率 = 标准相似度 * 先验概率</strong></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/挣值常用计算公式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/挣值常用计算公式/" itemprop="url">挣值常用计算公式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T14:51:45+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/项目管理/" itemprop="url" rel="index">
+                    <span itemprop="name">项目管理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>挣值最常用的计算公式<br><strong>以下公式用于测量项目绩效：</strong></p>
+<p>SV=EV-PV<br>SV—进度偏差，用挣值减去计划价值，若得数为负，则表明进度落后于计划进度。</p>
+<p>CV=EV-AC<br>CV—成本偏差，用挣值减去实际成本，若得数为负，则表明项目已经出现了成本超支。</p>
+<p>SPI=EV/PV<br>SPI—进度绩效指数，挣值除以计划价值，若得数小于1，则表明进度落后于计划进度。</p>
+<p>CPI=EV/AC<br>CPI—成本绩效指数，挣值除以实际成本，若得数小于1，则表明项目已经出现了成本超支。</p>
+<p><strong>以下公式用于预测：</strong></p>
+<p>ETC—完工尚需估计，即完成剩余工作所需的估算费用<br>EAC—完工时估算，即完成所有计划工作所需的估算<br>BAC—项目总预算，BAC=完工时的PV总和</p>
+<p>ETC=BAC-EV，基于非典型偏差计算ETC<br>此时当前偏差被看作是非典型的，并且项目团队预期在以后将不会发生类似偏差。</p>
+<p>ETC=(BAC-EV)/CPI，基于典型偏差计算ETC<br>此时当前偏差被看作是典型的，当前偏差可看作未来偏差的典型代表时。</p>
+<p>EAC=AC+ETC，使用新估算计算EAC，即原先估算假设有根本性缺陷或由于条件变化假设条件不再成立时重新估算的ETC。</p>
+<p>EAC=AC+BAC-EV，使用剩余预算计算EAC，偏差非典型时使用</p>
+<p>EAC=AC+(BAC-EV)/CPI，使用CPI计算EAC，偏差典型时使用</p>
+<p>EAC=BAC/CPI </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/项目挣值管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/项目挣值管理/" itemprop="url">项目挣值管理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T14:50:08+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/项目管理/" itemprop="url" rel="index">
+                    <span itemprop="name">项目管理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>　　专注于项目管理也有一段时间了，从最开始就接触到挣值管理，然每每看是都看懂了，但为用心去记，以至于再次提到挣值这个概念时，我不得不再去回顾原来的知识。因此，认真做下笔记，帮助自己更深的去理解挣值管理。</p>
+<p><strong>1、什么是挣值方法？</strong><br>　　挣值法又称为赢得值法或偏差分析法。挣值分析法是在工程项目实施中使用较多的一种方法，是对项目进度和费用进行综合控制的一种有效方法。 </p>
+<p>　　挣值法的价值在于将项目的进度和费用综合度量，从而能准确描述项目的进展状态。挣值法的另一个重要优点是可以预测项目可能发生的工期滞后量和费用超支量，从而及时采取纠正措施，为项目管理和控制提供了有效手段。</p>
+<p><strong>2、挣得值方法的基本参数</strong><br><strong>完成时预算</strong>（BAC），该项工作的总预算。<strong> </strong></p>
+<p><strong>计划工作量的预算费用</strong> （BCWS或PV —— Budgeted Cost for Work Scheduled）。 </p>
+<p>BCWS是指项目实施过程中某阶段计划要求完成的工作量所需的预算费用。BCWS主要是反映进度计划应当完成的工作量（用费用表示）。计算公式为： </p>
+<p><em>BCWS  =</em> <em>计划工作量</em> <em>× 预算定额</em>。</p>
+<p>BCWS是与时间相联系的，当考虑资金累计曲线时，是在项目预算S曲线上的某一点的值。当考虑某一项作业或某一时间段时，例如某一月份，BCWS是该作业或该月份包含作业的预算费用。</p>
+<p><strong>已完成工作量的实际费用</strong>（ACWP或AC —— Actual Cost for Work Performed）。</p>
+<p>ACWP是指项目实施过程中某阶段实际完成的工作量所消耗的工时（或费用）。ACWP主要反映项目执行的实际消耗指标。</p>
+<p><strong>已完工作量的预算成本</strong>（BCWP 或EV —— Budgeted Cost for Work Performed），或称挣值、盈得值和挣得值。</p>
+<p>BCWP是指项目实施过程中某阶段按实际完成工作量及按预算定额计算出来的费用，即挣得值（Earned Value）。BCWP的实质内容是将已完成的工作量用预算费用来度量。BCWP的计算公式为：</p>
+<p><em>BCWP =</em> <em>已完工作量</em> <em>×</em> <em>预算定额</em>。</p>
+<p><strong>3、挣得值方法的四个评价指标</strong></p>
+<p><strong>成本偏差</strong>（CV —— Cost Variance）：CV是指检查期间BCWP与ACWP之间的差异，计算公式为：</p>
+<p><em>CV = BCWP - ACWP
+</em></p>
+<p>当CV为负值时表示执行效果不佳，即实际消费费用超过预算值即超支。反之当CV为正值时表示实际消耗费用低于预算值，表示有节余或效率高。若CV=0,表示项目按计划执行。</p>
+<p><strong>进度偏差</strong>（SV —— Schedule Variance）：SV是指检查日期BCWP与BCWS之间的差异。其计算公式为：</p>
+<p><em>SV = BCWP - BCWS
+</em></p>
+<p>当SV为正值时表示进度提前，SV为负值表示进度延误。若SV=0，表明进度按计划执行。</p>
+<p><strong>成本绩效指数</strong>（CPI —— Cost Performed Index）：CPI是指挣得值与实际成本之比。其计算公式为：</p>
+<p>CPI = BCWP／ACWP</p>
+<p>当 CPI＞1表示低于预算，CPI＜1表示超出预算，CPI＝1表示实际费用与预算费用吻合。若CPI=1,表明项目费用按计划进行。</p>
+<p><strong>进度绩效指数</strong>（SPI —— Schedule Performed Index）：SPI是指项目挣得值与计划值之比，其计算公式为：</p>
+<p>SPI = BCWP／BCWS</p>
+<p>当 SPI＞1表示进度提前，SPI＜1表示进度延误，SPI＝1表示实际进度等于计划进度。</p>
+<p><strong>完成时预计值</strong>（估计完成全部工作所需的成本）的计算公式如下：</p>
+<p>EAC = BAC / CPI，或</p>
+<p>EAC= AC -（BAC - EV）/ CPI</p>
+<p><strong>4、挣值法评价曲线</strong></p>
+<p>　　挣值法评价曲线如下图所示，下图的横坐标表示时间，纵坐标则表示费用。BCWS曲线为计划工作量的预算费用曲线，表示项目投入的费用随时间的推移在不断积累，直至项目结束达到它的最大值，所以曲线呈S形状，也称为S曲线。ACWP已完成工作量的实际费用，同样是进度的时间参数，随项目推进而不断增加的，也是呈S形的曲线。利用挣值法评价曲线可进行费用进度评价，图中所示的项目，CV&lt;0，SV&lt;0，这表示项目执行效果不佳，即费用超支，进度延误，应采取相应的补救措施。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/3164735-141085db20909699.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="11.jpg"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/敏捷工作件：完成标准（Definition-of-Done）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/敏捷工作件：完成标准（Definition-of-Done）/" itemprop="url">敏捷工作件：完成标准（Definition of Done）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T14:48:33+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/项目管理/" itemprop="url" rel="index">
+                    <span itemprop="name">项目管理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>什么是完成标准？</strong></p>
+<ul>
+<li>基于“随时可向用户发布”的目标制定衡量团队工作是否已完成的标准，由团队和PM/Scrum Master形成共识。</li>
+</ul>
+<p><strong>完成标准的好处</strong></p>
+<ul>
+<li>共同协商的完成标准是团队的自我承诺，团队会更认真；</li>
+<li>用于准确评估团队工作进展；</li>
+<li>清晰和明确的完成标准保证了每次迭代是高质量的。</li>
+</ul>
+<p><strong>完成标准的关键要点</strong></p>
+<ul>
+<li><strong>团队自协商：</strong> 团队根据项目实际情况定义完成标准，并严格遵守；</li>
+<li><strong>有层次：</strong> 一般分为三个层次，Story级别，迭代级和发布级，每个级别都有各自完成标准。</li>
+</ul>
+<p>完成标准的样例：</p>
 <blockquote>
-<p><strong>注意：</strong>一定不要索引每一个键。这会导致插入非常慢，还会占用很多空间，并且很可能对查询速度提升不大。</p>
+<p><strong>Story完成标准样例：</strong><br>1.代码合入主干<br>2.代码100%检视<br>3.代码符合规范<br>4.持续集成无错误<br>5.通过验收测试</p>
+<p><strong>迭代完成标准样例：</strong><br>1.所有Story完成<br>2.所有缺陷解决<br>3.系统测试用例100%通过<br>4.通过迭代验收</p>
+<p><strong>发布完成标准样例：</strong><br>1.通过回归测试<br>2.通过性能测试<br>3.更新配套资料</p>
 </blockquote>
-<p>MongoDB排序需要将所有数据提取到内存来排序，因此，可以做无索引排序是有个上限的，那就是不可能在内存里面做T级别数据的排序。一旦集合大到不能在内存中排序，MongoDB就会报错。</p>
-<p>索引管理：索引的元信息存储在每个数据库的system.indexes集合中。这是一个保留集合，不能对其插入或者删除文档。操作只能通过ensureIndex或者dropIndexes进行。<br>建立索引既耗时也费力，还需要消耗很多资源。使用{“background”:true}选项可以使这个过程在后台完成，同时正常处理请求。</p>
-<p>MongoDB支持动态建立普通集合，还支持固定集合（<em>要实现创建，而且大小固定。如果固定集合空间不足，最早的文档就会被删除，为新的文档腾出空间，这意味着固定集合在新文档插入的时候自动淘汰最早的文档。</em>）</p>
-<p>固定集合和普通集合还有一个区别，就是在默认情况下固定集合没有索引，即便是“_id”上也没有索引。</p>
-<p>固定集合有种特殊的排序方式，叫做“自然排序”。自然排序就是文档在磁盘上的顺序顺时针方向依次的。文档总数安装插入的顺序存储的，自然顺序就是与此相同的。也可以使用自然排序按照反向插入的顺序查询。</p>
-<p>尾部游标只能在固定集合上使用。</p>
 
           
         
@@ -1236,7 +1735,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/MongoDB学习笔记——查询/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Prince-2-学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -1255,7 +1754,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/08/MongoDB学习笔记——查询/" itemprop="url">MongoDB学习笔记——查询</a></h1>
+                <a class="post-title-link" href="/2017/10/08/Prince-2-学习笔记/" itemprop="url">Prince 2 学习笔记</a></h1>
         
 
         <div class="post-meta">
@@ -1267,7 +1766,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:19:23+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T14:47:41+08:00">
                 2017-10-08
               </time>
             
@@ -1290,8 +1789,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
+                  <a href="/categories/项目管理/" itemprop="url" rel="index">
+                    <span itemprop="name">项目管理</span>
                   </a>
                 </span>
 
@@ -1329,446 +1828,31 @@
       
         
           
-            <p>转自：<a href="http://www.cnblogs.com/stephen-liu74/archive/2012/08/03/2553803.html" target="_blank" rel="external">http://www.cnblogs.com/stephen-liu74/archive/2012/08/03/2553803.html</a></p>
-<p><strong>1、基本查询</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">//构造查询数据</div><div class="line"> &gt; db.test.findOne()   </div><div class="line"> &#123;         </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;),</div><div class="line">     &quot;name&quot; : &quot;stephen&quot;,        </div><div class="line">     &quot;age&quot; : 35,         </div><div class="line">     &quot;genda&quot; : &quot;male&quot;,         </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot;    </div><div class="line">&#125;</div><div class="line"></div><div class="line">// 多条件查询。下面的示例等同于SQL语句的where name = &quot;stephen&quot; and age = 35</div><div class="line">  &gt; db.test.find(&#123;&#125;, &#123;&quot;name&quot;:1,&quot;age&quot;:1&#125;)</div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 指定不返回的文档键值对。下面的示例将返回除name之外的所有键值对。</div><div class="line">&gt; db.test.find(&#123;&#125;, &#123;&quot;name&quot;:0&#125;)    // 0 表示不查询name属性</div><div class="line">&#123;</div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;),</div><div class="line">     &quot;age&quot; : 35, </div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p><strong>2、查询条件</strong><br>MongoDB提供了一组比较操作符：<strong>$lt / $lte / $gt / $gte / $ne</strong>，依次等价于<strong>&lt;,&lt;=, &gt;, &gt;=, != </strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line"> //下面的示例返回符合条件age &gt;= 18 &amp;&amp; age &lt;= 40的文档  </div><div class="line">&gt; db.test.find(&#123;&quot;age&quot;:&#123;&quot;$gte&quot;:18, &quot;$lte&quot;:40&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot;</div><div class="line"> &#125;</div><div class="line"></div><div class="line">//下面的示例返回条件符合name != &quot;stephen1&quot;</div><div class="line">&gt; db.test.find(&#123;&quot;name&quot;:&#123;&quot;$ne&quot;:&quot;stephen1&quot;&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125;</div><div class="line"></div><div class="line">//$in等同于SQL中的in，下面的示例等同于SQL中的in (&quot;stephen&quot;,&quot;stephen1&quot;)</div><div class="line"> &gt; db.test.find(&#123;&quot;name&quot;:&#123;&quot;$in&quot;:[&quot;stephen&quot;,&quot;stephen1&quot;]&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125; </div><div class="line"></div><div class="line">//和SQL不同的是，MongoDB的in list中的数据可以是不同类型。这种情况可用于不同类型的别名场景。    </div><div class="line">&gt; db.test.find(&#123;&quot;name&quot;:&#123;&quot;$in&quot;:[&quot;stephen&quot;,123]&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125; </div><div class="line"></div><div class="line">//$nin等同于SQL中的not in，同时也是$in的取反。如：   </div><div class="line">&gt; db.test.find(&#123;&quot;name&quot;:&#123;&quot;$nin&quot;:[&quot;stephen2&quot;,&quot;stephen1&quot;]&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125;</div><div class="line"></div><div class="line">// $or等同于SQL中的or，$or所针对的条件被放到一个数组中，每个数组元素表示or的一个条件。</div><div class="line">//下面的示例等同于name = &quot;stephen1&quot; or age = 35*    </div><div class="line">&gt; db.test.find(&#123;&quot;$or&quot;: [&#123;&quot;name&quot;:&quot;stephen1&quot;&#125;, &#123;&quot;age&quot;:35&#125;]&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125; </div><div class="line"></div><div class="line">//下面的示例演示了如何混合使用$or和$in。</div><div class="line">&gt; db.test.find(&#123;&quot;$or&quot;: [&#123;&quot;name&quot;:&#123;&quot;$in&quot;:[&quot;stephen&quot;,&quot;stephen1&quot;]&#125;&#125;, &#123;&quot;age&quot;:36&#125;]&#125;)   </div><div class="line">&#123; </div><div class="line">    &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">    &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">    &quot;age&quot; : 35,</div><div class="line">    &quot;genda&quot; : &quot;male&quot;, </div><div class="line">    &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125;</div><div class="line"></div><div class="line">//$not表示取反，等同于SQL中的not。    </div><div class="line">&gt; db.test.find(&#123;&quot;name&quot;: &#123;&quot;$not&quot;: &#123;&quot;$in&quot;:[&quot;stephen2&quot;,&quot;stephen1&quot;]&#125;&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">    &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">    &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">    &quot;age&quot; : 35,</div><div class="line">    &quot;genda&quot; : &quot;male&quot;, </div><div class="line">    &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>3、null数据类型的查询</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">//在进行值为null数据的查询时，所有值为null，以及不包含指定键的文档均会被检索出来。</div><div class="line">&gt; db.test.find(&#123;&quot;x&quot;:null&#125;)</div><div class="line">&#123; </div><div class="line">    &quot;_id&quot; : ObjectId(&quot;4fd59d30b9ac507e96276f1b&quot;), </div><div class="line">     &quot;x&quot; : null</div><div class="line"> &#125;</div><div class="line">&#123; </div><div class="line">    &quot;_id&quot; : ObjectId(&quot;4fd59d49b9ac507e96276f1c&quot;), </div><div class="line">    &quot;y&quot; : 1 </div><div class="line">&#125;</div><div class="line"> </div><div class="line">//需要将null作为数组中的一个元素进行相等性判断，即便这个数组中只有一个元素。</div><div class="line">//再有就是通过$exists判断指定键是否存在。</div><div class="line">&gt; db.test.find(&#123;&quot;x&quot;: &#123;&quot;$in&quot;: [null], &quot;$exists&quot;:true&#125;&#125;)</div><div class="line">&#123; &quot;_id&quot; : ObjectId(&quot;4fd59d30b9ac507e96276f1b&quot;), &quot;x&quot; : null &#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/MongoDB基本命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/MongoDB基本命令/" itemprop="url">MongoDB基本命令</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:18:13+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>MongoDB基本命令</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">//查询所有数据库列表</div><div class="line">show dbs </div><div class="line"></div><div class="line">//查看当前连接哪个数据库</div><div class="line">db</div><div class="line"></div><div class="line">//切换到需要使用的数据库，例如：use test</div><div class="line">use database Name</div><div class="line"></div><div class="line">//查看当前数据库下有哪些表或者collection</div><div class="line">show collections</div><div class="line"></div><div class="line">//想知道mongodb支持哪些命令，可以直接输入help </div><div class="line">help</div><div class="line"></div><div class="line">//如果想知道当前数据库支持哪些方法</div><div class="line">db.help();</div><div class="line"></div><div class="line">//如果想知道当前数据库下的表或者表collection支持哪些方法，可以使用一下命令如</div><div class="line">db.user.help();  //user为表名 </div><div class="line"></div><div class="line">//如果你想备份数据库test</div><div class="line">$ ./mongodump -d test -o test/ </div><div class="line"></div><div class="line">//如果你想恢复数据库test</div><div class="line">$ ./mongorestore -d test -c user test/test/user.bson  //利用mongorestore表恢复刚才利用mongodump备份的数据</div></pre></td></tr></table></figure></p>
-<p><strong>help命令：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">HELP</div><div class="line">      show dbs                     show database names</div><div class="line">      show collections             show collections in current database</div><div class="line">      show users                   show users in current database</div><div class="line">      show profile                 show most recent system.profile entries with time &gt;= 1ms</div><div class="line">      use &lt;db name&gt;                set curent database to &lt;db name&gt;</div><div class="line">      db.help()                    help on DB methods</div><div class="line">      db.foo.help()                help on collection methods</div><div class="line">      db.foo.find()                list objects in collection foo</div><div class="line">      db.foo.find( &#123; a : 1 &#125; )     list objects in foo where a == 1</div><div class="line">      it                           result of the last line evaluated; use to further iterate</div></pre></td></tr></table></figure></p>
-<p><strong>db.help()命令：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">DB methods:</div><div class="line">      db.addUser(username, password) 添加数据库授权用户</div><div class="line">      db.auth(username, password)                访问认证</div><div class="line">      db.cloneDatabase(fromhost) 克隆数据库</div><div class="line">      db.commandHelp(name) returns the help for the command</div><div class="line">      db.copyDatabase(fromdb, todb, fromhost)  复制数据库</div><div class="line">      db.createCollection(name, &#123; size : ..., capped : ..., max : ... &#125; ) 创建表</div><div class="line">      db.currentOp() displays the current operation in the db</div><div class="line">      db.dropDatabase()        删除当前数据库</div><div class="line">      db.eval_r(func, args) run code server-side</div><div class="line">      db.getCollection(cname) same as db[&apos;cname&apos;] or db.cname</div><div class="line">      db.getCollectionNames()        获取当前数据库的表名</div><div class="line">      db.getLastError() - just returns the err msg string</div><div class="line">      db.getLastErrorObj() - return full status object</div><div class="line">      db.getMongo() get the server connection object</div><div class="line">      db.getMongo().setSlaveOk() allow this connection to read from the nonmaster member of a replica pair</div><div class="line">      db.getName()</div><div class="line">      db.getPrevError()</div><div class="line">      db.getProfilingLevel()</div><div class="line">      db.getReplicationInfo()</div><div class="line">      db.getSisterDB(name) get the db at the same server as this onew</div><div class="line">      db.killOp() kills the current operation in the db</div><div class="line">      db.printCollectionStats()   打印各表的状态信息</div><div class="line">      db.printReplicationInfo()        打印主数据库的复制状态信息</div><div class="line">      db.printSlaveReplicationInfo()        打印从数据库的复制状态信息</div><div class="line">      db.printShardingStatus()                打印分片状态信息</div><div class="line">      db.removeUser(username) 删除数据库用户</div><div class="line">      db.repairDatabase() 修复数据库</div><div class="line">      db.resetError()</div><div class="line">      db.runCommand(cmdObj) run a database command.  if cmdObj is a string, turns it into &#123; cmdObj : 1 &#125;</div><div class="line">      db.setProfilingLevel(level) 0=off 1=slow 2=all</div><div class="line">      db.shutdownServer()</div><div class="line">      db.version() current version of the server</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Win7下MongoDB的安装和部署测试/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/Win7下MongoDB的安装和部署测试/" itemprop="url">Win7下MongoDB的安装和部署测试</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:17:20+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>转自：<a href="http://jingyan.baidu.com/article/f3e34a12ac10cef5eb653583.html" target="_blank" rel="external">http://jingyan.baidu.com/article/f3e34a12ac10cef5eb653583.html</a></p>
-<p><a href="http://www.cnblogs.com/lzrabbit/p/3682510.html" target="_blank" rel="external">http://www.cnblogs.com/lzrabbit/p/3682510.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/RestFul概述/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/RestFul概述/" itemprop="url">RestFul概述</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:16:00+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h4><p>　　RestFul是一种软件架构风格，而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。<br>　　<br>　　REST（英文：Representational State Transfer，简称REST）描述了一个架构样式的网络系统，比如 web 应用程序。在目前主流的三种Web服务交互方案中，REST相比于SOAP（Simple Object Access protocol，简单对象访问协议）以及XML-RPC更加简单明了，无论是对URL的处理还是对Payload的编码，REST都倾向于用更加简单轻量的方法设计和实现。值得注意的是REST并没有一个明确的标准，而更像是一种设计的风格。<br>　　<br>　　要理解RESTful架构，最好的方法就是去理解Representational State Transfer这个词组到底是什么意思，它的每一个词代表了什么涵义。如果你把这个名称搞懂了，也就不难体会REST是一种什么样的设计。</p>
-<p>　　<strong>● 资源（Resources）</strong><br>　　REST的名称”表现层状态转化”中，省略了主语。”表现层”其实指的是”资源”（Resources）的”表现层”。<br>　　所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。它可以是一段文本、一张图片、一首歌曲、一种服务，总之就是一个具体的实在。你可以用一个URI（统一资源定位符）指向它，每种资源对应一个特定的URI。要获取这个资源，访问它的URI就可以，因此URI就成了每一个资源的地址或独一无二的识别符。所谓”上网”，就是与互联网上一系列的”资源”互动，调用它的URI。</p>
-<p>　　<strong>● 表现层（Representation）</strong><br>　　“资源”是一种信息实体，它可以有多种外在表现形式。我们把”资源”具体呈现出来的形式，叫做它的”表现层”（Representation）。比如，文本可以用txt格式表现，也可以用HTML格式、XML格式、JSON格式表现，甚至可以采用二进制格式；图片可以用JPG格式表现，也可以用PNG格式表现。<br>　　URI只代表资源的实体，不代表它的形式。严格地说，有些网址最后的”.html”后缀名是不必要的，因为这个后缀名表示格式，属于”表现层”范畴，而URI应该只代表”资源”的位置。它的具体表现形式，应该在HTTP请求的头信息中用Accept和Content-Type字段指定，这两个字段才是对”表现层”的描述。</p>
-<p>　　<strong>● 状态转化（State Transfer）</strong><br>　　访问一个网站，就代表了客户端和服务器的一个互动过程。在这个过程中，势必涉及到数据和状态的变化。互联网通信协议HTTP协议，是一个无状态协议。这意味着，<strong>所有的状态都保存在服务器端</strong>。因此，如果客户端想要操作服务器，必须通过某种手段，让服务器端发生”状态转化”（State Transfer）。而这种转化是建立在表现层之上的，所以就是”表现层状态转化”。客户端用到的手段，只能是HTTP协议。具体来说，就是HTTP协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。它们分别对应四种基本操作：GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源。</p>
+            <p><strong>为什么项目交付如此困难？</strong></p>
 <blockquote>
-<p><strong>因此RESTful架构可以理解为：</strong><br>1、每一个URI代表一种资源；<br>2、客户端和服务器之间，传递这种资源的某种表现层；<br>3、客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。</p>
+<p>项目是一个临时的组织，目的在于根据Business Case交付一个/多个商业产品。</p>
 </blockquote>
+<ul>
+<li>变化性</li>
+<li><strong>临时性：</strong>项目总是有开始日期和结束日期的，因此项目是具有临时性。</li>
+<li><strong>跨功能组织性：</strong>项目在团队组织上、项目交付的业务上，对会存在跨组织、跨业务。</li>
+<li><strong>唯一性：</strong>每个项目都是唯一的。同一个组织也许承担许多相似的项目 ，项目的类型、活动也一致。但是每个项目都有自己的独特性：不同的团队、不同的客户、不同的工作地点，不同的客户需求与期望、……，所有的因素决定了项目的独特性。</li>
+<li><strong>不确定性：</strong>每个项目交付过程中，都会遇到不可变因素，这些不可变因素就是存在着的各种风险，将会对项目的发展产生影响，因此项目交付过程中存在一定的不确定性。项目交付过程中需要识别威胁和计划（项目风险管理）。</li>
+</ul>
+<p>为什么我们需要项目管理方法论？</p>
+<blockquote>
+<p>项目管理是通过制定计划、委托授权、执行和监控项目多方面，，以期达到项目期望的目标（包括时间、成本、质量、范围、收益和风险）。</p>
+</blockquote>
+<p>###Prince 2项目管理7要素：</p>
+<ul>
+<li>Business Case（商业机会）</li>
+<li>Organization（项目组织）</li>
+<li>Quality（质量管理）</li>
+<li>Plans（计划管理）</li>
+<li>Risk（风险管理）</li>
+<li>Change（变更管理）</li>
+<li>Progress（过程管理）</li>
+</ul>
 
           
         
@@ -1808,7 +1892,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1854,7 +1938,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-count">75</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1865,7 +1949,7 @@
             
             <div class="site-state-item site-state-categories">
               
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               
             </div>
@@ -1876,7 +1960,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">49</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

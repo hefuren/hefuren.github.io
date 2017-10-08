@@ -219,11 +219,21 @@
       
         
         <li class="menu-item menu-item-projectmgnt">
-          <a href="/categories/projectMgnt/" rel="section">
+          <a href="/categories/项目管理/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
             
             项目管理
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ai">
+          <a href="/categories/AI/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            menu.AI
           </a>
         </li>
       
@@ -300,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/译-Python关键字yield的解释-上篇-stackoverflow/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/MongoDB基本命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -319,7 +329,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/08/译-Python关键字yield的解释-上篇-stackoverflow/" itemprop="url">(译)Python关键字yield的解释--上篇(stackoverflow)</a></h1>
+                <a class="post-title-link" href="/2017/10/08/MongoDB基本命令/" itemprop="url">MongoDB基本命令</a></h1>
         
 
         <div class="post-meta">
@@ -331,7 +341,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:19:26+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:18:13+08:00">
                 2017-10-08
               </time>
             
@@ -393,25 +403,9 @@
       
         
           
-            <blockquote>
-<p>原文：<a href="http://stackoverflow.com/questions/231767/the-python-yield-keyword-explained" target="_blank" rel="external">http://stackoverflow.com/questions/231767/the-python-yield-keyword-explained</a><br>译者：hit9<br>译者注：这是stackoverflow上一个很热的帖子，这里是投票最高的一个答案</p>
-</blockquote>
-<h4 id="1-提问者的问题"><a href="#1-提问者的问题" class="headerlink" title="1.提问者的问题"></a>1.提问者的问题</h4><p>Python关键字yield的作用是什么？用来干什么的？<br>比如，我正在试图理解下面的代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def node._get_child_candidates(self, distance, min_dist, max_dist):</div><div class="line">    if self._leftchild and distance - max_dist &lt; self._median:</div><div class="line">        yield self._leftchild</div><div class="line">    if self._rightchild and distance + max_dist &gt;= self._median:</div><div class="line">        yield self._rightchild</div></pre></td></tr></table></figure></p>
-<p>下面的是调用:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">result, candidates = list(), [self]</div><div class="line">while candidates: </div><div class="line">    node = candidates.pop() </div><div class="line">    distance = node._get_dist(obj) </div><div class="line">    if distance &lt;= max_dist and distance &gt;= min_dist: </div><div class="line">        result.extend(node._values) </div><div class="line">    candidates.extend(node._get_child_candidates(distance, min_dist, max_dist))</div><div class="line">return result</div></pre></td></tr></table></figure></p>
-<p>当调用 _get_child_candidates的时候发生了什么？返回了一个列表？返回了一个元素？被重复调用了么？ 什么时候这个调用结束呢？</p>
-<h4 id="2-回答部分"><a href="#2-回答部分" class="headerlink" title="2.回答部分"></a>2.回答部分</h4><p>为了理解什么是 <strong>yield</strong>,你必须理解什么是生成器。在理解生成器之前，让我们先走近迭代。</p>
-<h4 id="3-可迭代对象"><a href="#3-可迭代对象" class="headerlink" title="3.可迭代对象"></a>3.可迭代对象</h4><p>当你建立了一个列表，你可以逐项地读取这个列表，这叫做一个可迭代对象:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; mylist = [1, 2, 3]</div><div class="line">&gt;&gt;&gt; for i in mylist :</div><div class="line">...  print(i)</div><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td></tr></table></figure></p>
-<p><em>mylist</em>是一个可迭代的对象。当你使用一个列表生成式来建立一个列表的时候，就建立了一个可迭代的对象:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; mylist = [x*x for x in range(3)]</div><div class="line">&gt;&gt;&gt; for i in mylist :</div><div class="line">...  print(i)</div><div class="line">0</div><div class="line">1</div><div class="line">4</div></pre></td></tr></table></figure>
-<p>所有你可以使用 for .. in .. 语法的叫做一个迭代器：列表，字符串，文件……你经常使用它们是因为你可以如你所愿的读取其中的元素，但是你把所有的值都存储到了内存中，如果你有大量数据的话这个方式并不是你想要的。</p>
-<h4 id="4-生成器"><a href="#4-生成器" class="headerlink" title="4.生成器"></a>4.生成器</h4><p>生成器是可以迭代的，但是你 <strong>只可以读取它一次</strong> ，因为它并不把所有的值放在内存中，它是实时地生成数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; mygenerator = (x*x for x in range(3))</div><div class="line">&gt;&gt;&gt; for i in mygenerator :</div><div class="line">...  print(i)</div><div class="line">0</div><div class="line">1</div><div class="line">4</div></pre></td></tr></table></figure></p>
-<p>看起来除了把 [] 换成 () 外没什么不同。但是，你不可以再次使用 for i inmygenerator , 因为生成器只能被迭代一次：先计算出0，然后继续计算1，然后计算4，一个跟一个的…</p>
-<h4 id="5-yield关键字"><a href="#5-yield关键字" class="headerlink" title="5.yield关键字"></a>5.yield关键字</h4><p>yield 是一个类似 return 的关键字，只是这个函数返回的是个生成器。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; def createGenerator() :</div><div class="line">...  mylist = range(3)</div><div class="line">...  for i in mylist :</div><div class="line">...  yield i*i</div><div class="line">...</div><div class="line">&gt;&gt;&gt; mygenerator = createGenerator() # create a generator</div><div class="line">&gt;&gt;&gt; print(mygenerator) # mygenerator is an object!</div><div class="line"></div><div class="line">&lt;generator object createGenerator at 0xb7555c34</div><div class="line">&gt;&gt;&gt;&gt; for i in mygenerator:</div><div class="line">...  print(i)</div><div class="line">0</div><div class="line">1</div><div class="line">4</div></pre></td></tr></table></figure></p>
-<p>这个例子没什么用途，但是它让你知道，这个函数会返回一大批你只需要读一次的值.<br>为了精通 yield ,你必须要理解：<strong>当你调用这个函数的时候，函数内部的代码并不立马执行</strong> ，这个函数只是返回一个生成器对象，这有点蹊跷不是吗。</p>
-<p>那么，函数内的代码什么时候执行呢？当你使用for进行迭代的时候.</p>
-<p>现在到了关键点了！</p>
-<p>第一次迭代中你的函数会执行，从开始到达 yield 关键字，然后返回 yield<br> 后的值作为第一次迭代的返回值. 然后，每次执行这个函数都会继续执行你在函数内部定义的那个循环的下一次，再返回那个值，直到没有可以返回的。</p>
-<p>如果生成器内部没有定义 yield 关键字，那么这个生成器被认为成空的。这种情况可能因为是循环进行没了，或者是没有满足 if/else 条件。</p>
+            <p><strong>MongoDB基本命令</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">//查询所有数据库列表</div><div class="line">show dbs </div><div class="line"></div><div class="line">//查看当前连接哪个数据库</div><div class="line">db</div><div class="line"></div><div class="line">//切换到需要使用的数据库，例如：use test</div><div class="line">use database Name</div><div class="line"></div><div class="line">//查看当前数据库下有哪些表或者collection</div><div class="line">show collections</div><div class="line"></div><div class="line">//想知道mongodb支持哪些命令，可以直接输入help </div><div class="line">help</div><div class="line"></div><div class="line">//如果想知道当前数据库支持哪些方法</div><div class="line">db.help();</div><div class="line"></div><div class="line">//如果想知道当前数据库下的表或者表collection支持哪些方法，可以使用一下命令如</div><div class="line">db.user.help();  //user为表名 </div><div class="line"></div><div class="line">//如果你想备份数据库test</div><div class="line">$ ./mongodump -d test -o test/ </div><div class="line"></div><div class="line">//如果你想恢复数据库test</div><div class="line">$ ./mongorestore -d test -c user test/test/user.bson  //利用mongorestore表恢复刚才利用mongodump备份的数据</div></pre></td></tr></table></figure></p>
+<p><strong>help命令：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">HELP</div><div class="line">      show dbs                     show database names</div><div class="line">      show collections             show collections in current database</div><div class="line">      show users                   show users in current database</div><div class="line">      show profile                 show most recent system.profile entries with time &gt;= 1ms</div><div class="line">      use &lt;db name&gt;                set curent database to &lt;db name&gt;</div><div class="line">      db.help()                    help on DB methods</div><div class="line">      db.foo.help()                help on collection methods</div><div class="line">      db.foo.find()                list objects in collection foo</div><div class="line">      db.foo.find( &#123; a : 1 &#125; )     list objects in foo where a == 1</div><div class="line">      it                           result of the last line evaluated; use to further iterate</div></pre></td></tr></table></figure></p>
+<p><strong>db.help()命令：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">DB methods:</div><div class="line">      db.addUser(username, password) 添加数据库授权用户</div><div class="line">      db.auth(username, password)                访问认证</div><div class="line">      db.cloneDatabase(fromhost) 克隆数据库</div><div class="line">      db.commandHelp(name) returns the help for the command</div><div class="line">      db.copyDatabase(fromdb, todb, fromhost)  复制数据库</div><div class="line">      db.createCollection(name, &#123; size : ..., capped : ..., max : ... &#125; ) 创建表</div><div class="line">      db.currentOp() displays the current operation in the db</div><div class="line">      db.dropDatabase()        删除当前数据库</div><div class="line">      db.eval_r(func, args) run code server-side</div><div class="line">      db.getCollection(cname) same as db[&apos;cname&apos;] or db.cname</div><div class="line">      db.getCollectionNames()        获取当前数据库的表名</div><div class="line">      db.getLastError() - just returns the err msg string</div><div class="line">      db.getLastErrorObj() - return full status object</div><div class="line">      db.getMongo() get the server connection object</div><div class="line">      db.getMongo().setSlaveOk() allow this connection to read from the nonmaster member of a replica pair</div><div class="line">      db.getName()</div><div class="line">      db.getPrevError()</div><div class="line">      db.getProfilingLevel()</div><div class="line">      db.getReplicationInfo()</div><div class="line">      db.getSisterDB(name) get the db at the same server as this onew</div><div class="line">      db.killOp() kills the current operation in the db</div><div class="line">      db.printCollectionStats()   打印各表的状态信息</div><div class="line">      db.printReplicationInfo()        打印主数据库的复制状态信息</div><div class="line">      db.printSlaveReplicationInfo()        打印从数据库的复制状态信息</div><div class="line">      db.printShardingStatus()                打印分片状态信息</div><div class="line">      db.removeUser(username) 删除数据库用户</div><div class="line">      db.repairDatabase() 修复数据库</div><div class="line">      db.resetError()</div><div class="line">      db.runCommand(cmdObj) run a database command.  if cmdObj is a string, turns it into &#123; cmdObj : 1 &#125;</div><div class="line">      db.setProfilingLevel(level) 0=off 1=slow 2=all</div><div class="line">      db.shutdownServer()</div><div class="line">      db.version() current version of the server</div></pre></td></tr></table></figure></p>
 
           
         
@@ -460,7 +454,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Java并发编程学习/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Win7下MongoDB的安装和部署测试/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -479,7 +473,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/08/Java并发编程学习/" itemprop="url">Java并发编程学习</a></h1>
+                <a class="post-title-link" href="/2017/10/08/Win7下MongoDB的安装和部署测试/" itemprop="url">Win7下MongoDB的安装和部署测试</a></h1>
         
 
         <div class="post-meta">
@@ -491,7 +485,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:18:10+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:17:20+08:00">
                 2017-10-08
               </time>
             
@@ -553,1273 +547,1329 @@
       
         
           
-            <blockquote>
-<p><strong>不可变对象</strong>可以在没有额外同步的情况下，安全地用于任意线程；甚至发布它们时亦不需要同步。</p>
-</blockquote>
-<p><strong>安全发布的模式：</strong><br>如果一个对象是可变的，它就必须被安全地发布，通常发布线程与消费线程都必须同步化。如何确保消费线程能够看到处于发布当时的对象状态，我们要解决对象发布后对其修改的可见性问题。</p>
+            <p>转自：<a href="http://jingyan.baidu.com/article/f3e34a12ac10cef5eb653583.html" target="_blank" rel="external">http://jingyan.baidu.com/article/f3e34a12ac10cef5eb653583.html</a></p>
+<p><a href="http://www.cnblogs.com/lzrabbit/p/3682510.html" target="_blank" rel="external">http://www.cnblogs.com/lzrabbit/p/3682510.html</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/RestFul概述/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/RestFul概述/" itemprop="url">RestFul概述</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:16:00+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h4><p>　　RestFul是一种软件架构风格，而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。<br>　　<br>　　REST（英文：Representational State Transfer，简称REST）描述了一个架构样式的网络系统，比如 web 应用程序。在目前主流的三种Web服务交互方案中，REST相比于SOAP（Simple Object Access protocol，简单对象访问协议）以及XML-RPC更加简单明了，无论是对URL的处理还是对Payload的编码，REST都倾向于用更加简单轻量的方法设计和实现。值得注意的是REST并没有一个明确的标准，而更像是一种设计的风格。<br>　　<br>　　要理解RESTful架构，最好的方法就是去理解Representational State Transfer这个词组到底是什么意思，它的每一个词代表了什么涵义。如果你把这个名称搞懂了，也就不难体会REST是一种什么样的设计。</p>
+<p>　　<strong>● 资源（Resources）</strong><br>　　REST的名称”表现层状态转化”中，省略了主语。”表现层”其实指的是”资源”（Resources）的”表现层”。<br>　　所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。它可以是一段文本、一张图片、一首歌曲、一种服务，总之就是一个具体的实在。你可以用一个URI（统一资源定位符）指向它，每种资源对应一个特定的URI。要获取这个资源，访问它的URI就可以，因此URI就成了每一个资源的地址或独一无二的识别符。所谓”上网”，就是与互联网上一系列的”资源”互动，调用它的URI。</p>
+<p>　　<strong>● 表现层（Representation）</strong><br>　　“资源”是一种信息实体，它可以有多种外在表现形式。我们把”资源”具体呈现出来的形式，叫做它的”表现层”（Representation）。比如，文本可以用txt格式表现，也可以用HTML格式、XML格式、JSON格式表现，甚至可以采用二进制格式；图片可以用JPG格式表现，也可以用PNG格式表现。<br>　　URI只代表资源的实体，不代表它的形式。严格地说，有些网址最后的”.html”后缀名是不必要的，因为这个后缀名表示格式，属于”表现层”范畴，而URI应该只代表”资源”的位置。它的具体表现形式，应该在HTTP请求的头信息中用Accept和Content-Type字段指定，这两个字段才是对”表现层”的描述。</p>
+<p>　　<strong>● 状态转化（State Transfer）</strong><br>　　访问一个网站，就代表了客户端和服务器的一个互动过程。在这个过程中，势必涉及到数据和状态的变化。互联网通信协议HTTP协议，是一个无状态协议。这意味着，<strong>所有的状态都保存在服务器端</strong>。因此，如果客户端想要操作服务器，必须通过某种手段，让服务器端发生”状态转化”（State Transfer）。而这种转化是建立在表现层之上的，所以就是”表现层状态转化”。客户端用到的手段，只能是HTTP协议。具体来说，就是HTTP协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。它们分别对应四种基本操作：GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源。</p>
 <blockquote>
-<p>为了安全地发布对象，对象的引用以及对象的状态必须同时对其他线程可见。一个正确创建的对象可以通过下列条件安全地发布：</p>
+<p><strong>因此RESTful架构可以理解为：</strong><br>1、每一个URI代表一种资源；<br>2、客户端和服务器之间，传递这种资源的某种表现层；<br>3、客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/元数据驱动成熟度模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/元数据驱动成熟度模型/" itemprop="url">元数据驱动成熟度模型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:14:59+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="第一代：代码辅助手段"><a href="#第一代：代码辅助手段" class="headerlink" title="第一代：代码辅助手段**"></a>第一代：代码辅助手段**</h4><p><strong>应用定制开放依然以原生C++/JAVA代码为主</strong>，元数据主要用于生成原代码的一种辅助手段。</p>
+<p>当前很多系统中，大部分元数据处于这个阶段，前端重点只有Gadget元数据其他元数据未抽象呈现，甚至前端没有元数据的概念；后端服务编排（以POJO实现为主）、服务实现（BO全是代码）、数据对象（VO全是代码）也是以代码为主开发。</p>
+<h4 id="第二代：端到端元数据（Siebel）"><a href="#第二代：端到端元数据（Siebel）" class="headerlink" title="第二代：端到端元数据（Siebel）"></a>第二代：端到端元数据（Siebel）</h4><p><strong>应用定制开发基于元数据对象视图进行</strong>，从前端界面、组件、事件、接口、流程、服务、模型整个端到端都已经抽象成元数据对象，任意定制需求最终都分解成一个Task去完成整个元数据的配置，定制开发工具以离线IDE为主，在线提供受限的能力。</p>
+<p>Siebel <em>版本开发定制处于这个阶段。</em></p>
+<h4 id="第三代：元数据SaaS化（Salesforce）"><a href="#第三代：元数据SaaS化（Salesforce）" class="headerlink" title="第三代：元数据SaaS化（Salesforce）"></a>第三代：元数据SaaS化（Salesforce）</h4><p><strong>应用定制开发在现场在定制闭环</strong>，应用的定制开发能力通过SaaS化的能力对外提供出来，支持多租户的并发定制，定制开发人员通过Chrome等浏览器就可以完成现场定制需求的配置开发，可在线完成界面主体调整、界面Gadget组件、新Gadget开发、在线流程变更、业务规则调整、模型扩展，甚至新流程、新服务、新模型、新界面的中小特性开发。</p>
+<p>同时保证在线配置元数据（包括服务脚本逻辑）的安全性，通过元数据引擎沙箱技术对运行所耗费的CPU时间、内容容量、SQL语句数量等数据来判断元数据是否正常，以避免影响到属于其他租户的应用，对于脚本需要自带能覆盖其75%代码的测试用例否则不允许调用等措施，从而确保平台整体运行的稳定。</p>
+<p>Salesforce 版本开发定制处于这个阶段。</p>
+<h4 id="第四代：元数据人性化"><a href="#第四代：元数据人性化" class="headerlink" title="第四代：元数据人性化"></a>第四代：元数据人性化</h4><p>就像CRM从以OCRM为主向以ACRM为主转变，未来可能像HCRM（HappyCRM）转变，不过可以确定的是未来编程肯定会越来越简单，就像公司另外一个同事在硅谷调研发现硅谷有很多创新公司就做一件事：为编程者提供极易的软件创造平台，这样对大部分软件人员来说，编程并不是最重要的，业务本身创造才是；所以抽象的<strong>元数据可能会逐步往自然语言</strong>的方向进行发展，当然第四代还不是很清晰。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/什么是元数据驱动开发？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/什么是元数据驱动开发？/" itemprop="url">什么是元数据驱动开发？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:14:04+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="先看一个例子："><a href="#先看一个例子：" class="headerlink" title="先看一个例子："></a>先看一个例子：</h3><p><strong>Case1：</strong><br><strong>客户资料</strong>的一条记录，是我们通常理解的“数据”，描述<em>客户资料</em>的数据结构定义的数据就是“元数据”（<em>描述数据的数据</em>）。</p>
+<p><strong>Case2：</strong><br><strong>系统参数</strong>的一条记录，是我们配置出来的“数据”，描述<em>系统参数</em>的数据结构定义的数据也是“元数据”。</p>
+<p><strong>Case1和Case2的差别：</strong><br>Case1的数据的产生或变化不会在运行期直接改变软件的预置业务功能，只会影响后续业务功能的处理结果。</p>
+<p>Case2的数据的产生或变化会在运行期改变软件的行为，直接提供不同的<strong>业务功能</strong>。</p>
+<p>把Case2中的这种通过建模定义元数据的方式，期望提供一种配置化的设计方案从而改变软件提供的业务功能的<strong>设计方法</strong>称为基于<strong>元数据驱动架构</strong>。</p>
+<p>这种直接基于case2大的类别的元数据，针对性的进行配置从而提供软件不同的业务功能的方式称为<strong>元数据驱动开发</strong>。<br>元数据驱动开发的基本思想，就是<strong>基于元数据对象声明式开发</strong>整个应用，围绕元数据对象创建界面、业务流程、领域服务、领域对象及物理存储表结构，围绕元数据对象进行测试（包括测试数据生成、用例管理等），围绕元数据对象进行局点个性化需求定制（包括界面、流程、服务、表结构等），围绕元数据对象进行问题定位，从而达到通过元数据对象驱动整个应用开发过程的进行。</p>
+<p>如果基于元数据还把业务需求的需求分析+调测+安装部署+资料都搞定了，那么就是<strong>元数据驱动交付</strong>。</p>
+<p>注意：CASE1和CASE2是相对一个特定系统边界来说的，反例是：对于系统A来说，CASE2中的这个数据就是CASE1的类别，比如：SM就是要管理这个系统参数实体，对系统参数实体的CRUD是SM的“业务”功能，再比如PM会管理商品/产品数据，这个数据对于PM来说是CASE1类型，对于OM来说就是CASE2类型的，因为不同的商品/产品,相同商品/产品的不同属性对于OM来说是要提供不同的业务功能的。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Python-编程最佳实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/Python-编程最佳实践/" itemprop="url">Python 编程最佳实践</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:13:05+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="项目结构定义：-Sample-Repository"><a href="#项目结构定义：-Sample-Repository" class="headerlink" title="项目结构定义： Sample Repository"></a>项目结构定义： Sample Repository</h3><p>This is what Kenneth Reitz recommends.<br>This repository is <a href="https://github.com/kennethreitz/samplemod" target="_blank" rel="external">available on GitHub.</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">README.rst</div><div class="line">LICENSE</div><div class="line">setup.py</div><div class="line">requirements.txt</div><div class="line">sample/__init__.py</div><div class="line">sample/core.py</div><div class="line">sample/helpers.py</div><div class="line">docs/conf.py</div><div class="line">docs/index.rst</div><div class="line">tests/test_basic.py</div><div class="line">tests/test_advanced.py</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="Very-bad"><a href="#Very-bad" class="headerlink" title="Very bad"></a>Very bad</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[...]</div><div class="line">from modu import *</div><div class="line">[...]</div><div class="line">x = sqrt(4) # Is sqrt part of modu? A builtin? Defined above?</div></pre></td></tr></table></figure>
+<h4 id="Better"><a href="#Better" class="headerlink" title="Better"></a>Better</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">from modu import sqrt</div><div class="line">[...]</div><div class="line">x = sqrt(4) # sqrt may be part of modu, if not redefined in between</div></pre></td></tr></table></figure>
+<h4 id="Best"><a href="#Best" class="headerlink" title="Best"></a>Best</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import modu</div><div class="line">[...]</div><div class="line">x = modu.sqrt(4) # sqrt is visibly part of modu&apos;s namespace</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="Decorators"><a href="#Decorators" class="headerlink" title="Decorators"></a>Decorators</h3><p>The Python language provides a simple yet powerful syntax called ‘decorators’. A decorator is a function or a class that wraps (or decorates) a function or a method. The ‘decorated’ function or method will replace the original ‘undecorated’ function or method. Because functions are first-class objects in Python, this can be done ‘manually’, but using the @decorator syntax is clearer and thus preferred.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">def foo():</div><div class="line">    # do something</div><div class="line"></div><div class="line">def decorator(func):</div><div class="line">    # manipulate func</div><div class="line">    return func</div><div class="line"></div><div class="line">foo = decorator(foo) # Manually decorate</div><div class="line"></div><div class="line">@decorator</div><div class="line">def bar():</div><div class="line">    # Do something</div><div class="line"></div><div class="line"># bar() is decorated</div></pre></td></tr></table></figure>
+<hr>
+<p><strong>Bad</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">items = &apos;a b c d&apos; # This is a string...</div><div class="line">items = items.split(&apos; &apos;) # ...becoming a list</div><div class="line">items = set(items) # ...and then a set</div></pre></td></tr></table></figure></p>
+<p><strong>Good</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">count = 1</div><div class="line">msg = &apos;a string&apos;</div><div class="line">def func():</div><div class="line">    pass # Do something</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>Bad</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># create a concatenated string from 0 to 19 (e.g. &quot;012..1819&quot;)</div><div class="line">nums = &quot;&quot;</div><div class="line">for n in range(20):</div><div class="line">    nums += str(n) # slow and inefficient</div><div class="line">print nums</div></pre></td></tr></table></figure></p>
+<p><strong>Good</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># create a concatenated string from 0 to 19 (e.g. &quot;012..1819&quot;)</div><div class="line">nums = []</div><div class="line">for n in range(20):</div><div class="line">    nums.append(str(n))</div><div class="line">print &quot;&quot;.join(nums) # much more efficient</div></pre></td></tr></table></figure></p>
+<p><strong>Best</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># create a concatenated string from 0 to 19 (e.g. &quot;012..1819&quot;)</div><div class="line">nums = [str(n) for n in range(20)]</div><div class="line">print &quot;&quot;.join(nums)</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/python学习笔记3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/python学习笔记3/" itemprop="url">python学习笔记3</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:11:07+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Python网络编程"><a href="#Python网络编程" class="headerlink" title="Python网络编程"></a>Python网络编程</h4><p>TCP面向连接的通信方式，UDP与TCP不同，与虚拟电路完全相反，是数据报型的无连接套接字。</p>
+<p>TCP通信，要先开服务器，后开客户端。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># tcp sock</div><div class="line">tcpSerSock = socket(AF_INET,SOCK_STREAM) </div><div class="line"></div><div class="line"># udp sock</div><div class="line">udpSerSock =  socket(AF_INET,SOCK_DGRAM)</div></pre></td></tr></table></figure></p>
+<h4 id="python-apply-函数"><a href="#python-apply-函数" class="headerlink" title="python apply()函数"></a>python apply()函数</h4><p>apply(func [, args [, kwargs ]]) 函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数。args是一个包含将要提供给函数的按位置传递的参数的元组。如果省略了args，任 何参数都不会被传递，kwargs是一个包含关键字参数的字典。</p>
+<p>apply()的返回值就是func()的返回值，apply()的元素参数是有序的，元素的顺序必须和func()形式参数的顺序一致</p>
+<p>下面给几个例子来详细的说下:<br> 1、假设是执行没有带参数的方法</p>
+<p>def say():<br>  print ‘say in’</p>
+<p>apply(say)</p>
+<p>输出的结果是’say in’</p>
+<p>2、函数只带元组的参数。</p>
+<p>def say(a, b):<br>  print a, b</p>
+<p>apply(say,(“hello”, “老王python”))</p>
+<p>输出的结果是hello,老王python</p>
+<h4 id="call-函数"><a href="#call-函数" class="headerlink" title="__call__函数"></a><code>__call__</code>函数</h4><p>Python中有一个有趣的语法，只要定义类型的时候，实现__call__函数，这个类型就成为可调用的。换句话说，我们可以把这个类型的对象当作函数来使用，相当于 重载了括号运算符。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">class g_dpm(object):  </div><div class="line">  </div><div class="line">    def __init__(self, g):  </div><div class="line">        self.g = g  </div><div class="line">  </div><div class="line">    def __call__(self, t):  </div><div class="line">        return (self.g*t**2)/2</div></pre></td></tr></table></figure></p>
+<p>计算地球场景的时候，我们就可以令e_dpm = g_dpm(9.8)，s = e_dpm(t)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">class Animal(object):  </div><div class="line">    def __init__(self, name, legs):  </div><div class="line">        self.name = name  </div><div class="line">        self.legs = legs  </div><div class="line">        self.stomach = []          </div><div class="line">   </div><div class="line">    def __call__(self,food):  </div><div class="line">        self.stomach.append(food)  </div><div class="line">   </div><div class="line">    def poop(self):  </div><div class="line">        if len(self.stomach) &gt; 0:  </div><div class="line">            return self.stomach.pop(0)  </div><div class="line">   </div><div class="line">    def __str__(self):          </div><div class="line">        return &apos;A animal named %s&apos; % (self.name)         </div><div class="line">   </div><div class="line">cow = Animal(&apos;king&apos;, 4)  #We make a cow  </div><div class="line">dog = Animal(&apos;flopp&apos;, 4) #We can make many animals  </div><div class="line">print &apos;We have 2 animales a cow name %s and dog named %s,both have %s legs&apos; % (cow.name, dog.name, cow.legs)  </div><div class="line">print cow  #here __str__ metod work  </div><div class="line">   </div><div class="line">#We give food to cow  </div><div class="line">cow(&apos;gras&apos;)  </div><div class="line">print cow.stomach  </div><div class="line">   </div><div class="line">#We give food to dog  </div><div class="line">dog(&apos;bone&apos;)  </div><div class="line">dog(&apos;beef&apos;)  </div><div class="line">print dog.stomach  </div><div class="line">   </div><div class="line">#What comes inn most come out  </div><div class="line">print cow.poop()  </div><div class="line">print cow.stomach  #Empty stomach</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&apos;&apos;&apos;--&gt;output </div><div class="line">We have 2 animales a cow name king and dog named flopp,both have 4 legs </div><div class="line">A animal named king </div><div class="line">[&apos;gras&apos;] </div><div class="line">[&apos;bone&apos;, &apos;beef&apos;] </div><div class="line">gras </div><div class="line">[] </div><div class="line">&apos;&apos;&apos;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/浅谈-Python-的-with语句/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/浅谈-Python-的-with语句/" itemprop="url">浅谈 Python 的 with语句</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:31:30+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>转自：<a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-pythonwith/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/opensource/os-cn-pythonwith/</a></p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>with 语句是从 Python 2.5 开始引入的一种与异常处理相关的功能（2.5 版本中要通过 from <strong>future</strong> import with_statement 导入后才可以使用），从 2.6 版本开始缺省可用（参考 What’s new in Python 2.6? 中 with 语句相关部分介绍）。with 语句适用于对资源进行访问的场合，确保不管使用过程中是否发生异常都会执行必要的“清理”操作，释放资源，比如文件使用后自动关闭、线程中锁的自动获取和释放等。</p>
+<h1 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h1><p>要使用 with 语句，首先要明白上下文管理器这一概念。有了上下文管理器，with 语句才能工作。</p>
+<p>下面是一组与上下文管理器和with 语句有关的概念。</p>
+<p><strong>上下文管理协议（Context Management Protocol）</strong>：包含方法<code>__enter__()</code> 和 <code>__exit__()</code>，支持<br>该协议的对象要实现这两个方法。</p>
+<p><strong>上下文管理器（Context Manager）</strong>：支持上下文管理协议的对象，这种对象实现了<br><code>__enter__()</code> 和 <code>__exit__()</code>方法。上下文管理器定义执行 with 语句时要建立的运行时上下文，<br>负责执行 with 语句块上下文中的进入与退出操作。通常使用 with 语句调用上下文管理器，<br>也可以通过直接调用其方法来使用。</p>
+<p><strong>运行时上下文（runtime context）</strong>：由上下文管理器创建，通过上下文管理器的 <code>__enter__()</code> 和<br><code>__exit__()</code>方法实现，<code>__enter__()</code>方法在语句体执行之前进入运行时上下文，<code>__exit__()</code> 在<br>语句体执行完后从运行时上下文退出。with 语句支持运行时上下文这一概念。</p>
+<p><strong>上下文表达式（Context Expression）</strong>：with 语句中跟在关键字 with 之后的表达式，该表达式<br>要返回一个上下文管理器对象。</p>
+<p><strong>语句体（with-body）</strong>：with 语句包裹起来的代码块，在执行语句体之前会调用上下文管<br>理器的 <strong>enter</strong>() 方法，执行完语句体之后会执行 <strong>exit</strong>() 方法。</p>
+<p>#基本语法和工作原理<br>with 语句的语法格式如下：</p>
+<blockquote>
+<p>清单 1. with 语句的语法格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">with context_expression [as target(s)]:</div><div class="line">    with-body</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这里 context_expression 要返回一个上下文管理器对象，该对象并不赋值给 as 子句中的 target(s) ，如果指定了 as 子句的话，会将上下文管理器的 <strong>enter</strong>() 方法的返回值赋值给 target(s)。target(s) 可以是单个变量，或者由“()”括起来的元组（不能是仅仅由“,”分隔的变量列表，必须加“()”）。</p>
+<p>Python 对一些内建对象进行改进，加入了对上下文管理器的支持，可以用于 with 语句中，比如可以自动关闭文件、线程锁的自动获取和释放等。假设要对一个文件进行操作，使用 with 语句可以有如下代码：</p>
+<blockquote>
+<p>清单 2. 使用 with 语句操作文件对象<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">with open(r&apos;somefileName&apos;) as somefile:</div><div class="line">    for line in somefile:</div><div class="line">        print line</div><div class="line">        # ...more code</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这里使用了 with 语句，不管在处理文件过程中是否发生异常，都能保证 with 语句执行完毕后已经关闭了打开的文件句柄。如果使用传统的 try/finally 范式，则要使用类似如下代码：</p>
+<blockquote>
+<p><strong>清单 3. try/finally 方式操作文件对象</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">somefile = open(r&apos;somefileName&apos;)</div><div class="line">try:</div><div class="line">    for line in somefile:</div><div class="line">        print line</div><div class="line">        # ...more code</div><div class="line">finally:</div><div class="line">    somefile.close()</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>比较起来，使用 with 语句可以减少编码量。已经加入对上下文管理协议支持的还有模块 threading、decimal 等。</p>
+<p>PEP 0343 对 with 语句的实现进行了描述。with 语句的执行过程类似如下代码块：</p>
+<blockquote>
+<p><strong>清单 4. with 语句执行过程</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">context_manager = context_expression</div><div class="line">exit = type(context_manager).__exit__  </div><div class="line">value = type(context_manager).__enter__(context_manager)</div><div class="line">exc = True   # True 表示正常执行，即便有异常也忽略；False 表示重新抛出异常，需要对异常进行处理</div><div class="line">try:</div><div class="line">    try:</div><div class="line">        target = value  # 如果使用了 as 子句</div><div class="line">        with-body     # 执行 with-body</div><div class="line">    except:</div><div class="line">        # 执行过程中有异常发生</div><div class="line">        exc = False</div><div class="line">        # 如果 __exit__ 返回 True，则异常被忽略；如果返回 False，则重新抛出异常</div><div class="line">        # 由外层代码对异常进行处理</div><div class="line">        if not exit(context_manager, *sys.exc_info()):</div><div class="line">            raise</div><div class="line">finally:</div><div class="line">    # 正常退出，或者通过 statement-body 中的 break/continue/return 语句退出</div><div class="line">    # 或者忽略异常退出</div><div class="line">    if exc:</div><div class="line">        exit(context_manager, None, None, None) </div><div class="line">    # 缺省返回 None，None 在布尔上下文中看做是 False</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>1.执行 context_expression，生成上下文管理器 context_manager<br>2.调用上下文管理器的<code>__enter__()</code>方法；如果使用了 as 子句，则将<code>__enter__()</code>方法的返回值赋值给 as 子句中的 target(s)<br>3.执行语句体 with-body<br>4.不管是否执行过程中是否发生了异常，执行上下文管理器的<code>__exit__()</code>方法，<code>__exit__()</code>方法负责执行“清理”工作，如释放资源等。如果执行过程中没有出现异常，或者语句体中执行了语句 <code>break/continue/return</code>则以 None 作为参数调用<code>__exit__(None, None, None)</code>；如果执行过程中出现异常，则使用<code>sys.exc_info</code>得到的异常信息为参数调用 <code>__exit__(exc_type, exc_value, exc_traceback)</code><br>5.出现异常时，如果 <code>__exit__(type, value, traceback)</code>返回 False，则会重新抛出异常，让with 之外的语句逻辑来处理异常，这也是通用做法；如果返回 True，则忽略异常，不再对异常进行处理。</p>
+<h1 id="自定义上下文管理器"><a href="#自定义上下文管理器" class="headerlink" title="自定义上下文管理器"></a>自定义上下文管理器</h1><p>开发人员可以自定义支持上下文管理协议的类。自定义的上下文管理器要实现上下文管理协议所需要的 <code>__enter__()</code>和<code>__exit__()</code>两个方法：</p>
 <ul>
-<li>通过静态初始化器初始化对象的引用；</li>
-<li>将它的引用存储到 volatile域或 AtomicReference；</li>
-<li>将它的引用存储到正确创建的对象的final域中；</li>
-<li>或者将它的引用存储到由锁正确保护的域中。</li>
+<li><code>context_manager.__enter__()</code>：进入上下文管理器的运行时上下文，在语句体执行前调用。with 语句将该方法的返回值赋值给 as 子句中的 target，如果指定了 as 子句的话</li>
+<li><p><code>context_manager.__exit__(exc_type, exc_value, exc_traceback)</code>：退出与上下文管理器相关的运行时上下文，返回一个布尔值表示是否对发生的异常进行处理。参数表示引起退出操作的异常，如果退出时没有发生异常，则3个参数都为None。如果发生异常，返回</p>
+<p>True 表示不处理异常，否则会在退出该方法后重新抛出异常以由 with 语句之外的代码逻辑进行处理。如果该方法内部产生异常，则会取代由 statement-body 中语句产生的异常。要处理异常时，不要显示重新抛出异常，即不能重新抛出通过参数传递进来的异常，只需要将返回值设置为 False 就可以了。之后，上下文管理代码会检测是否<code>__exit__()</code>失败来处理异常</p>
+</li>
 </ul>
+<p>下面通过一个简单的示例来演示如何构建自定义的上下文管理器。注意，上下文管理器必须同时提供 <code>__enter__()</code>和<code>__exit__()</code> 方法的定义，缺少任何一个都会导致 AttributeError；with 语句会先检查是否提供了<code>__exit__()</code>方法，然后检查是否定义了<code>__enter__()</code> 方法。</p>
+<p>假设有一个资源 DummyResource，这种资源需要在访问前先分配，使用完后再释放掉；分配操作可以放到 <strong>enter</strong>() 方法中，释放操作可以放到 <strong>exit</strong>() 方法中。简单起见，这里只通过打印语句来表明当前的操作，并没有实际的资源分配与释放。</p>
+<blockquote>
+<p><strong>清单 5. 自定义支持 with 语句的对象</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class DummyResource:</div><div class="line">def __init__(self, tag):</div><div class="line">        self.tag = tag</div><div class="line">        print &apos;Resource [%s]&apos; % tag</div><div class="line">    def __enter__(self):</div><div class="line">        print &apos;[Enter %s]: Allocate resource.&apos; % self.tag</div><div class="line">        return self   # 可以返回不同的对象</div><div class="line">    def __exit__(self, exc_type, exc_value, exc_tb):</div><div class="line">        print &apos;[Exit %s]: Free resource.&apos; % self.tag</div><div class="line">        if exc_tb is None:</div><div class="line">            print &apos;[Exit %s]: Exited without exception.&apos; % self.tag</div><div class="line">        else:</div><div class="line">            print &apos;[Exit %s]: Exited with exception raised.&apos; % self.tag</div><div class="line">            return False   # 可以省略，缺省的None也是被看做是False</div></pre></td></tr></table></figure></p>
 </blockquote>
-<p>线程安全库中的容器提供了如下的线程安全保证：</p>
+<p>DummyResource 中的 <strong>enter</strong>() 返回的是自身的引用，这个引用可以赋值给 as 子句中的 target 变量；返回值的类型可以根据实际需要设置为不同的类型，不必是上下文管理器对象本身。</p>
+<p><code>__exit__()</code>方法中对变量 exc_tb 进行检测，如果不为 None，表示发生了异常，返回 False 表示需要由外部代码逻辑对异常进行处理；注意到如果没有发生异常，缺省的返回值为 None，在布尔环境中也是被看做 False，但是由于没有异常发生，<code>__exit__()</code>的三个参数都为 None，上下文管理代码可以检测这种情况，做正常处理。</p>
+<p>下面在 with 语句中访问 DummyResource ：</p>
+<blockquote>
+<p><strong>清单 6. 使用自定义的支持 with 语句的对象*</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">with DummyResource(&apos;Normal&apos;):</div><div class="line">    print &apos;[with-body] Run without exceptions.&apos;    </div><div class="line">with DummyResource(&apos;With-Exception&apos;):</div><div class="line">    print &apos;[with-body] Run with exception.&apos;</div><div class="line">    raise Exception</div><div class="line">    print &apos;[with-body] Run with exception. Failed to finish statement-body!&apos;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>第1个 with 语句的执行结果如下：</p>
+<blockquote>
+<p><strong>清单 7. with 语句1执行结果</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Resource [Normal]</div><div class="line">[Enter Normal]: Allocate resource.</div><div class="line">[with-body] Run without exceptions.</div><div class="line">[Exit Normal]: Free resource.</div><div class="line">[Exit Normal]: Exited without exception.</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>可以看到，正常执行时会先执行完语句体 with-body，然后执行 <code>__exit__()</code> 方法释放资源。</p>
+<p>第2个 with 语句的执行结果如下：</p>
+<blockquote>
+<p><strong>清单 8. with 语句2执行结果</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Resource [With-Exception]</div><div class="line">[Enter With-Exception]: Allocate resource.</div><div class="line">[with-body] Run with exception.</div><div class="line">[Exit With-Exception]: Free resource.</div><div class="line">[Exit With-Exception]: Exited with exception raised. </div><div class="line">Traceback (most recent call last):</div><div class="line">  File &quot;G:/demo&quot;, line 20, in &lt;module&gt;</div><div class="line">   raise Exception</div><div class="line">Exception</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>可以看到，with-body 中发生异常时with-body 并没有执行完，但资源会保证被释放掉，同时产生的异常由 with 语句之外的代码逻辑来捕获处理。</p>
+<p>可以自定义上下文管理器来对软件系统中的资源进行管理，比如数据库连接、共享资源的访问控制等。Python 在线文档 Writing Context Managers 提供了一个针对数据库连接进行管理的上下文管理器的简单范例。</p>
+<h1 id="contextlib-模块"><a href="#contextlib-模块" class="headerlink" title="contextlib 模块"></a>contextlib 模块</h1><p>contextlib 模块提供了3个对象：装饰器 contextmanager、函数 nested 和上下文管理器 closing。使用这些对象，可以对已有的生成器函数或者对象进行包装，加入对上下文管理协议的支持，避免了专门编写上下文管理器来支持 with 语句。</p>
+<h1 id="装饰器-contextmanager"><a href="#装饰器-contextmanager" class="headerlink" title="装饰器 contextmanager"></a>装饰器 contextmanager</h1><p>contextmanager 用于对生成器函数进行装饰，生成器函数被装饰以后，返回的是一个上下文管理器，其 <code>__enter__()</code>和 <code>__exit__()</code>方法由 contextmanager 负责提供，而不再是之前的迭代子。被装饰的生成器函数只能产生一个值，否则会导致异常 RuntimeError；产生的值会赋值给 as 子句中的 target，如果使用了 as 子句的话。下面看一个简单的例子。</p>
+<blockquote>
+<p><strong>清单 9. 装饰器 contextmanager 使用示例</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">from contextlib import contextmanager </div><div class="line">@contextmanager</div><div class="line">def demo():</div><div class="line">    print &apos;[Allocate resources]&apos;</div><div class="line">    print &apos;Code before yield-statement executes in __enter__&apos;</div><div class="line">    yield &apos;*** contextmanager demo ***&apos;</div><div class="line">    print &apos;Code after yield-statement executes in __exit__&apos;</div><div class="line">    print &apos;[Free resources]&apos; </div><div class="line">with demo() as value:</div><div class="line">    print &apos;Assigned Value: %s&apos; % value</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>结果输出如下：</p>
+<blockquote>
+<p>清单 10. contextmanager 使用示例执行结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[Allocate resources]</div><div class="line">Code before yield-statement executes in __enter__</div><div class="line">Assigned Value: *** contextmanager demo ***</div><div class="line">Code after yield-statement executes in __exit__</div><div class="line">[Free resources]</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>可以看到，生成器函数中 yield 之前的语句在<code>__enter__()</code> 方法中执行，yield 之后的语句在 <code>__exit__()</code> 中执行，而 yield 产生的值赋给了 as 子句中的 value 变量。<br>需要注意的是，contextmanager 只是省略了 <code>__enter__() / __exit__()</code> 的编写，但并不负责实现资源的“获取”和“清理”工作；“获取”操作需要定义在 yield 语句之前，“清理”操作需要定义 yield 语句之后，这样 with 语句在执行 <code>__enter__() / __exit__()</code>方法时会执行这些语句以获取/释放资源，即生成器函数中需要实现必要的逻辑控制，包括资源访问出现错误时抛出适当的异常。<br>函数 nested<br>nested 可以将多个上下文管理器组织在一起，避免使用嵌套 with 语句。</p>
+<blockquote>
+<p><strong>清单 11. nested 语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">with nested(A(), B(), C()) as (X, Y, Z):</div><div class="line">     # with-body code here</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>类似于：<br>清单 12. nested 执行过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">with A() as X:</div><div class="line">    with B() as Y:</div><div class="line">        with C() as Z:</div><div class="line">             # with-body code here</div></pre></td></tr></table></figure></p>
+<p>需要注意的是，发生异常后，如果某个上下文管理器的 <strong>exit</strong>() 方法对异常处理返回 False，则更外层的上下文管理器不会监测到异常。<br>上下文管理器 closing<br>closing 的实现如下：<br>清单 13. 上下文管理 closing 实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class closing(object):</div><div class="line">    # help doc here</div><div class="line">    def __init__(self, thing):</div><div class="line">        self.thing = thing</div><div class="line">    def __enter__(self):</div><div class="line">        return self.thing</div><div class="line">    def __exit__(self, *exc_info):</div><div class="line">        self.thing.close()</div></pre></td></tr></table></figure></p>
+<p>上下文管理器会将包装的对象赋值给 as 子句的 target 变量，同时保证打开的对象在 with-body 执行完后会关闭掉。closing 上下文管理器包装起来的对象必须提供 close() 方法的定义，否则执行时会报 AttributeError 错误。</p>
+<blockquote>
+<p><strong>清单 14. 自定义支持 closing 的对象</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">class ClosingDemo(object):</div><div class="line">    def __init__(self):</div><div class="line">        self.acquire()</div><div class="line">    def acquire(self):</div><div class="line">        print &apos;Acquire resources.&apos;</div><div class="line">    def free(self):</div><div class="line">        print &apos;Clean up any resources acquired.&apos;</div><div class="line">    def close(self):</div><div class="line">        self.free() </div><div class="line">with closing(ClosingDemo()):</div><div class="line">    print &apos;Using resources&apos;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>结果输出如下：</p>
+<blockquote>
+<p><strong>清单 15. 自定义 closing 对象的输出结果</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Acquire resources.</div><div class="line">Using resources</div><div class="line">Clean up any resources acquired.</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>closing 适用于提供了 close() 实现的对象，比如网络连接、数据库连接等，也可以在自定义类时通过接口 close() 来执行所需要的资源“清理”工作。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文对 with 语句的语法和工作机理进行了介绍，并通过示例介绍了如何实现自定义的上下文管理器，最后介绍了如何使用 contextlib 模块来简化上下文管理器的编写。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/The-Twelve-Factor-App/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/The-Twelve-Factor-App/" itemprop="url">The Twelve-Factor App</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:28:25+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>如今，软件通常会作为一种服务来交付，它们被称为网络应用程序，或软件即服务（SaaS）。12-Factor 为构建如下的 SaaS 应用提供了方法论：</p>
 <ul>
-<li>置入Hashtable、synchronizedMap、ConcurrentMap 中的主键以及健值，会安全地发布到可以从Map获得它们的任意线程中，无论是直接获得还是通过迭代器（iterator）获得：</li>
-<li>置入vector、CopyOnWriteArrayList、CopyOnWriteArraySet、synchronizedList或者synchronizedSet中的元素，会安全地发布到可以从容器中获得它的任意线程中。</li>
-<li>置入BlockingQueue 或者 ConcurrentLinkedQueue 的元素，会安全地发布到可以从队列中获得它的任意线程中。</li>
+<li>使用<strong>标准化</strong>流程自动配置，从而使新的开发者花费最少的学习成本加入这个项目。</li>
+<li>和操作系统之间尽可能的<strong>划清界限</strong>，在各个系统中提供<strong>最大的可移植性</strong>。</li>
+<li>适合<strong>部署</strong>在现代的<strong>云计算平台</strong>，从而在服务器和系统管理方面节省资源。</li>
+<li>将开发环境和生产环境的<strong>差异降至最低</strong>，并使用<strong>持续交付</strong>实施敏捷开发。</li>
+<li>可以在工具、架构和开发流程不发生明显变化的前提下实现<strong>扩展</strong>。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//静态初始化器示例：</div><div class="line">public static Holder holder = new Holder(42);</div></pre></td></tr></table></figure>
-<p>发布对象的必要条件依赖于对象的可变性：</p>
+<p>这套理论适用于任意语言和后端服务（数据库、消息队列、缓存等）开发的应用程序。</p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>本文的贡献者者参与过数以百计的应用程序的开发和部署，并通过 <a href="http://www.heroku.com/" target="_blank" rel="external">Heroku</a> 平台间接见证了数十万应用程序的开发，运作以及扩展的过程。<br>本文综合了我们关于 SaaS 应用几乎所有的经验和智慧，是开发此类应用的理想实践标准，并特别关注于应用程序如何保持良性成长，开发者之间如何进行有效的代码协作，以及如何 <a href="http://blog.heroku.com/archives/2011/6/28/the_new_heroku_4_erosion_resistance_explicit_contracts/" target="_blank" rel="external">避免软件污染</a> 。<br>我们的初衷是分享在现代软件开发过程中发现的一些系统性问题，并加深对这些问题的认识。我们提供了讨论这些问题时所需的共享词汇，同时使用相关术语给出一套针对这些问题的广义解决方案。本文格式的灵感来自于 Martin Fowler 的书籍：<em><a href="http://books.google.com/books/about/Patterns_of_enterprise_application_archi.html?id=FyWZt5DdvFkC" target="_blank" rel="external">Patterns of Enterprise Application Architecture</a></em> ， <em><a href="http://books.google.com/books/about/Refactoring.html?id=1MsETFPD3I0C" target="_blank" rel="external">Refactoring</a></em> 。</p>
+<p>读者应该是哪些人？<br>任何 SaaS 应用的开发人员。部署和管理此类应用的运维工程师。</p>
+<h3 id="12-factors"><a href="#12-factors" class="headerlink" title="12-factors"></a>12-factors</h3><p><a href="https://12factor.net/zh_cn/codebase" target="_blank" rel="external">I. 基准代码</a><br>一份基准代码，多份部署<br><a href="https://12factor.net/zh_cn/dependencies" target="_blank" rel="external">II. 依赖</a><br>显式声明依赖关系<br><a href="https://12factor.net/zh_cn/config" target="_blank" rel="external">III. 配置</a><br>在环境中存储配置<br><a href="https://12factor.net/zh_cn/backing-services" target="_blank" rel="external">IV. 后端服务</a><br>把后端服务当作附加资源<br><a href="https://12factor.net/zh_cn/build-release-run" target="_blank" rel="external">V. 构建，发布，运行</a><br>严格分离构建和运行<br><a href="https://12factor.net/zh_cn/processes" target="_blank" rel="external">VI. 进程</a><br>以一个或多个无状态进程运行应用<br><a href="https://12factor.net/zh_cn/port-binding" target="_blank" rel="external">VII. 端口绑定</a><br>通过端口绑定提供服务<br><a href="https://12factor.net/zh_cn/concurrency" target="_blank" rel="external">VIII. 并发</a><br>通过进程模型进行扩展<br><a href="https://12factor.net/zh_cn/disposability" target="_blank" rel="external">IX. 易处理</a><br>快速启动和优雅终止可最大化健壮性<br><a href="https://12factor.net/zh_cn/dev-prod-parity" target="_blank" rel="external">X. 开发环境与线上环境等价</a><br>尽可能的保持开发，预发布，线上环境相同<br><a href="https://12factor.net/zh_cn/logs" target="_blank" rel="external">XI. 日志</a><br>把日志当作事件流<br><a href="https://12factor.net/zh_cn/admin-processes" target="_blank" rel="external">XII. 管理进程</a><br>后台管理任务当作一次性进程运行</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/元数据基本概念/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/元数据基本概念/" itemprop="url">元数据基本概念</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:26:32+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="元数据（Metadata）定义"><a href="#元数据（Metadata）定义" class="headerlink" title="元数据（Metadata）定义"></a>元数据（Metadata）定义</h3><p>元数据在数据仓库、软件开发、图书管理等各领域有着广泛的应用，其业界通用的定义为：描述数据的数据。用于承载关于数据的组织、数据域及其关系等的信息。</p>
+<p>示例：客户信息记录</p>
+<table>
+<thead>
+<tr>
+<th>元数据</th>
+<th>数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>客户名称</td>
+<td>张三</td>
+</tr>
+<tr>
+<td>证件类型</td>
+<td>身份证</td>
+</tr>
+<tr>
+<td>证件号码</td>
+<td>123456789</td>
+</tr>
+<tr>
+<td>手机号码</td>
+<td>13913912345</td>
+</tr>
+<tr>
+<td>行业类型</td>
+<td>通信</td>
+</tr>
+<tr>
+<td>地址</td>
+<td>xx省xx市xx区xx路xx号</td>
+</tr>
+</tbody>
+</table>
+<p><em>对于一条客户信息记录而言，其中：张三、身份证、123456789等信息就是数据，而客户名称、证件类型、证件号码等信息就是描述这些数据的数据，也就是元数据。</em></p>
+<p>什么是元数据，直接参考wiki的一些定义：<a href="https://en.wikipedia.org/wiki/Metadata" target="_blank" rel="external">https://en.wikipedia.org/wiki/Metadata</a> </p>
+<p><strong>元元数据：</strong>定义元数据这个对象的结构的数据。</p>
+<h3 id="技术元数据与业务元数据"><a href="#技术元数据与业务元数据" class="headerlink" title="技术元数据与业务元数据"></a>技术元数据与业务元数据</h3><p>技术元数据与业务元数据的本质区别在于是否与具体的业务逻辑（套件）强相关。</p>
 <ul>
-<li>不可变对象可以通过任意机制发布；</li>
-<li>高效不可变对象必须要安全发布；</li>
-<li>可变对象必须要安全发布，同时必须要线程安全或者被锁保护。</li>
+<li>技术元数据：指对应用架构进行抽象，屏蔽技术细节而定义出来的元数据。与具体业务逻辑无关，一般由平台定义。</li>
+<li>业务元数据：指对业务框架进行抽象后，基于具体业务逻辑的那部分元数据，一般由业务侧根据平台提供的元数据定义和自生长机制生成出来。</li>
 </ul>
-<p><strong>安全地共享对象</strong><br>在并发程序中，使用共享对象的一些最有效的策略如下：</p>
-<ul>
-<li>线程限制：一个线程限制的对象，通过限制在现场中，而被线程独占，且只能被占有它的线程修改。</li>
-<li>共享只读（share read-only）：一个共享的只读对象，在没有额外同步的情况下，可以被多个线程并发地访问，但是任何线程都不能修改它。共享只读对象包括可变对象与高效不可变对象。</li>
-<li>共享线程安全（shared thread-safe）：一个线程安全的对象在内部进行同步，所以其他线程无须额外同步，就可以通过公共接口随意地访问它。</li>
-<li>被守护的（Guarded）：一个被守护的对象只能通过特定的锁来访问。被守护的对象包括那些被线程安全对象封装的对象，和已知被特定的锁保护起来的已发布对象。</li>
-</ul>
-<p>将数据封装在对象内部，把对数据的访问限制在对象的方法上，更易确保线程在访问数据时总能获得正确的 锁。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Java线程学习/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/Java线程学习/" itemprop="url">Java线程学习</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:16:57+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>　　Java创建一个线程，最简单的方法就是从<strong>Thread类继承</strong>。这个类包含了创建和运行线程所需的一切东西。Tread最重要的方法是run()。但为了使用run()，必须对其进行重载或者覆盖，使其能充分按自己的吩咐形式。因此，run()属于那些会与程序中的其他线程“并发”或“同时”执行代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//simpleThread.java</div><div class="line">public class SimpleThread extends Thread &#123;</div><div class="line">    ......</div><div class="line">    public void run()&#123;</div><div class="line">        // do something ......</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>　　Thread包含一个特殊的方法 start()，它的作用是对线程进行特殊的初始化，然后调用 run() 。所以整个步骤包括：调用构建器来构建对象，然后用 start() 配置线程，再调用 run() 。如果不调用 start()，线程便永远不会启动。</p>
-<p>　　Java操作共享资源时，为了保证共享资源信息数据一致性，在调用共享资源的方法使用，需要采用“同步”方式操作，即调用”synchronized”方法。调用任何synchronized方法时，对象就会被锁定，不可再调用那个对象的其它任何synchronized方法，除非第一个方法完成了自己的工作，并解除锁定。下面列出简单的synchronized的方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">synchronized void f()&#123;</div><div class="line">    // do something ......</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> synchronized void g()&#123;</div><div class="line">    // do something ......</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>重要规则：对于访问某个关键共享资源的<strong>所有方法</strong>，都必须把它们设为synchronized，否则就不能正常地工作。</p>
-</blockquote>
-<p><strong>一个线程的四个状态：</strong></p>
-<ul>
-<li><strong>新（New）</strong>：线程对象已经创建，但尚未启动，所以不可运行。</li>
-<li><strong>可运行（Runnable）</strong>：意味着一旦时机分片机制有空闲的CPU周期提供给一个线程，那个线程便立即开始运行。因此，线程可能在、也可能不在运行当中，但一旦条件许可，没有什么能阻止他的运行——它既没有“死”掉，也未被“堵塞”。</li>
-<li><strong>死（Dead）</strong>：从自己的run()方法中返回后，一个线程便已“死”掉。亦可调用stop()令其死掉，但会产生一个违例——属于Error的一个子类（也就是说，我们通常不捕获它）。记住一个违例的“掷”出应当是一个特殊事件，而不是正常程序运行的一部分。所以不建议你使用stop()（在Java 1.2 则是坚决反对）。另外还有一个destroy()方法（它永远不会实现），应该尽可能地避免调用它，因为它非常武断，根本不会解除对象的锁定。</li>
-<li><strong>堵塞（Blocked）</strong>：线程可以运行，但有某种东西阻碍了它。若线程处于堵塞状态，调度机制可以简单地跳过它，不给它分配任何CPU 时间。除非线程再次进入“可运行”状态，否则不会采取任何操作。</li>
-</ul>
-<p><strong>线程为何会堵塞？</strong><br>堵塞状态是前述四种状态中最有趣的，值得我们作进一步的探讨。线程被堵塞可能是由下述五方面的原因造成的：<br>1.调用sleep(毫秒数)，使线程进入“睡眠”状态。在规定的时间内，这个线程是不会运行的。<br>2.用suspend()暂停了线程的执行。除非线程收到resume()消息，否则不会返回“可运行”状态。<br>3.用wait()暂停了线程的执行。除非线程收到nofify()或者notifyAll()消息，否则不会变成“可运行”（是的，这看起来同原因2 非常相象，但有一个明显的区别是我们马上要揭示的）。<br>4.线程正在等候一些IO（输入输出）操作完成。<br>5.线程试图调用另一个对象的“同步”方法，但那个对象处于锁定状态，暂时无法使用。</p>
-<p>亦可调用yield()（Thread 类的一个方法）自动放弃CPU，以便其他线程能够运行。</p>
-<p><strong>死锁</strong><br>由于线程可能进入堵塞状态，而且由于对象可能拥有“同步”方法——除非同步锁定被解除，否则线程不能访问那个对象——所以一个线程完全可能等候另一个对象，而另一个对象又在等候下一个对象，以此类推。这个“等候”链最可怕的情形就是进入封闭状态——最后那个对象等候的是第一个对象！此时，所有线程都会陷入无休止的相互等待状态，大家都动弹不得。我们将这种情况称为“死锁”。</p>
-<blockquote>
-<p>为减少出现死锁的可能，Java 1.2 作出的一项贡献是“反对”使用Thread 的stop()，suspend()，resume() 以及destroy()方法。<br>suspend()和resume() 方法天生容易发生死锁。调用suspend()的时候，目标线程会停下来，但却仍然持有在这之前获得的锁定。此时，其他任何线程都不能访问锁定的资源，除非被“挂起”的线程恢复运行。</p>
-</blockquote>
-<p>推荐：<em>使用wait()命其进入等待状态。若标志指出线程应当恢复，则用一个<br>notify()重新启动线程。</em></p>
-<p><strong>线程安全性：</strong>当多个线程访问一个类时，如果不用考虑这些线程在运行时环境下的调度和交替执行，并且不需要额外的同步及在调用方代码不必做其他的协调，这个类的行为仍然是正确的，那么称这个类是<strong>线程安全的</strong>。<strong>对于线程安全类的实例进行顺序或并发的一系列操作，都不会导致实例处于无效状态。</strong></p>
-<blockquote>
-<p><strong>无状态对象永远是现场安全的。</strong></p>
-</blockquote>
-<p><strong>原子变量</strong><br>线程安全性定义要求无论是多线程中的时序或交替操作，都要保证不破坏那些不变约束。当一个不变约束涉及多个变量时，变量间不是<strong>彼此独立</strong>的：某个变量的值会制约其他几个变量的值。因此，更新一个变量的时候，要在<strong>同一原子操作</strong>中更新其他几个。</p>
-<blockquote>
-<p>为了保护状态的一致性，要在单一的原子操作中更新相互关联的状态变量。</p>
-</blockquote>
-<p>加锁</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Java并发注解Annotation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/Java并发注解Annotation/" itemprop="url">Java并发注解Annotation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:15:51+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Java并发编程中，用到了一些专门为并发编程准备的 Annotation。主要包括三类：<br><strong>1、类 Annotation（注解）</strong><br>就像名字一样，这些注解是针对类的。主有要以下三个：<br>@Immutable<br>@ThreadSafe<br>@NotThreadSafe</p>
-<p>@ThreadSafe 是表示这个类是线程安全的。具体是否真安全，那要看实现者怎么实现的了，反正打上这个标签只是表示一下。不线程安全的类打上这个注解也没事儿。<br>@Immutable 表示，类是不可变的，包含了　@ThreadSafe　的意思。<br>      @NotThreadSafe 表示这个类不是线程安全的。如果是线程安全的非要打上这个注解，那也不会报错。</p>
-<p>这三个注解，对用户和维护者是有益的，用户可以立即看出来这个类是否是线程安全的，维护者则是可以根据这个注解，重点检查线程安全方面。另外，代码分析工具可能会利用这个注解。</p>
-<p><strong>2、域 Annotation（注解）</strong><br>域注解是对类里面成员变量加的注解。</p>
-<p><strong>3、方法 Annotation（注解）</strong><br>方法注解是对类里面方法加的注解。</p>
-<p>域注解和方法注解都是用@GuardedBy( lock )来标识。里面的Lock是告诉维护者：这个状态变量，这个方法被哪个锁保护着。这样可以强烈的提示类的维护者注意这里。<br>@GuardedBy( lock )有以下几种使用形式：<br>1、@GuardedBy( “this” ) 受对象内部锁保护<br>2、@GuardedBy( “fieldName” ) 受 与fieldName引用相关联的锁 保护。<br>3、@GuardedBy( “ClassName.fieldName” ) 受 一个类的静态field的锁 保存。<br>4、@GuardedBy( “methodName()” ) 锁对象是 methodName() 方法的返值，受这个锁保护。<br>5、@GuardedBy( “ClassName.class” ) 受 ClassName类的直接锁对象保护。而不是这个类的某个实例的锁对象。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Java-容器学习/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/Java-容器学习/" itemprop="url">Java 容器学习</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:34:34+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h4><p>实现Set接口包括 HashSet, TreeSet, LinkedHashSet 。在没有其它限制的情况下，建议使用<strong>HashSet</strong>，因为它对速度/效率进行了优化。</p>
-<ul>
-<li><strong>Set (interface) ：</strong> 存入Set的每个元素都必须是唯一性，因为Set不保存重复元素。加入Set的元素必须定义equals()方法以确保对象的唯一性。Set与Collection有完全一样的接口。Set接口不保证维护元素的次序。</li>
-<li><strong>HashSet * ：</strong> 为了快速查找而设计的Set。 存入HashSet的元素必须定义<strong>hashCode()</strong>方法。</li>
-<li><strong>TreeSet ：</strong> 保持次序的Set，底层为树结构。使用它可以从Set中提取有序的序列。元素必须实现<strong>Comparable</strong>接口。</li>
-<li><strong>LinkedHashSet：</strong> 具有HashSet的查询速度，且内部使用链表维护元素的的顺序（插入的次序）。于是在使用迭代器遍历Set时，结果会按元素插入的次序显示。元素必须定义hashCode()方法。</li>
-</ul>
-<blockquote>
-<p>对于良好的编程风格而言，你应该覆盖equals()方法时，总是覆盖hashCode()方法。</p>
-</blockquote>
-<h4 id="队列-Queue"><a href="#队列-Queue" class="headerlink" title="队列 Queue"></a>队列 Queue</h4><p>除了并发应用，Queue在Java SE5中仅有的两个实现是<strong>LinkedList</strong>和<strong>PriorityQueue</strong>，它们的差异在于排序行为而不是性能。</p>
-<p>LinkedList双向队列（<em>双端队列</em>），就像是一个队列，但是你可以在任何一端添加和移除元素。在LinkedList 中包含支持双向队列的方法。</p>
-<h4 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h4><ul>
-<li><strong>HashMap * ：</strong> Map基于散列表的实现（它取代了Hashtable）。插入和查询“键值对”的开销是固定的。可以通过构造器设置容量和负载因子，以调整容器的性能。</li>
-<li><strong>LinkedHashMap ：</strong> 类似于HashMap，但是迭代遍历它时，取得“键值对”的顺序是其插入次序，或者是最近少使用（LRU）的次序。只比HashMap慢一点；而在<em>迭代访问时反而速度更快</em>，因为它使用链表维护内部次序。</li>
-<li><strong>TreeMap ： </strong> 基于红黑树的实现。查看“键”或“键值对”时，它们会被排序（次序由Comparable或Comparator决定）。TreeMap的特定在于，所得到的结果是经过排序的。TreeMap是唯一的带有<strong>subMap()</strong>方法的Map，它可以返回一个子树。</li>
-<li><strong>WeakHashMap：</strong> 弱键（weak key）映射，允许释放映射所指向的对象；这是为解决某些特殊问题而设计的。如果映射之外没有引用指向某个“键”，则此“键”可以被垃圾收集器回收。</li>
-<li><strong>ConcurrentHashMap： </strong> 一种线程安全的Map，它不涉及同步加锁。</li>
-<li><strong>IdentityHashMap：</strong> 使用==代替equals()对“键”进行比较的散列映射。专为解决特殊问题而设计的。</li>
-</ul>
-<p>对Map中使用的键值要求与Set中的元素要求一致。任何键都必须具有一个equals()方法，如果键被用于散列Map，那么它必须还具有恰当的hashCode()方法；如果键被用于TreeMap，那么它必须实现Comparable。</p>
-<blockquote>
-<p>Java 数组的效率比ArrayList效率高</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Comparable-和-Comparator比较/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/Comparable-和-Comparator比较/" itemprop="url">Comparable 和 Comparator比较</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:33:34+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>对集合或数组进行排序有两种方法：</strong><br>1.集合中的对象所属的类实现了java.lang.Comparable 接口，然后调用<strong>Collections.sort()</strong>或者<strong>Arrays.sort()</strong><br>2.实现java.lang.Comparator接口，把这个实现接口的类作为参数传递给上述的sort()方法。</p>
-<p><strong>1、Comparable<t> java.lang Interface Comparable<t></t></t></strong><br>属于Java集合框架下的一个接口。它只有一个方法 <strong>int compareTo(T o)</strong> 用于提供排序所需要的比较逻辑。实现这个接口的类，其对象都可以通过调用<strong>Collections.sort()</strong>或者<strong>Arrays.sort()</strong>进行排序，根据<strong>compareTo</strong>的逻辑升序排列。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">class Person implements Comparable&lt;Person&gt;&#123;</div><div class="line">    String name;</div><div class="line">    public Person(String name) &#123;</div><div class="line">        this.name = name;</div><div class="line">    &#125; </div><div class="line"></div><div class="line">    public int compareTo(Person other) &#123;</div><div class="line">        //按名字的字母顺序从z~a排    </div><div class="line">        if(name.compareTo(other.name) &lt; 0)  //当前的字符串，在比较字符串之前，那就返回1</div><div class="line">            return 1;</div><div class="line">        else</div><div class="line">            if(name.compareTo(other.name) &gt; 0)</div><div class="line">                return -1;</div><div class="line">            else</div><div class="line">                return 0;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>2、再来看Comparator<t> java.util Interface Comparator<t></t></t></strong><br>简单来说，Comparator是策略模式的一种实现，体现了将类和排序算法相分离的原则。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class ComparatorImp implements Comparator&lt;Person&gt;&#123;</div><div class="line">	public int compare(Person p1, Person p2)	&#123;</div><div class="line">		if(p1.name.compareTo(p2.name) &lt; 0)</div><div class="line">			return -1;</div><div class="line">		else</div><div class="line">			return (p1.name.compareTo(p2.name) &gt; 0) ? 1 : 0;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">public class TestComparable &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		Person[] aPersons = new Person[4];</div><div class="line">		aPersons[0] = new Person(&quot;Jony&quot;);</div><div class="line">		aPersons[1] = new Person(&quot;Pun&quot;);</div><div class="line">		aPersons[2] = new Person(&quot;HelloKitty&quot;);</div><div class="line">		aPersons[3] = new Person(&quot;Brown&quot;);</div><div class="line"></div><div class="line">		Arrays.sort(aPersons);</div><div class="line">		for(Person p: aPersons )	&#123;</div><div class="line">			System.out.print(p.name + &quot; &quot;);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		System.out.println();</div><div class="line">		Arrays.sort(aPersons, new ComparatorImp());</div><div class="line">		for(Person p: aPersons )	&#123;</div><div class="line">			System.out.print(p.name + &quot; &quot;);</div><div class="line">		&#125;</div><div class="line">		System.out.println();</div><div class="line"></div><div class="line">		List&lt;Person&gt; lperson = new LinkedList&lt;Person&gt;();</div><div class="line">		for(Person p : aPersons) &#123;</div><div class="line">			lperson.add(p);</div><div class="line">		&#125;</div><div class="line">		Collections.sort(lperson);</div><div class="line">		for(int i = 0 ; i &lt; lperson.size(); i++)		&#123;</div><div class="line">			System.out.print(lperson.get(i).name+ &quot; &quot;);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/python学习笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/python学习笔记/" itemprop="url">python学习笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:31:48+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>python类支持多重继承，当使用多重继承时，需要注意：</p>
-<blockquote>
-<p>如果一个方法从多个超类继承（也就是说你有两个具有相同名字的不同方法），那么必须要注意一下超类的顺序（在class语句中）：先继承的类中的方法会重写后继承的类中的方法。</p>
-</blockquote>
-<p>python魔法方法，就是在方法名前后加双下划线“__”，例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">class FooBar:</div><div class="line">   def __init__(self, value = 42):</div><div class="line">         self.somevar = value</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意：Python中有一个魔法方法叫做”__del<strong>“，也就是析构方法。它在对象就要被垃圾回收之前调用。但发生调用的具体时间是不可知的。所以建议读者尽力避免使用”\</strong>del__”函数。</p>
-</blockquote>
-<p>Python中类的继承，如果一个子类直接重写了构造器的方法，这将恢复完全覆盖了在超类中构造器方法的作用。<strong>如果要想保留超类构造器方法的作用：调用超类构造方法的未绑定版本，或者使用 super函数。</strong><br>__init__ 方法为一个类创建后第一个执行的方法。<br>什么是self ？ 它是类实例自身的引用。其它面向对象语言通常使用一个名为 this 的标识符。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">class SongBird(Bird):</div><div class="line">    def __init__(self):</div><div class="line">         Bird.__init__(self)  # 调用超类构造器方法</div><div class="line">         self.sound = &apos;Squawk !&apos;</div><div class="line">    </div><div class="line">     def sing(self):</div><div class="line">          print self.sound</div><div class="line"></div><div class="line">__metaclass__ = type </div><div class="line">class SongBird(Bird):</div><div class="line">    def __init__(self):</div><div class="line">         super(SongBird.self).__init__()  # super函数只在新式类中起作用</div><div class="line">         self.sound = &apos;Squawk !&apos;</div><div class="line">    </div><div class="line">     def sing(self):</div><div class="line">          print self.sound</div></pre></td></tr></table></figure></p>
-<p>解决python文件显示中文build错误问题：</p>
-<blockquote>
-<p>需要在程序的第一行或者第二行声明编码，就可以解决问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># coding =encoding name 或者  # -*- coding: -*-</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p>下面的链接是原文地址 <a href="http://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">http://www.python.org/dev/peps/pep-0263/</a></p>
-<p><strong>raw_input</strong>　，python3.0版本后用<strong>input</strong>替换了raw_input</p>
-<p>python编程时，每一行语句结束时直接换行，不需要像C，Java那样用“；”结尾；但是同一行书写多个预计时，可以用“ ; “分割</p>
-<blockquote>
-<p>注意：在python语言中，赋值并不是直接将一个值赋给一个变量，对象是通过<strong>引用传递</strong>的。</p>
-</blockquote>
-<p>python不支持类似 x++ 或 –x 这样的前置/后置自增/自减运算。</p>
-<p>专用下划线标识符：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">_xxx   #不用 &apos; from module import * &apos; 导入</div><div class="line">_xxx_  #系统定义名字</div><div class="line">_xxx   #类中的私有变量名</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>核心风格建议：避免用下划线作为变量名的开始，因为下划线对解释器有特殊的意义，而且是内建标识符所使用的符号，我们建议程序员避免用下划线作为变量名的开始。一般来讲，变量名 _xxx 被看做是“私有的”，在模块或类外都不可以使用。当变量是私有的时候，用_xxx来表示变量是很好的习惯。因为变量或类外不可以使用。当变量是私有的时候，用_xxx来表示变量是很好的习惯。因为变量名__xxx__对python来说有特殊含义，对于普通的变量应当避免这种命名风格。</p>
-</blockquote>
-<p>python 变量量无需事先声明，也无需声明类型。</p>
-<blockquote>
-<p>提醒：print语句默认在输出内容末尾后加一个换行符，而在语句后加一个“逗号”可以避免这个新闻。</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Effective-Java-随笔（异常）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/08/Effective-Java-随笔（异常）/" itemprop="url">Effective Java 随笔（异常）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:18:51+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>异常</strong><br><strong>第57条：只针对异常的情况使用异常</strong><br>　　Java程序设计的时候，只针对有异常的情况，才考了使用异常。实际上，<strong>基于异常的模式比标准模式要慢很多。</strong>异常是为了在异常情况下使用而设计的，不要将它们用于普通的控制流。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">try&#123;</div><div class="line">    //do someting</div><div class="line">    ......</div><div class="line">&#125;catch(Exception ex)&#123;</div><div class="line">    ......</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>第58条：对可恢复的情况使用受检异常，对变成错误使用允许时异常</strong><br>　　Java程序设计语言提供了三种可抛出结构（throwable）：受检异常（checked exception）、运行时异常（run-time exception）和错误（error）。<strong>使用原则：如果期望调用者能够适当地恢复，对于这种情况就应该使用受检的异常</strong>通过抛出受检的异常，强迫调用者在一个catch子句中处理异常，或者将它传播出去。因此，方法中声明要抛出的每个受检的异常，都是对API用户的一种潜在提示：与异常相关的条件是调用这个方法的一种可能的结果。</p>
-<p><strong>并发</strong><br><strong>第66条：同步访问共享的可变数据</strong><br>　　<em>当多个线程共享可变数据的时候，每个读或者写数据的线程都必须执行同步。</em></p>
-<p>　　</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Effective-Java-随笔（内部类、泛型、方法……）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Effective-Java-随笔（内部类、泛型、方法……）/" itemprop="url">Effective Java 随笔（内部类、泛型、方法……）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:26:16+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>第22条：优先考虑静态成员类</strong>　　<br>　　Java程序中共有四种不同的嵌套类，每一种都有自己的用途。如果一个嵌套类需要在单个方法之外仍然是可见的，或者它太长了，不适合于放在方法内部，就应该使用成员类。如果成员类的每个实例都需要一个指向其外围实例的引用，就要把成员类做成非静态的；否则，就做成静态的。假设这个嵌套类属于一个方法的内部，如果你只需要在一个地方创建实例，并且已经有了一个预置的类似可以说吗这个类的特征，就要把它做成匿名类；否则，就做成局部类。</p>
-<p><strong>泛型</strong><br><strong>第23条：请不要在新代码中使用原生态类型</strong><br>　　Java 1.5之后支持泛型，建议在代码中不要使用原生态类型。如果使用原生态类型，就失掉了泛型在安全性和表述性方面的所有优势。，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//不建议这样定义List</div><div class="line">private List list ;</div><div class="line"></div><div class="line">//支持泛型的对象，建议如下定义</div><div class="line">private List&lt;String&gt; list;</div></pre></td></tr></table></figure></p>
-<p><strong>第30条：用enum代替int常量</strong><br>　　在编程语言中还没有引入枚举类型之前，表示枚举类型的常用模式是声明一组具名的int常量，每个类型成员一个常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// The int enum pattern - severely dificient !</div><div class="line">public static final int APPLE_FUJI = 0;</div><div class="line">public static final int APPLE_PIPPIN =1</div><div class="line">......</div><div class="line"></div><div class="line">public static final int ORANGE_NAVEL = 0;</div><div class="line">public static final int ORANGE_TEMPLE =1;</div><div class="line">......</div></pre></td></tr></table></figure></p>
-<p>　　这种方法称作int枚举模式，存在诸多不足。它在类型安全性和使用方便性方面没有任何帮组。如果将apple传到想要的orange的方法中，编译器也不会出现警告。建议在诸如类似常量定义时，考虑使用 enum type。</p>
-<p><strong>方法</strong><br><em>**第38条：检查参数的有效性</em><br>　　每当编写方法或者构造器的时候，应该考虑它的参数有哪些限制。应该把这些限制写到文档中，并且在方法体的开头处，通过显示的简称来实施这些限制。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">  * Returns a BigInteger whose value is (this mod m). This method</div><div class="line">  * differs form the remainder method in that it always returns a </div><div class="line">  * non-negative BigInteger</div><div class="line">  *</div><div class="line">  * @param m the modeulus, thich must be positive</div><div class="line">  * @return this mod m</div><div class="line">  * @throws ArithmeticException if m is less than or equal to 0</div><div class="line">  */</div><div class="line">public BigInteger mod(BigInteger m)&#123;</div><div class="line">    if(m.signum() &lt;= 0)</div><div class="line">        throw new ArithmeticException(&quot;Modulus &lt;= 0 : &quot; + m );</div><div class="line"></div><div class="line">      ...... // Do the computation</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>通用程序设计</strong><br><strong>第49条：基本类型优先于装箱基本类型（基本类型的包装类）</strong><br>1.什么时候应该使用装箱基本类型呢？<br>　　第一是作为集合中的元素、健和值。你不能将基本类型放在集合中，因此必须使用装箱基本类型。这是一种更通用的特例。在参数化类型中，必须使用装箱基本类型作为类型参数，因为Java不能运行使用基本类型。<br>　　基本类型性能优于装箱基本类型，总之，当可以选择的时候，基本类型要优先于装箱基本类型。</p>
-<p><strong>第52条：通过接口引用对象</strong><br>　　应该优先使用接口而不是类的引用对象。<em>如果有合适的接口类型存在，那么对于参数、返回值、变量或域来说，就都应该使用接口类型进行声明。</em>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//Good - user interface as type</div><div class="line">List&lt;Subscriber&gt; subscribers = new ArrayList&lt;Subscriber&gt;();</div><div class="line"></div><div class="line">//Bad - user class as type</div><div class="line">ArrayList&lt;Subscriber&gt; subscribers = new ArrayList&lt;Subscriber&gt;();</div></pre></td></tr></table></figure></p>
-<p><em>如果没有合适的接口存在，完全可以用类而不是接口来引用对象。（建议使用类层次接口中提供了必要功能的最基础的类）</em></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Effective-Java-随笔：复合优于继承/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Effective-Java-随笔：复合优于继承/" itemprop="url">Effective Java 随笔：复合优于继承</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:25:09+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>第16条：复合优于继承</strong>　　<br>　　只有当子类真正是超类的子类型（subtype）时，才适合用继承。换句话说，对于两个类A和B，只有当两者之间确实存在“is-a”关系的时候，类B才应该扩展类A。如果你打算让类B扩展类A，就应该问问之间：每个B确实也是A吗？如果你不能确定这个问题的答案是肯定的，那么B就不应该扩展A。如果答案是否定的，通常情况下，B应该包含A的一个私有实例，并且暴露一个较小的、较简单的API：A本质上不是B的一部分，只是它的实现细节而已。</p>
-<p><strong>第17条：要么为继承而设计，并提供文档说明，要么就禁止继承</strong><br>　　专门为继承而设计，就需要具有良好的文档说明。该类的文档必须精确地描述覆盖每个方法所带来的影响，换句话说，<em>该类必须有文档说明它可覆盖（overridable）的方法的自用性（self-use）</em>。<br>　　为了允许继承，类还必须遵守其他一些约束。<em>构造器决不能调用可被覆盖的方法</em>，无论是直接调用还是间接调用。如果违反了这条规则，很有可能导致程序失败。<br>　　如果你决定在一个为了继承而设计的类中实现了Cloneable或者Serializable接口，就应该意识到，因为clone和readObject方法在行为非常类似于构造器，所以类似的限制规则也是适合用的：无论是clone还是readObject，都不可以调用覆盖的方法，不管是以直接还是间接的方式。对于readObject方法，覆盖版本的方法将在子类的状态被反序列化之前被允许；而对于clone方法，覆盖版本的方法则是在子类的clone方法有机会修正被克隆对象中的状态之前被允许。无论哪种情形，都不可避免将导致程序失败。</p>
 
           
         
@@ -1859,7 +1909,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1905,7 +1955,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-count">75</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1916,7 +1966,7 @@
             
             <div class="site-state-item site-state-categories">
               
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               
             </div>
@@ -1927,7 +1977,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">49</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
