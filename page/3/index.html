@@ -300,7 +300,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Lombok-安装，JavaBean中消除冗长的get-set方法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/译-Python关键字yield的解释-上篇-stackoverflow/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -319,7 +319,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/07/Lombok-安装，JavaBean中消除冗长的get-set方法/" itemprop="url">Lombok 安装，JavaBean中消除冗长的get/set方法</a></h1>
+                <a class="post-title-link" href="/2017/10/08/译-Python关键字yield的解释-上篇-stackoverflow/" itemprop="url">(译)Python关键字yield的解释--上篇(stackoverflow)</a></h1>
         
 
         <div class="post-meta">
@@ -331,8 +331,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:49:23+08:00">
-                2017-10-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:19:26+08:00">
+                2017-10-08
               </time>
             
 
@@ -393,19 +393,25 @@
       
         
           
-            <p>在项目中引用Lombok lib，如果是通过Maven构建项目的，可以在pom.xml中增加对lib的依赖。</p>
-<pre><code>&lt;!-- 简化JavaBean get/set 方法 --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-    &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-    &lt;version&gt;1.16.10&lt;/version&gt;
-    &lt;scope&gt;provided&lt;/scope&gt;
-&lt;/dependency&gt;
-</code></pre><p>如果你使用eclipse/myeclipse进行开发，在项目中引用了对lombok的依赖，然后发现代码编译的时候，还是没有生成get/set方法。这个时候还需要在eclipse/myeclipse中安装lombok，安装步骤如下：<br>1、 将 lombok.jar 复制到 myeclipse.ini / eclipse.ini 所在的文件夹目录下；<br>2.、打开 eclipse.ini / myeclipse.ini，在最后面插入以下两行并保存：</p>
-<pre><code>-Xbootclasspath/a:lombok.jar        
--javaagent:lombok.jar
-</code></pre><p>3、重启 eclipse / myeclipse</p>
-<p>最后在JavaBean中如何使用，请参考Lombok 注解在线帮助文档：<a href="http://projectlombok.org/features/index.html" target="_blank" rel="external">http://projectlombok.org/features/index.</a></p>
+            <blockquote>
+<p>原文：<a href="http://stackoverflow.com/questions/231767/the-python-yield-keyword-explained" target="_blank" rel="external">http://stackoverflow.com/questions/231767/the-python-yield-keyword-explained</a><br>译者：hit9<br>译者注：这是stackoverflow上一个很热的帖子，这里是投票最高的一个答案</p>
+</blockquote>
+<h4 id="1-提问者的问题"><a href="#1-提问者的问题" class="headerlink" title="1.提问者的问题"></a>1.提问者的问题</h4><p>Python关键字yield的作用是什么？用来干什么的？<br>比如，我正在试图理解下面的代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def node._get_child_candidates(self, distance, min_dist, max_dist):</div><div class="line">    if self._leftchild and distance - max_dist &lt; self._median:</div><div class="line">        yield self._leftchild</div><div class="line">    if self._rightchild and distance + max_dist &gt;= self._median:</div><div class="line">        yield self._rightchild</div></pre></td></tr></table></figure></p>
+<p>下面的是调用:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">result, candidates = list(), [self]</div><div class="line">while candidates: </div><div class="line">    node = candidates.pop() </div><div class="line">    distance = node._get_dist(obj) </div><div class="line">    if distance &lt;= max_dist and distance &gt;= min_dist: </div><div class="line">        result.extend(node._values) </div><div class="line">    candidates.extend(node._get_child_candidates(distance, min_dist, max_dist))</div><div class="line">return result</div></pre></td></tr></table></figure></p>
+<p>当调用 _get_child_candidates的时候发生了什么？返回了一个列表？返回了一个元素？被重复调用了么？ 什么时候这个调用结束呢？</p>
+<h4 id="2-回答部分"><a href="#2-回答部分" class="headerlink" title="2.回答部分"></a>2.回答部分</h4><p>为了理解什么是 <strong>yield</strong>,你必须理解什么是生成器。在理解生成器之前，让我们先走近迭代。</p>
+<h4 id="3-可迭代对象"><a href="#3-可迭代对象" class="headerlink" title="3.可迭代对象"></a>3.可迭代对象</h4><p>当你建立了一个列表，你可以逐项地读取这个列表，这叫做一个可迭代对象:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; mylist = [1, 2, 3]</div><div class="line">&gt;&gt;&gt; for i in mylist :</div><div class="line">...  print(i)</div><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td></tr></table></figure></p>
+<p><em>mylist</em>是一个可迭代的对象。当你使用一个列表生成式来建立一个列表的时候，就建立了一个可迭代的对象:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; mylist = [x*x for x in range(3)]</div><div class="line">&gt;&gt;&gt; for i in mylist :</div><div class="line">...  print(i)</div><div class="line">0</div><div class="line">1</div><div class="line">4</div></pre></td></tr></table></figure>
+<p>所有你可以使用 for .. in .. 语法的叫做一个迭代器：列表，字符串，文件……你经常使用它们是因为你可以如你所愿的读取其中的元素，但是你把所有的值都存储到了内存中，如果你有大量数据的话这个方式并不是你想要的。</p>
+<h4 id="4-生成器"><a href="#4-生成器" class="headerlink" title="4.生成器"></a>4.生成器</h4><p>生成器是可以迭代的，但是你 <strong>只可以读取它一次</strong> ，因为它并不把所有的值放在内存中，它是实时地生成数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; mygenerator = (x*x for x in range(3))</div><div class="line">&gt;&gt;&gt; for i in mygenerator :</div><div class="line">...  print(i)</div><div class="line">0</div><div class="line">1</div><div class="line">4</div></pre></td></tr></table></figure></p>
+<p>看起来除了把 [] 换成 () 外没什么不同。但是，你不可以再次使用 for i inmygenerator , 因为生成器只能被迭代一次：先计算出0，然后继续计算1，然后计算4，一个跟一个的…</p>
+<h4 id="5-yield关键字"><a href="#5-yield关键字" class="headerlink" title="5.yield关键字"></a>5.yield关键字</h4><p>yield 是一个类似 return 的关键字，只是这个函数返回的是个生成器。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; def createGenerator() :</div><div class="line">...  mylist = range(3)</div><div class="line">...  for i in mylist :</div><div class="line">...  yield i*i</div><div class="line">...</div><div class="line">&gt;&gt;&gt; mygenerator = createGenerator() # create a generator</div><div class="line">&gt;&gt;&gt; print(mygenerator) # mygenerator is an object!</div><div class="line"></div><div class="line">&lt;generator object createGenerator at 0xb7555c34</div><div class="line">&gt;&gt;&gt;&gt; for i in mygenerator:</div><div class="line">...  print(i)</div><div class="line">0</div><div class="line">1</div><div class="line">4</div></pre></td></tr></table></figure></p>
+<p>这个例子没什么用途，但是它让你知道，这个函数会返回一大批你只需要读一次的值.<br>为了精通 yield ,你必须要理解：<strong>当你调用这个函数的时候，函数内部的代码并不立马执行</strong> ，这个函数只是返回一个生成器对象，这有点蹊跷不是吗。</p>
+<p>那么，函数内的代码什么时候执行呢？当你使用for进行迭代的时候.</p>
+<p>现在到了关键点了！</p>
+<p>第一次迭代中你的函数会执行，从开始到达 yield 关键字，然后返回 yield<br> 后的值作为第一次迭代的返回值. 然后，每次执行这个函数都会继续执行你在函数内部定义的那个循环的下一次，再返回那个值，直到没有可以返回的。</p>
+<p>如果生成器内部没有定义 yield 关键字，那么这个生成器被认为成空的。这种情况可能因为是循环进行没了，或者是没有满足 if/else 条件。</p>
 
           
         
@@ -454,7 +460,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/CXF-开发和部署-webservice-客户端注意事项/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Java并发编程学习/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ElwinHe">
@@ -473,7 +479,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/07/CXF-开发和部署-webservice-客户端注意事项/" itemprop="url">CXF 开发和部署 webservice 客户端注意事项</a></h1>
+                <a class="post-title-link" href="/2017/10/08/Java并发编程学习/" itemprop="url">Java并发编程学习</a></h1>
         
 
         <div class="post-meta">
@@ -485,8 +491,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:47:18+08:00">
-                2017-10-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:18:10+08:00">
+                2017-10-08
               </time>
             
 
@@ -547,1249 +553,1273 @@
       
         
           
-            <p>在做招商银行项目时，需要我们的系统集成招商银行的邮件服务器。招商银行邮件服务器采用webservice方式进行集成。经过多方面的考虑后，决定采用第三方开源框架Apache CXF进行webservice客户端开发。</p>
-<p>该项目采用Apache CXF最新版本2.5.2版本，在使用该版本cxf开发时依赖的第三方包中与jaee.jar包有冲突；需要把jaee.jar中同名包下的文件进行删除。</p>
-<p>另外采用jboss部署web应用程序时，需要注意以下两点：</p>
+            <blockquote>
+<p><strong>不可变对象</strong>可以在没有额外同步的情况下，安全地用于任意线程；甚至发布它们时亦不需要同步。</p>
+</blockquote>
+<p><strong>安全发布的模式：</strong><br>如果一个对象是可变的，它就必须被安全地发布，通常发布线程与消费线程都必须同步化。如何确保消费线程能够看到处于发布当时的对象状态，我们要解决对象发布后对其修改的可见性问题。</p>
 <blockquote>
-<p>1.将jaxb-api-2.2.3.jar,jaxws-api-2.1.jar包拷贝到jboss\lib\endorsed目录下；<br>2.将jaxb-api-2.2.3.jar,jaxws-api-2.1.jar包拷贝到jdk1.5\jre\lib\endorsed目录下。</p>
-</blockquote>
-<p>这里采用通过命令生成客户端代码进行调用：</p>
-<blockquote>
-<p>wsdl2java -d src -frontendjaxws21 -p com.easytrack.customization.cmb.integration.email -client <a href="http://99.1.101.169/coreservice/svc/coreservice.asmx?wsdl" target="_blank" rel="external">http://99.1.101.169/coreservice/svc/coreservice.asmx?wsdl</a></p>
-</blockquote>
-<p>最后根据生成的客户端代码适当的修改即可。</p>
-<p>在开发和部署时注意以上两点，同时注意引用的CXF第三方包与自己本项目包的冲突。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Funsion-Charts-参数大全/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Funsion-Charts-参数大全/" itemprop="url">Funsion Charts 参数大全</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:37:28+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="基础参数"><a href="#基础参数" class="headerlink" title="基础参数"></a>基础参数</h3><blockquote>
-<p>animation  是否动画显示数据，默认为1(True)<br>showNames   是否显示横向坐标轴(x轴)标签名称<br>rotateNames  是否旋转显示标签，默认为0(False):横向显示<br>showValues  是否在图表显示对应的数据值，默认为1(True)<br>yAxisMinValue  指定纵轴(y轴)最小值，数字<br>yAxisMaxValue  指定纵轴(y轴)最小值，数字<br>showLimits 是否显示图表限值(y轴最大、最小值)，默认为1(True)</p>
-</blockquote>
-<h3 id="图表标题和轴名称"><a href="#图表标题和轴名称" class="headerlink" title="图表标题和轴名称"></a>图表标题和轴名称</h3><blockquote>
-<p>caption  图表主标题<br>subCaption  图表副标题<br>xAxisName  横向坐标轴(x轴)名称<br>yAxisName  纵向坐标轴(y轴)名称</p>
-</blockquote>
-<h3 id="图表和画布的样式"><a href="#图表和画布的样式" class="headerlink" title="图表和画布的样式"></a>图表和画布的样式</h3><blockquote>
-<p>bgColor  图表背景色，6位16进制颜色值<br>canvasBgColor  画布背景色，6位16进制颜色值<br>canvasBgAlpha  画布透明度，[0-100]<br>canvasBorderColor  画布边框颜色，6位16进制颜色值<br>canvasBorderThickness  画布边框厚度，[0-100]<br>shadowAlpha  投影透明度，[0-100]<br>showLegend  是否显示系列名，默认为1(True)</p>
-</blockquote>
-<h3 id="字体属性"><a href="#字体属性" class="headerlink" title="字体属性"></a>字体属性</h3><blockquote>
-<p>baseFont  图表字体样式<br>baseFontSize  图表字体大小<br>baseFontColor  图表字体颜色，6位16进制颜色值<br>outCnvBaseFont  图表画布以外的字体样式<br>outCnvBaseFontSize  图表画布以外的字体大小<br>outCnvBaseFontColor  图表画布以外的字体颜色，6位16进制颜色值</p>
-</blockquote>
-<h3 id="分区线和网格"><a href="#分区线和网格" class="headerlink" title="分区线和网格"></a>分区线和网格</h3><blockquote>
-<p>numDivLines  画布内部水平分区线条数，数字<br>divLineColor  水平分区线颜色，6位16进制颜色值<br>divLineThickness 水平分区线厚度，[1-5]<br>divLineAlpha  水平分区线透明度，[0-100]<br>showAlternateHGridColor  是否在横向网格带交替的颜色，默认为0(False)<br>alternateHGridColor  横向网格带交替的颜色，6位16进制颜色值<br>alternateHGridAlpha  横向网格带的透明度，[0-100]<br>showDivLinues  是否显示Div行的值，默认？？<br>numVDivLines  画布内部垂直分区线条数，数字<br>vDivLineColor  垂直分区线颜色，6位16进制颜色值<br>vDivLineThickness  垂直分区线厚度，[1-5]<br>vDivLineAlpha  垂直分区线透明度，[0-100]<br>showAlternateVGridColor  是否在纵向网格带交替的颜色，默认为0(False)<br>alternateVGridColor  纵向网格带交替的颜色，6位16进制颜色值<br>alternateVGridAlpha  纵向网格带的透明度，[0-100]</p>
-</blockquote>
-<h3 id="数字格式"><a href="#数字格式" class="headerlink" title="数字格式"></a>数字格式</h3><blockquote>
-<p>numberPrefix 增加数字前缀<br>numberSuffix 增加数字后缀%为’%’<br>formatNumberScale 是否格式化数字,默认为1(True),自动的给你的数字加上K（千）或M（百万）；若取0,则不加K或M<br>decimalPrecision 指定小数位的位数，[0-10]例如：=’0’取整<br>divLineDecimalPrecision 指定水平分区线的值小数位的位数，[0-10]<br>limitsDecimalPrecision 指定y轴最大、最小值的小数位的位数，[0-10]<br>formatNumber 逗号来分隔数字(千位，百万位),默认为1(True)；若取0,则不加分隔符<br>decimalSeparator 指定小数分隔符,默认为’.’<br>thousandSeparato r指定千分位分隔符,默认为’,’<br>Tool-tip/Hover 标题<br>showhovercap 是否显示悬停说明框，默认为1(True)<br>hoverCapBgColor 悬停说明框背景色，6位16进制颜色值<br>hoverCapBorderColor  悬停说明框边框颜色，6位16进制颜色值<br>hoverCapSepChar  指定悬停说明框内值与值之间分隔符,默认为’,’</p>
-</blockquote>
-<h3 id="折线图的参数"><a href="#折线图的参数" class="headerlink" title="折线图的参数"></a>折线图的参数</h3><blockquote>
-<p>lineThickness 折线的厚度<br>anchorRadius 折线节点半径，数字<br>anchorBgAlpha 折线节点透明度，[0-100]<br>anchorBgColor 折线节点填充颜色，6位16进制颜色值<br>anchorBorderColor 折线节点边框颜色，6位16进制颜色值<br>Set  标签使用的参数<br>value  数据值<br>color  颜色<br>link 链接（本窗口打开[Url]，新窗口打开[n-Url]，调用JS函数[JavaScript:函数]）<br>name  横向坐标轴标签名称</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Linux-高频命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Linux-高频命令/" itemprop="url">Linux 高频命令</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:32:18+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>1. halt 命令  关闭系统</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ halt -p  关闭系统后关闭电源；</div></pre></td></tr></table></figure></p>
-<p><strong>2. reboot 重新启动系统</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ reboot</div></pre></td></tr></table></figure></p>
-<p><strong>3. shutdown  关闭并重启系统</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ shutdown</div></pre></td></tr></table></figure></p>
-<p><strong>4. service  管理系统服务</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ service smb start</div><div class="line"></div><div class="line">$ service smb stop</div><div class="line"></div><div class="line">$ service smb restart</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Effective-Java-随笔——第3、4条/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Effective-Java-随笔——第3、4条/" itemprop="url">Effective Java 随笔——第3、4条</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:31:09+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="第3条：用私有构造器或者枚举类型强化Singleton属性"><a href="#第3条：用私有构造器或者枚举类型强化Singleton属性" class="headerlink" title="第3条：用私有构造器或者枚举类型强化Singleton属性　　"></a>第3条：用私有构造器或者枚举类型强化Singleton属性　　</h3><p>　　Singleton指仅仅被实例化一次的类，通常被用来代表那些本质上唯一的系统组件。如果项目通过Spring构建，可以通过Spring来管理Bean，默认情况下在Bean的为单例模式。</p>
-<h3 id="第4条：通过私有构造器强化不可实例化的能力"><a href="#第4条：通过私有构造器强化不可实例化的能力" class="headerlink" title="第4条：通过私有构造器强化不可实例化的能力"></a>第4条：通过私有构造器强化不可实例化的能力</h3><p>　　有的类只有静态方法和静态域时，就可以定义私有构造器来明确说明该类不可实例化，一般多用于工具类。</p>
-<h3 id="第14条：在公有类中使用访问方法而非公有域"><a href="#第14条：在公有类中使用访问方法而非公有域" class="headerlink" title="第14条：在公有类中使用访问方法而非公有域"></a>第14条：在公有类中使用访问方法而非公有域</h3><p>　　简书面向对象设计的思想，对于可变类来说，应该用包含私有域的公有设值方法（setter）类代替。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class Point &#123;</div><div class="line">    private double x;</div><div class="line">    private double y;</div><div class="line">    </div><div class="line">    public double getX()&#123;</div><div class="line">           return x;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    public double getY()&#123;</div><div class="line">           return y;</div><div class="line">    &#125;</div><div class="line">   </div><div class="line">    public void setX(double x)&#123;</div><div class="line">            this.x = x;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">     public void setY(double y)&#123;</div><div class="line">            this.y = y;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>　　如果类可以在它所在的包外部进行访问，就提供访问方法 ，避免直接访问类的域。如果类是包级私有的，或者是私有的嵌套类，直接暴露它的数据域并没有本质的错误。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Redis学习笔记-list类型及操作1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Redis学习笔记-list类型及操作1/" itemprop="url">Redis学习笔记--list类型及操作1</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:29:40+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>list 是一个链表结构，主要功能是push、pop、获取一个范围的所有值等等，操作中key 理解为链表的名字。</p>
-<p>Redis 的list 类型其实就是一个每个子元素都是string 类型的双向链表。链表的最大长度是(2的32 次方)。我们可以通过push,pop 操作从链表的头部或者尾部添加删除元素。这使得list既可以用作栈，也可以用作队列。</p>
-<p>有意思的是list 的pop 操作还有阻塞版本的，当我们[lr]pop 一个list 对象时，如果list 是空，或者不存在，会立即返回nil。但是阻塞版本的b[lr]pop 可以则可以阻塞，当然可以加超时时间，超时后也会返回nil。为什么要阻塞版本的pop 呢，主要是为了避免轮询。举个简单的例子如果我们用list 来实现一个工作队列。执行任务的thread 可以调用阻塞版本的pop 去获取任务这样就可以避免轮询去检查是否有任务存在。当任务来时候工作线程可以立即返回，也可以避免轮询带来的延迟。说了这么多，接下来看一下实际操作的方法吧：</p>
-<p><strong>lpush</strong><br>在key 对应list 的头部添加字符串元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lpush mylist &quot;world&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; lpush mylist &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>在此处我们先插入了一个world，然后在world 的头部插入了一个hello。其中lrange 是用于取mylist 的内容。</p>
-<hr>
-<p><strong>rpush</strong><br>在key 对应list 的尾部添加字符串元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist2 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist2 &quot;world&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>linsert</strong><br>在key 对应list 的特定位置之前或之后添加字符串元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist3 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist3 &quot;world&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; linsert mylist3 before &quot;world&quot; &quot;there&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist3 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;there&quot;</div><div class="line">3) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>在此处我们先插入了一个hello，然后在hello 的尾部插入了一个world，然后又在world 的前面插入了there。</p>
-<hr>
-<p><strong>lset</strong><br>设置list中下表的元素值（下标从0开始）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;two&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;three&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; lset mylist4 0 &quot;four&quot;</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; lset mylist4 -2 &quot;five&quot;</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist4 0 -1</div><div class="line">1) &quot;four&quot;</div><div class="line">2) &quot;five&quot;</div><div class="line">3) &quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>lrem</strong><br>从key对应list中删除count个和value相同的元素。<br>count&gt;0时，按从头到尾的顺序删除，具体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;foo&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; lrem mylist5 2 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;foo&quot;</div><div class="line">2) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p><strong>lrange</strong><br>lrange key start stop：返回存储在 key 的列表里指定范围内的元素。 start 和 end 偏移量都是基于0的下标，即list的第一个元素下标是0（list的表头），第二个元素下标是1，以此类推。</p>
-<p>偏移量也可以是负数，表示偏移量是从list尾部开始计数。 例如， -1 表示列表的最后一个元素，-2 是倒数第二个，以此类推。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">redis&gt; RPUSH mylist &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis&gt; RPUSH mylist &quot;two&quot;</div><div class="line">(integer) 2</div><div class="line">redis&gt; RPUSH mylist &quot;three&quot;</div><div class="line">(integer) 3</div><div class="line">redis&gt; LRANGE mylist 0 0</div><div class="line">1) &quot;one&quot;</div><div class="line">redis&gt; LRANGE mylist -3 2</div><div class="line">1) &quot;one&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">3) &quot;three&quot;</div><div class="line">redis&gt; LRANGE mylist -100 100</div><div class="line">1) &quot;one&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">3) &quot;three&quot;</div><div class="line">redis&gt; LRANGE mylist 5 10</div><div class="line">(empty list or set)</div><div class="line">redis&gt; </div><div class="line"></div><div class="line">#count&lt;0 时，按从尾到头的顺序删除，具体如下:</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;foo&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; lrem mylist6 -2 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div><div class="line"></div><div class="line">#count=0 时，删除全部，具体如下:</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;foo&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; lrem mylist7 0 &quot;hello&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist7 0 -1</div><div class="line">1) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Redis学习笔记-list类型及操作2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Redis学习笔记-list类型及操作2/" itemprop="url">Redis学习笔记--list类型及操作2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:28:53+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>ltrim</strong><br>保留指定key的值范围内的数据(<em>不在指定范围内的数据，将被删除</em>)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;two&quot;</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;three&quot;</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;four&quot;</div><div class="line">(integer) 4</div><div class="line">redis 127.0.0.1:6379&gt; ltrim mylist8 1 -1</div><div class="line">OK</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist8 0 -1</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;three&quot;</div><div class="line">3) &quot;four&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>lpop</strong><br>从list的头部删除元素，并返回删除元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lpop mylist</div><div class="line">&quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</div><div class="line">1) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>rpop</strong><br>从list的尾部删除元素，并返回删除元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt; rpop mylist2</div><div class="line">&quot;world&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>rpoplpush</strong><br>从第一个list 的尾部移除元素，并添加到第二个list 的头部，最后返回被移除的元素值，整个操作是原子的，如果第一个list 是空或者不存在返回nil。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">3) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line"></div><div class="line">redis 127.0.0.1:6379&gt; rpoplpush mylist5 mylist6</div><div class="line">&quot;hello&quot;</div><div class="line"></div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</div><div class="line">1) &quot;hello&quot;</div><div class="line">2) &quot;hello&quot;</div><div class="line">3) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>lindex</strong><br>返回名称为key的list中index位置的元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lindex mylist5 0</div><div class="line">&quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt; lindex mylist5 1</div><div class="line">&quot;foo&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>llen</strong><br>返回key 对应list 的长度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; llen mylist5</div><div class="line">(integer) 2</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Redis学习笔记-sets类型及操作1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Redis学习笔记-sets类型及操作1/" itemprop="url">Redis学习笔记--sets类型及操作1</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:26:50+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>set 是集合，和我们数学中的集合概念相似，对集合的操作有添加删除元素，有对多个集合求交并差等操作，操作中key 理解为集合的名字。</p>
-<p>Redis 的set 是string 类型的无序集合。set 元素最大可以包含(2 的32 次方)个元素。</p>
-<p>set 的是通过hash table 实现的，所以添加、删除和查找的复杂度都是O(1)。hash table 会随着添加或者删除自动的调整大小。需要注意的是调整hash table 大小时候需要同步（获取写锁）会阻塞其他读写操作，可能不久后就会改用跳表（skip list）来实现，跳表已经在sortedset 中使用了。关于set 集合类型除了基本的添加删除操作，其他有用的操作还包含集合的取并集(union)，交集(intersection)，差集(difference)。通过这些操作可以很容易的实现sns中的好友推荐和blog 的tag 功能。下面详细介绍set 相关命令：</p>
-<p><strong>sadd</strong><br>向名称为key的set中添加元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; sadd myset &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset &quot;world&quot;</div><div class="line">(integer) 1</div><div class="line"></div><div class="line"> #向set中添加重复的数据，添加将失败，并返回0</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset &quot;world&quot; </div><div class="line">(integer) 0  </div><div class="line"></div><div class="line">redis 127.0.0.1:6379&gt; smembers myset</div><div class="line">1) &quot;world&quot;</div><div class="line">2) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>本例中，我们向myset 中添加了三个元素，但由于第三个元素跟第二个元素是相同的，所以第三个元素没有添加成功，最后我们用smembers 来查看myset 中的所有元素。</p>
-<hr>
-<p><strong>srem</strong><br>删除名称为key的set中的元素member<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; sadd myset2 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset2 &quot;two&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset2 &quot;three&quot;</div><div class="line">(integer) 1</div><div class="line"></div><div class="line">#本例中，我们向myset2 中添加了三个元素后，再调用srem 来删除one 和four，但由于元素中没有four 所以，此条srem 命令执行失败。</div><div class="line">redis 127.0.0.1:6379&gt; srem myset2 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; srem myset2 &quot;four&quot;</div><div class="line">(integer) 0</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>spop</strong><br>随机返回并删除名称为key的set中的一个元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; sadd myset3 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset3 &quot;two&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset3 &quot;three&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; spop myset3</div><div class="line">&quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>本例中，我们向myset3 中添加了三个元素后，再调用spop 来随机删除一个元素，可以看到three 元素被删除了。</p>
-<hr>
-<p><strong>sdiff</strong><br>返回所有给定key与第一个key的差集。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sdiff myset2 myset3</div><div class="line">1) &quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div><div class="line"></div><div class="line">#我们也可以将myset2 和myset3 换个顺序来看一下结果:</div><div class="line">redis 127.0.0.1:6379&gt; sdiff myset3 myset2</div><div class="line">1) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>sdiffstore</strong><br>返回所有给定key与第一个key的差集，并将结果存为另一个key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sdiffstore myset4 myset2 myset3</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset4</div><div class="line">1) &quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>sinterstore</strong><br>返回所有给定key的交集，并将结果存为另一个key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sinterstore myset5 myset2 myset3</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset5</div><div class="line">1) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>通过本例的结果可以看出, myset2 和myset3 的交集被保存到myset5 中了</p>
-<hr>
-<p><strong>sunion</strong><br>返回所有给定key 的并集<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sunion myset2 myset3</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">3) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>通过本例的结果可以看出, myset2 和myset3 的并集被查出来了</p>
-<hr>
-<p><strong>sunionstore</strong><br>返回所有给定key 的并集，并将结果存为另一个key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sunionstore myset6 myset2 myset3</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset6</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">3) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>通过本例的结果可以看出, myset2 和myset3 的并集被保存到myset6 中了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Redis学习笔记-sets类型及操作2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Redis学习笔记-sets类型及操作2/" itemprop="url">Redis学习笔记--sets类型及操作2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T17:58:28+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>smove</strong><br>从第一个key 对应的set 中移除member 并添加到第二个对应set 中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smove myset2 myset7 three</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset7</div><div class="line">1) &quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>通过本例可以看到，myset2 的three 被移到myset7 中了</p>
-<hr>
-<p><strong>scard</strong><br>返回名称为key的set的元素个数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; scard myset2</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>通过本例可以看到，myset2 的成员数量为1</p>
-<hr>
-<p><strong>sismember</strong><br>测试member 是否是名称为key 的set 的元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sismember myset2 two</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sismember myset2 one</div><div class="line">(integer) 0</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>通过本例可以看到，two 是myset2 的成员，而one 不是。</p>
-<hr>
-<p><strong>srandmember</strong><br>随机返回名称为key 的set 的一个元素，但是不删除元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; srandmember myset3</div><div class="line">&quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; srandmember myset3</div><div class="line">&quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/决策树学习/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/决策树学习/" itemprop="url">决策树学习</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T17:56:38+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="决策树学习的适用问题"><a href="#决策树学习的适用问题" class="headerlink" title="决策树学习的适用问题"></a>决策树学习的适用问题</h4><p>通常决策树学习最适合具有以下特征的问题：</p>
+<p>为了安全地发布对象，对象的引用以及对象的状态必须同时对其他线程可见。一个正确创建的对象可以通过下列条件安全地发布：</p>
 <ul>
-<li><strong>实例是由“属性-值”对（pair）表示的</strong>。实例是用一系列固定的属性（例如，Temperature）和它们的值（例如，Hot）来描述的。最简单的决策树学习中，每一个属性取少数的分离的值（例如，Hot、Mild、Cold）。然而，扩展的算法也运行处理值域为实数的属性（利润，数字表示的温度）。</li>
-<li><strong>目标函数具有离散的输出值</strong>。决策树给每个实例赋予一个布尔型的分类（例如，yes或no）。决策树方法很容易扩展到学习有两个以上输出值的函数。一种更强有力的扩展算法运行学习具有实数值输出的函数，尽管决策树在这种情况下的应用不太常见。</li>
-<li><strong>可能需要析取的描述</strong>，决策树很自然代表了析取表达式。</li>
-<li><strong>训练数据可以包含错误</strong>。决策树学习对错误有很好的鲁棒性，无论是训练样例所属的分类错误还是描述这些样例的属性值错误。</li>
-<li><strong>训练数据可以包含缺少属性值的实例</strong>。决策树学习甚至可以在未知属性值的训练样例中使用（仅有一部分训练样例知道当天的湿度）。</li>
+<li>通过静态初始化器初始化对象的引用；</li>
+<li>将它的引用存储到 volatile域或 AtomicReference；</li>
+<li>将它的引用存储到正确创建的对象的final域中；</li>
+<li>或者将它的引用存储到由锁正确保护的域中。</li>
 </ul>
-<h4 id="基本的决策树学习算法"><a href="#基本的决策树学习算法" class="headerlink" title="基本的决策树学习算法"></a>基本的决策树学习算法</h4><p>ID3算法，通过自顶向下构造决策树来进行学习。构造过程是从“哪一个属性将在树的根节点被测试？”这个问题开始的。为了回答这个问题，使用统计测试来确定每一个实例属性单独分类训练样例的能力。分类能力最好的属性被选作为树的根节点的测试。然后为根节点属性的每个可能值产生一个分支，并把训练样例排列到适当的分支之下。然后重复整个过程，用每个分支节点关联的训练样例来选取在该点呗测试的最佳 属性。这形成了对合格决策树的贪婪搜索，也就是算法从不回溯重新考虑以前的选择。</p>
-<p>ID3算法的核心问题是选取在树的每个节点要测试的属性。我们希望选择的是最有助于分类实例的属性。那么衡量属性价值的一个好的定量标准是什么呢？这里将定义一个统计属性，称为“信息增益”，用来衡量给定的属性区分训练样例的能力。ID3算法在增长树的每一步使用这个信息增益标准从候选属性中选择属性。</p>
-<p>用<strong> “熵” </strong>度量样例的均一性，它刻画了任意样例的纯度（purity），熵介于0~1之间。在信息论中，熵被用来衡量一个随机变量出现的期望值。</p>
-<p>与其它的归纳学习算法一样，ID3算法可以被描述为从一个假设空间搜索一个拟合训练样例的假设。被ID3算法搜索的假设空间就是可能的决策树的集合。ID3算法以一种简单到复杂的爬山算法遍历这个假设空间，从空的树开始，然后逐步考虑更加复杂的假设，目的是搜索到一个正确分类训练数据的决策树。引导这种爬山搜索的评估函数是<strong>信息增益度</strong>。</p>
-<p><strong>决策树学习的常见问题</strong><br>决策树学习的实际问题包括确定决策树增长的深度；处理连续值的属性；选择一个适当的属性筛选度量标准；处理属性值不完整的训练数据；处理不同代价的属性；以及提高计算效率。</p>
-<p><strong>过度拟合</strong>：给定一个假设空间 H，一个假设h∈H，如果存在其他的假设h´∈H，使得在训练样例上h 的错误率比h´小，但在整个实例分布上h´的错误率比h 小，那么就说假设h <strong>过度拟合</strong>（overfit）训练数据。</p>
+</blockquote>
+<p>线程安全库中的容器提供了如下的线程安全保证：</p>
+<ul>
+<li>置入Hashtable、synchronizedMap、ConcurrentMap 中的主键以及健值，会安全地发布到可以从Map获得它们的任意线程中，无论是直接获得还是通过迭代器（iterator）获得：</li>
+<li>置入vector、CopyOnWriteArrayList、CopyOnWriteArraySet、synchronizedList或者synchronizedSet中的元素，会安全地发布到可以从容器中获得它的任意线程中。</li>
+<li>置入BlockingQueue 或者 ConcurrentLinkedQueue 的元素，会安全地发布到可以从队列中获得它的任意线程中。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//静态初始化器示例：</div><div class="line">public static Holder holder = new Holder(42);</div></pre></td></tr></table></figure>
+<p>发布对象的必要条件依赖于对象的可变性：</p>
+<ul>
+<li>不可变对象可以通过任意机制发布；</li>
+<li>高效不可变对象必须要安全发布；</li>
+<li>可变对象必须要安全发布，同时必须要线程安全或者被锁保护。</li>
+</ul>
+<p><strong>安全地共享对象</strong><br>在并发程序中，使用共享对象的一些最有效的策略如下：</p>
+<ul>
+<li>线程限制：一个线程限制的对象，通过限制在现场中，而被线程独占，且只能被占有它的线程修改。</li>
+<li>共享只读（share read-only）：一个共享的只读对象，在没有额外同步的情况下，可以被多个线程并发地访问，但是任何线程都不能修改它。共享只读对象包括可变对象与高效不可变对象。</li>
+<li>共享线程安全（shared thread-safe）：一个线程安全的对象在内部进行同步，所以其他线程无须额外同步，就可以通过公共接口随意地访问它。</li>
+<li>被守护的（Guarded）：一个被守护的对象只能通过特定的锁来访问。被守护的对象包括那些被线程安全对象封装的对象，和已知被特定的锁保护起来的已发布对象。</li>
+</ul>
+<p>将数据封装在对象内部，把对数据的访问限制在对象的方法上，更易确保线程在访问数据时总能获得正确的 锁。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Java线程学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/Java线程学习/" itemprop="url">Java线程学习</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:16:57+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>　　Java创建一个线程，最简单的方法就是从<strong>Thread类继承</strong>。这个类包含了创建和运行线程所需的一切东西。Tread最重要的方法是run()。但为了使用run()，必须对其进行重载或者覆盖，使其能充分按自己的吩咐形式。因此，run()属于那些会与程序中的其他线程“并发”或“同时”执行代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//simpleThread.java</div><div class="line">public class SimpleThread extends Thread &#123;</div><div class="line">    ......</div><div class="line">    public void run()&#123;</div><div class="line">        // do something ......</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>　　Thread包含一个特殊的方法 start()，它的作用是对线程进行特殊的初始化，然后调用 run() 。所以整个步骤包括：调用构建器来构建对象，然后用 start() 配置线程，再调用 run() 。如果不调用 start()，线程便永远不会启动。</p>
+<p>　　Java操作共享资源时，为了保证共享资源信息数据一致性，在调用共享资源的方法使用，需要采用“同步”方式操作，即调用”synchronized”方法。调用任何synchronized方法时，对象就会被锁定，不可再调用那个对象的其它任何synchronized方法，除非第一个方法完成了自己的工作，并解除锁定。下面列出简单的synchronized的方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">synchronized void f()&#123;</div><div class="line">    // do something ......</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> synchronized void g()&#123;</div><div class="line">    // do something ......</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>重要规则：对于访问某个关键共享资源的<strong>所有方法</strong>，都必须把它们设为synchronized，否则就不能正常地工作。</p>
+</blockquote>
+<p><strong>一个线程的四个状态：</strong></p>
+<ul>
+<li><strong>新（New）</strong>：线程对象已经创建，但尚未启动，所以不可运行。</li>
+<li><strong>可运行（Runnable）</strong>：意味着一旦时机分片机制有空闲的CPU周期提供给一个线程，那个线程便立即开始运行。因此，线程可能在、也可能不在运行当中，但一旦条件许可，没有什么能阻止他的运行——它既没有“死”掉，也未被“堵塞”。</li>
+<li><strong>死（Dead）</strong>：从自己的run()方法中返回后，一个线程便已“死”掉。亦可调用stop()令其死掉，但会产生一个违例——属于Error的一个子类（也就是说，我们通常不捕获它）。记住一个违例的“掷”出应当是一个特殊事件，而不是正常程序运行的一部分。所以不建议你使用stop()（在Java 1.2 则是坚决反对）。另外还有一个destroy()方法（它永远不会实现），应该尽可能地避免调用它，因为它非常武断，根本不会解除对象的锁定。</li>
+<li><strong>堵塞（Blocked）</strong>：线程可以运行，但有某种东西阻碍了它。若线程处于堵塞状态，调度机制可以简单地跳过它，不给它分配任何CPU 时间。除非线程再次进入“可运行”状态，否则不会采取任何操作。</li>
+</ul>
+<p><strong>线程为何会堵塞？</strong><br>堵塞状态是前述四种状态中最有趣的，值得我们作进一步的探讨。线程被堵塞可能是由下述五方面的原因造成的：<br>1.调用sleep(毫秒数)，使线程进入“睡眠”状态。在规定的时间内，这个线程是不会运行的。<br>2.用suspend()暂停了线程的执行。除非线程收到resume()消息，否则不会返回“可运行”状态。<br>3.用wait()暂停了线程的执行。除非线程收到nofify()或者notifyAll()消息，否则不会变成“可运行”（是的，这看起来同原因2 非常相象，但有一个明显的区别是我们马上要揭示的）。<br>4.线程正在等候一些IO（输入输出）操作完成。<br>5.线程试图调用另一个对象的“同步”方法，但那个对象处于锁定状态，暂时无法使用。</p>
+<p>亦可调用yield()（Thread 类的一个方法）自动放弃CPU，以便其他线程能够运行。</p>
+<p><strong>死锁</strong><br>由于线程可能进入堵塞状态，而且由于对象可能拥有“同步”方法——除非同步锁定被解除，否则线程不能访问那个对象——所以一个线程完全可能等候另一个对象，而另一个对象又在等候下一个对象，以此类推。这个“等候”链最可怕的情形就是进入封闭状态——最后那个对象等候的是第一个对象！此时，所有线程都会陷入无休止的相互等待状态，大家都动弹不得。我们将这种情况称为“死锁”。</p>
+<blockquote>
+<p>为减少出现死锁的可能，Java 1.2 作出的一项贡献是“反对”使用Thread 的stop()，suspend()，resume() 以及destroy()方法。<br>suspend()和resume() 方法天生容易发生死锁。调用suspend()的时候，目标线程会停下来，但却仍然持有在这之前获得的锁定。此时，其他任何线程都不能访问锁定的资源，除非被“挂起”的线程恢复运行。</p>
+</blockquote>
+<p>推荐：<em>使用wait()命其进入等待状态。若标志指出线程应当恢复，则用一个<br>notify()重新启动线程。</em></p>
+<p><strong>线程安全性：</strong>当多个线程访问一个类时，如果不用考虑这些线程在运行时环境下的调度和交替执行，并且不需要额外的同步及在调用方代码不必做其他的协调，这个类的行为仍然是正确的，那么称这个类是<strong>线程安全的</strong>。<strong>对于线程安全类的实例进行顺序或并发的一系列操作，都不会导致实例处于无效状态。</strong></p>
+<blockquote>
+<p><strong>无状态对象永远是现场安全的。</strong></p>
+</blockquote>
+<p><strong>原子变量</strong><br>线程安全性定义要求无论是多线程中的时序或交替操作，都要保证不破坏那些不变约束。当一个不变约束涉及多个变量时，变量间不是<strong>彼此独立</strong>的：某个变量的值会制约其他几个变量的值。因此，更新一个变量的时候，要在<strong>同一原子操作</strong>中更新其他几个。</p>
+<blockquote>
+<p>为了保护状态的一致性，要在单一的原子操作中更新相互关联的状态变量。</p>
+</blockquote>
+<p>加锁</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Java并发注解Annotation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/Java并发注解Annotation/" itemprop="url">Java并发注解Annotation</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:15:51+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Java并发编程中，用到了一些专门为并发编程准备的 Annotation。主要包括三类：<br><strong>1、类 Annotation（注解）</strong><br>就像名字一样，这些注解是针对类的。主有要以下三个：<br>@Immutable<br>@ThreadSafe<br>@NotThreadSafe</p>
+<p>@ThreadSafe 是表示这个类是线程安全的。具体是否真安全，那要看实现者怎么实现的了，反正打上这个标签只是表示一下。不线程安全的类打上这个注解也没事儿。<br>@Immutable 表示，类是不可变的，包含了　@ThreadSafe　的意思。<br>      @NotThreadSafe 表示这个类不是线程安全的。如果是线程安全的非要打上这个注解，那也不会报错。</p>
+<p>这三个注解，对用户和维护者是有益的，用户可以立即看出来这个类是否是线程安全的，维护者则是可以根据这个注解，重点检查线程安全方面。另外，代码分析工具可能会利用这个注解。</p>
+<p><strong>2、域 Annotation（注解）</strong><br>域注解是对类里面成员变量加的注解。</p>
+<p><strong>3、方法 Annotation（注解）</strong><br>方法注解是对类里面方法加的注解。</p>
+<p>域注解和方法注解都是用@GuardedBy( lock )来标识。里面的Lock是告诉维护者：这个状态变量，这个方法被哪个锁保护着。这样可以强烈的提示类的维护者注意这里。<br>@GuardedBy( lock )有以下几种使用形式：<br>1、@GuardedBy( “this” ) 受对象内部锁保护<br>2、@GuardedBy( “fieldName” ) 受 与fieldName引用相关联的锁 保护。<br>3、@GuardedBy( “ClassName.fieldName” ) 受 一个类的静态field的锁 保存。<br>4、@GuardedBy( “methodName()” ) 锁对象是 methodName() 方法的返值，受这个锁保护。<br>5、@GuardedBy( “ClassName.class” ) 受 ClassName类的直接锁对象保护。而不是这个类的某个实例的锁对象。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Java-容器学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/Java-容器学习/" itemprop="url">Java 容器学习</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:34:34+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h4><p>实现Set接口包括 HashSet, TreeSet, LinkedHashSet 。在没有其它限制的情况下，建议使用<strong>HashSet</strong>，因为它对速度/效率进行了优化。</p>
+<ul>
+<li><strong>Set (interface) ：</strong> 存入Set的每个元素都必须是唯一性，因为Set不保存重复元素。加入Set的元素必须定义equals()方法以确保对象的唯一性。Set与Collection有完全一样的接口。Set接口不保证维护元素的次序。</li>
+<li><strong>HashSet * ：</strong> 为了快速查找而设计的Set。 存入HashSet的元素必须定义<strong>hashCode()</strong>方法。</li>
+<li><strong>TreeSet ：</strong> 保持次序的Set，底层为树结构。使用它可以从Set中提取有序的序列。元素必须实现<strong>Comparable</strong>接口。</li>
+<li><strong>LinkedHashSet：</strong> 具有HashSet的查询速度，且内部使用链表维护元素的的顺序（插入的次序）。于是在使用迭代器遍历Set时，结果会按元素插入的次序显示。元素必须定义hashCode()方法。</li>
+</ul>
+<blockquote>
+<p>对于良好的编程风格而言，你应该覆盖equals()方法时，总是覆盖hashCode()方法。</p>
+</blockquote>
+<h4 id="队列-Queue"><a href="#队列-Queue" class="headerlink" title="队列 Queue"></a>队列 Queue</h4><p>除了并发应用，Queue在Java SE5中仅有的两个实现是<strong>LinkedList</strong>和<strong>PriorityQueue</strong>，它们的差异在于排序行为而不是性能。</p>
+<p>LinkedList双向队列（<em>双端队列</em>），就像是一个队列，但是你可以在任何一端添加和移除元素。在LinkedList 中包含支持双向队列的方法。</p>
+<h4 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h4><ul>
+<li><strong>HashMap * ：</strong> Map基于散列表的实现（它取代了Hashtable）。插入和查询“键值对”的开销是固定的。可以通过构造器设置容量和负载因子，以调整容器的性能。</li>
+<li><strong>LinkedHashMap ：</strong> 类似于HashMap，但是迭代遍历它时，取得“键值对”的顺序是其插入次序，或者是最近少使用（LRU）的次序。只比HashMap慢一点；而在<em>迭代访问时反而速度更快</em>，因为它使用链表维护内部次序。</li>
+<li><strong>TreeMap ： </strong> 基于红黑树的实现。查看“键”或“键值对”时，它们会被排序（次序由Comparable或Comparator决定）。TreeMap的特定在于，所得到的结果是经过排序的。TreeMap是唯一的带有<strong>subMap()</strong>方法的Map，它可以返回一个子树。</li>
+<li><strong>WeakHashMap：</strong> 弱键（weak key）映射，允许释放映射所指向的对象；这是为解决某些特殊问题而设计的。如果映射之外没有引用指向某个“键”，则此“键”可以被垃圾收集器回收。</li>
+<li><strong>ConcurrentHashMap： </strong> 一种线程安全的Map，它不涉及同步加锁。</li>
+<li><strong>IdentityHashMap：</strong> 使用==代替equals()对“键”进行比较的散列映射。专为解决特殊问题而设计的。</li>
+</ul>
+<p>对Map中使用的键值要求与Set中的元素要求一致。任何键都必须具有一个equals()方法，如果键被用于散列Map，那么它必须还具有恰当的hashCode()方法；如果键被用于TreeMap，那么它必须实现Comparable。</p>
+<blockquote>
+<p>Java 数组的效率比ArrayList效率高</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Comparable-和-Comparator比较/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/Comparable-和-Comparator比较/" itemprop="url">Comparable 和 Comparator比较</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:33:34+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>对集合或数组进行排序有两种方法：</strong><br>1.集合中的对象所属的类实现了java.lang.Comparable 接口，然后调用<strong>Collections.sort()</strong>或者<strong>Arrays.sort()</strong><br>2.实现java.lang.Comparator接口，把这个实现接口的类作为参数传递给上述的sort()方法。</p>
+<p><strong>1、Comparable<t> java.lang Interface Comparable<t></t></t></strong><br>属于Java集合框架下的一个接口。它只有一个方法 <strong>int compareTo(T o)</strong> 用于提供排序所需要的比较逻辑。实现这个接口的类，其对象都可以通过调用<strong>Collections.sort()</strong>或者<strong>Arrays.sort()</strong>进行排序，根据<strong>compareTo</strong>的逻辑升序排列。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">class Person implements Comparable&lt;Person&gt;&#123;</div><div class="line">    String name;</div><div class="line">    public Person(String name) &#123;</div><div class="line">        this.name = name;</div><div class="line">    &#125; </div><div class="line"></div><div class="line">    public int compareTo(Person other) &#123;</div><div class="line">        //按名字的字母顺序从z~a排    </div><div class="line">        if(name.compareTo(other.name) &lt; 0)  //当前的字符串，在比较字符串之前，那就返回1</div><div class="line">            return 1;</div><div class="line">        else</div><div class="line">            if(name.compareTo(other.name) &gt; 0)</div><div class="line">                return -1;</div><div class="line">            else</div><div class="line">                return 0;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>2、再来看Comparator<t> java.util Interface Comparator<t></t></t></strong><br>简单来说，Comparator是策略模式的一种实现，体现了将类和排序算法相分离的原则。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class ComparatorImp implements Comparator&lt;Person&gt;&#123;</div><div class="line">	public int compare(Person p1, Person p2)	&#123;</div><div class="line">		if(p1.name.compareTo(p2.name) &lt; 0)</div><div class="line">			return -1;</div><div class="line">		else</div><div class="line">			return (p1.name.compareTo(p2.name) &gt; 0) ? 1 : 0;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">public class TestComparable &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		Person[] aPersons = new Person[4];</div><div class="line">		aPersons[0] = new Person(&quot;Jony&quot;);</div><div class="line">		aPersons[1] = new Person(&quot;Pun&quot;);</div><div class="line">		aPersons[2] = new Person(&quot;HelloKitty&quot;);</div><div class="line">		aPersons[3] = new Person(&quot;Brown&quot;);</div><div class="line"></div><div class="line">		Arrays.sort(aPersons);</div><div class="line">		for(Person p: aPersons )	&#123;</div><div class="line">			System.out.print(p.name + &quot; &quot;);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		System.out.println();</div><div class="line">		Arrays.sort(aPersons, new ComparatorImp());</div><div class="line">		for(Person p: aPersons )	&#123;</div><div class="line">			System.out.print(p.name + &quot; &quot;);</div><div class="line">		&#125;</div><div class="line">		System.out.println();</div><div class="line"></div><div class="line">		List&lt;Person&gt; lperson = new LinkedList&lt;Person&gt;();</div><div class="line">		for(Person p : aPersons) &#123;</div><div class="line">			lperson.add(p);</div><div class="line">		&#125;</div><div class="line">		Collections.sort(lperson);</div><div class="line">		for(int i = 0 ; i &lt; lperson.size(); i++)		&#123;</div><div class="line">			System.out.print(lperson.get(i).name+ &quot; &quot;);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/python学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/python学习笔记/" itemprop="url">python学习笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:31:48+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>python类支持多重继承，当使用多重继承时，需要注意：</p>
+<blockquote>
+<p>如果一个方法从多个超类继承（也就是说你有两个具有相同名字的不同方法），那么必须要注意一下超类的顺序（在class语句中）：先继承的类中的方法会重写后继承的类中的方法。</p>
+</blockquote>
+<p>python魔法方法，就是在方法名前后加双下划线“__”，例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">class FooBar:</div><div class="line">   def __init__(self, value = 42):</div><div class="line">         self.somevar = value</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：Python中有一个魔法方法叫做”__del<strong>“，也就是析构方法。它在对象就要被垃圾回收之前调用。但发生调用的具体时间是不可知的。所以建议读者尽力避免使用”\</strong>del__”函数。</p>
+</blockquote>
+<p>Python中类的继承，如果一个子类直接重写了构造器的方法，这将恢复完全覆盖了在超类中构造器方法的作用。<strong>如果要想保留超类构造器方法的作用：调用超类构造方法的未绑定版本，或者使用 super函数。</strong><br>__init__ 方法为一个类创建后第一个执行的方法。<br>什么是self ？ 它是类实例自身的引用。其它面向对象语言通常使用一个名为 this 的标识符。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">class SongBird(Bird):</div><div class="line">    def __init__(self):</div><div class="line">         Bird.__init__(self)  # 调用超类构造器方法</div><div class="line">         self.sound = &apos;Squawk !&apos;</div><div class="line">    </div><div class="line">     def sing(self):</div><div class="line">          print self.sound</div><div class="line"></div><div class="line">__metaclass__ = type </div><div class="line">class SongBird(Bird):</div><div class="line">    def __init__(self):</div><div class="line">         super(SongBird.self).__init__()  # super函数只在新式类中起作用</div><div class="line">         self.sound = &apos;Squawk !&apos;</div><div class="line">    </div><div class="line">     def sing(self):</div><div class="line">          print self.sound</div></pre></td></tr></table></figure></p>
+<p>解决python文件显示中文build错误问题：</p>
+<blockquote>
+<p>需要在程序的第一行或者第二行声明编码，就可以解决问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># coding =encoding name 或者  # -*- coding: -*-</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>下面的链接是原文地址 <a href="http://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">http://www.python.org/dev/peps/pep-0263/</a></p>
+<p><strong>raw_input</strong>　，python3.0版本后用<strong>input</strong>替换了raw_input</p>
+<p>python编程时，每一行语句结束时直接换行，不需要像C，Java那样用“；”结尾；但是同一行书写多个预计时，可以用“ ; “分割</p>
+<blockquote>
+<p>注意：在python语言中，赋值并不是直接将一个值赋给一个变量，对象是通过<strong>引用传递</strong>的。</p>
+</blockquote>
+<p>python不支持类似 x++ 或 –x 这样的前置/后置自增/自减运算。</p>
+<p>专用下划线标识符：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">_xxx   #不用 &apos; from module import * &apos; 导入</div><div class="line">_xxx_  #系统定义名字</div><div class="line">_xxx   #类中的私有变量名</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>核心风格建议：避免用下划线作为变量名的开始，因为下划线对解释器有特殊的意义，而且是内建标识符所使用的符号，我们建议程序员避免用下划线作为变量名的开始。一般来讲，变量名 _xxx 被看做是“私有的”，在模块或类外都不可以使用。当变量是私有的时候，用_xxx来表示变量是很好的习惯。因为变量或类外不可以使用。当变量是私有的时候，用_xxx来表示变量是很好的习惯。因为变量名__xxx__对python来说有特殊含义，对于普通的变量应当避免这种命名风格。</p>
+</blockquote>
+<p>python 变量量无需事先声明，也无需声明类型。</p>
+<blockquote>
+<p>提醒：print语句默认在输出内容末尾后加一个换行符，而在语句后加一个“逗号”可以避免这个新闻。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Effective-Java-随笔（异常）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/Effective-Java-随笔（异常）/" itemprop="url">Effective Java 随笔（异常）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:18:51+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>异常</strong><br><strong>第57条：只针对异常的情况使用异常</strong><br>　　Java程序设计的时候，只针对有异常的情况，才考了使用异常。实际上，<strong>基于异常的模式比标准模式要慢很多。</strong>异常是为了在异常情况下使用而设计的，不要将它们用于普通的控制流。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">try&#123;</div><div class="line">    //do someting</div><div class="line">    ......</div><div class="line">&#125;catch(Exception ex)&#123;</div><div class="line">    ......</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>第58条：对可恢复的情况使用受检异常，对变成错误使用允许时异常</strong><br>　　Java程序设计语言提供了三种可抛出结构（throwable）：受检异常（checked exception）、运行时异常（run-time exception）和错误（error）。<strong>使用原则：如果期望调用者能够适当地恢复，对于这种情况就应该使用受检的异常</strong>通过抛出受检的异常，强迫调用者在一个catch子句中处理异常，或者将它传播出去。因此，方法中声明要抛出的每个受检的异常，都是对API用户的一种潜在提示：与异常相关的条件是调用这个方法的一种可能的结果。</p>
+<p><strong>并发</strong><br><strong>第66条：同步访问共享的可变数据</strong><br>　　<em>当多个线程共享可变数据的时候，每个读或者写数据的线程都必须执行同步。</em></p>
+<p>　　</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Effective-Java-随笔（内部类、泛型、方法……）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Effective-Java-随笔（内部类、泛型、方法……）/" itemprop="url">Effective Java 随笔（内部类、泛型、方法……）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:26:16+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>第22条：优先考虑静态成员类</strong>　　<br>　　Java程序中共有四种不同的嵌套类，每一种都有自己的用途。如果一个嵌套类需要在单个方法之外仍然是可见的，或者它太长了，不适合于放在方法内部，就应该使用成员类。如果成员类的每个实例都需要一个指向其外围实例的引用，就要把成员类做成非静态的；否则，就做成静态的。假设这个嵌套类属于一个方法的内部，如果你只需要在一个地方创建实例，并且已经有了一个预置的类似可以说吗这个类的特征，就要把它做成匿名类；否则，就做成局部类。</p>
+<p><strong>泛型</strong><br><strong>第23条：请不要在新代码中使用原生态类型</strong><br>　　Java 1.5之后支持泛型，建议在代码中不要使用原生态类型。如果使用原生态类型，就失掉了泛型在安全性和表述性方面的所有优势。，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//不建议这样定义List</div><div class="line">private List list ;</div><div class="line"></div><div class="line">//支持泛型的对象，建议如下定义</div><div class="line">private List&lt;String&gt; list;</div></pre></td></tr></table></figure></p>
+<p><strong>第30条：用enum代替int常量</strong><br>　　在编程语言中还没有引入枚举类型之前，表示枚举类型的常用模式是声明一组具名的int常量，每个类型成员一个常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// The int enum pattern - severely dificient !</div><div class="line">public static final int APPLE_FUJI = 0;</div><div class="line">public static final int APPLE_PIPPIN =1</div><div class="line">......</div><div class="line"></div><div class="line">public static final int ORANGE_NAVEL = 0;</div><div class="line">public static final int ORANGE_TEMPLE =1;</div><div class="line">......</div></pre></td></tr></table></figure></p>
+<p>　　这种方法称作int枚举模式，存在诸多不足。它在类型安全性和使用方便性方面没有任何帮组。如果将apple传到想要的orange的方法中，编译器也不会出现警告。建议在诸如类似常量定义时，考虑使用 enum type。</p>
+<p><strong>方法</strong><br><em>**第38条：检查参数的有效性</em><br>　　每当编写方法或者构造器的时候，应该考虑它的参数有哪些限制。应该把这些限制写到文档中，并且在方法体的开头处，通过显示的简称来实施这些限制。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">  * Returns a BigInteger whose value is (this mod m). This method</div><div class="line">  * differs form the remainder method in that it always returns a </div><div class="line">  * non-negative BigInteger</div><div class="line">  *</div><div class="line">  * @param m the modeulus, thich must be positive</div><div class="line">  * @return this mod m</div><div class="line">  * @throws ArithmeticException if m is less than or equal to 0</div><div class="line">  */</div><div class="line">public BigInteger mod(BigInteger m)&#123;</div><div class="line">    if(m.signum() &lt;= 0)</div><div class="line">        throw new ArithmeticException(&quot;Modulus &lt;= 0 : &quot; + m );</div><div class="line"></div><div class="line">      ...... // Do the computation</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>通用程序设计</strong><br><strong>第49条：基本类型优先于装箱基本类型（基本类型的包装类）</strong><br>1.什么时候应该使用装箱基本类型呢？<br>　　第一是作为集合中的元素、健和值。你不能将基本类型放在集合中，因此必须使用装箱基本类型。这是一种更通用的特例。在参数化类型中，必须使用装箱基本类型作为类型参数，因为Java不能运行使用基本类型。<br>　　基本类型性能优于装箱基本类型，总之，当可以选择的时候，基本类型要优先于装箱基本类型。</p>
+<p><strong>第52条：通过接口引用对象</strong><br>　　应该优先使用接口而不是类的引用对象。<em>如果有合适的接口类型存在，那么对于参数、返回值、变量或域来说，就都应该使用接口类型进行声明。</em>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//Good - user interface as type</div><div class="line">List&lt;Subscriber&gt; subscribers = new ArrayList&lt;Subscriber&gt;();</div><div class="line"></div><div class="line">//Bad - user class as type</div><div class="line">ArrayList&lt;Subscriber&gt; subscribers = new ArrayList&lt;Subscriber&gt;();</div></pre></td></tr></table></figure></p>
+<p><em>如果没有合适的接口存在，完全可以用类而不是接口来引用对象。（建议使用类层次接口中提供了必要功能的最基础的类）</em></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Effective-Java-随笔：复合优于继承/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Effective-Java-随笔：复合优于继承/" itemprop="url">Effective Java 随笔：复合优于继承</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:25:09+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>第16条：复合优于继承</strong>　　<br>　　只有当子类真正是超类的子类型（subtype）时，才适合用继承。换句话说，对于两个类A和B，只有当两者之间确实存在“is-a”关系的时候，类B才应该扩展类A。如果你打算让类B扩展类A，就应该问问之间：每个B确实也是A吗？如果你不能确定这个问题的答案是肯定的，那么B就不应该扩展A。如果答案是否定的，通常情况下，B应该包含A的一个私有实例，并且暴露一个较小的、较简单的API：A本质上不是B的一部分，只是它的实现细节而已。</p>
+<p><strong>第17条：要么为继承而设计，并提供文档说明，要么就禁止继承</strong><br>　　专门为继承而设计，就需要具有良好的文档说明。该类的文档必须精确地描述覆盖每个方法所带来的影响，换句话说，<em>该类必须有文档说明它可覆盖（overridable）的方法的自用性（self-use）</em>。<br>　　为了允许继承，类还必须遵守其他一些约束。<em>构造器决不能调用可被覆盖的方法</em>，无论是直接调用还是间接调用。如果违反了这条规则，很有可能导致程序失败。<br>　　如果你决定在一个为了继承而设计的类中实现了Cloneable或者Serializable接口，就应该意识到，因为clone和readObject方法在行为非常类似于构造器，所以类似的限制规则也是适合用的：无论是clone还是readObject，都不可以调用覆盖的方法，不管是以直接还是间接的方式。对于readObject方法，覆盖版本的方法将在子类的状态被反序列化之前被允许；而对于clone方法，覆盖版本的方法则是在子类的clone方法有机会修正被克隆对象中的状态之前被允许。无论哪种情形，都不可避免将导致程序失败。</p>
 
           
         
@@ -1829,7 +1859,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1875,7 +1905,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">62</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1897,7 +1927,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-count">35</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
