@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hive,大数据," />
+  <meta name="keywords" content="大数据,Hive," />
 
 
 
@@ -95,7 +95,7 @@
 
 
 <meta name="description" content="【文件存储格式】在建表语句中通过” STORED AS FILE_FORMAT” 指定。  TEXTFILE：默认格式，数据不做压缩，磁盘开销大，数据解析开销大，结合Gzip/Bizp2使用，采用此种方式不支持对数据进行切分，从而无法实现数据的并行操作。 SEQUENCEFILE：Hadoop API提供的一种二进制文件，使用方便，支持数据切分与压缩。有三种压缩方式，NONE，RECORD（压缩率">
-<meta name="keywords" content="Hive,大数据">
+<meta name="keywords" content="大数据,Hive">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hive 学习笔记">
 <meta property="og:url" content="http://yoursite.com/2017/10/08/Hive-学习笔记/index.html">
@@ -461,6 +461,35 @@
     
 
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果觉得我的文章对您有用，请随意赞赏。您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span style="line-height:35px;font-size:14px;"><strong>赞赏支持</strong></span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="ElwinHe WeChat Pay"/>
+        <p>微信打赏</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="ElwinHe Alipay"/>
+        <p>支付宝打赏</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
 
     
 
@@ -468,9 +497,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Hive/" rel="tag"># Hive</a>
-          
             <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/Hive/" rel="tag"># Hive</a>
           
         </div>
       
@@ -565,7 +594,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -576,7 +605,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -587,7 +616,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-count">50</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -772,8 +801,8 @@
   
     <script type="text/javascript">
     (function(){
-      var appid = 'cytgs68Ad';
-      var conf = '8f544d5b3e8e6b2b1b23131a7436a23b';
+      var appid = 'cytgviwqu';
+      var conf = 'ef70c894e5be1181cad737488b1a0867';
       var width = window.innerWidth || document.documentElement.clientWidth;
       if (width < 960) {
       window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){

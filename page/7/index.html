@@ -330,6 +330,512 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/PostgreSQL在2003系统和Win7系统启动注意事项/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/PostgreSQL在2003系统和Win7系统启动注意事项/" itemprop="url">PostgreSQL在2003系统和Win7系统启动注意事项</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:22:16+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/10/07/PostgreSQL在2003系统和Win7系统启动注意事项/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/10/07/PostgreSQL在2003系统和Win7系统启动注意事项/" class="cy_cmt_count" data-xid="2017/10/07/PostgreSQL在2003系统和Win7系统启动注意事项/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/10/07/PostgreSQL在2003系统和Win7系统启动注意事项/" class="leancloud_visitors" data-flag-title="PostgreSQL在2003系统和Win7系统启动注意事项">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>PostgreSQL在2003和Win7系统注册成功后，但是无法启动数据库。解决办法是，修改修改pgsql\data目录下pg_hba.conf文件。</p>
+<blockquote>
+<p>win2003 修改如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># IPv4 local connections:</div><div class="line">host    all         all         127.0.0.1/32          trust</div><div class="line">#host    all         all         ::1/128               trust</div><div class="line"># IPv6 local connections:</div><div class="line">#host    all         all         ::1/128               trust</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>win7修改如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># IPv4 local connections:</div><div class="line">host    all         all         127.0.0.1/32          trust</div><div class="line">host    all         all         ::1/128               trust</div><div class="line"># IPv6 local connections:</div><div class="line">#host    all         all         ::1/128               trust</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Oracle-11G在用EXP-导出时，空表不能导出问题解决/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Oracle-11G在用EXP-导出时，空表不能导出问题解决/" itemprop="url">Oracle 11G在用EXP 导出时，空表不能导出问题解决</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:19:48+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/10/07/Oracle-11G在用EXP-导出时，空表不能导出问题解决/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/10/07/Oracle-11G在用EXP-导出时，空表不能导出问题解决/" class="cy_cmt_count" data-xid="2017/10/07/Oracle-11G在用EXP-导出时，空表不能导出问题解决/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/10/07/Oracle-11G在用EXP-导出时，空表不能导出问题解决/" class="leancloud_visitors" data-flag-title="Oracle 11G在用EXP 导出时，空表不能导出问题解决">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>11G中有个新特性，当表无数据时，不分配segment，以节省空间　　<br><strong>解决方法：</strong><br>1、insert一行，再rollback就产生segment了。该方法是在在空表中插入数据，再删除，则产生segment。导出时则可导出空表。<br>2、设置deferred_segment_creation 参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">show parameter deferred_segment_creation</div><div class="line">NAME                               TYPE      VALUE</div><div class="line">----------------------------   ----------- ---------</div><div class="line">deferred_segment_creation        boolean     TRUE</div><div class="line"></div><div class="line">SQL&gt; alter system set deferred_segment_creation=false;</div><div class="line">系统已更改。 </div><div class="line"></div><div class="line">SQL&gt; show parameter deferred_segment_creation</div><div class="line">NAME                                  TYPE        VALUE</div><div class="line">--------------------------------- ------------ ---------</div><div class="line">deferred_segment_creation            boolean      FALSE</div></pre></td></tr></table></figure></p>
+<p>   该参数值默认是TRUE，当改为FALSE时，无论是空表还是非空表，都分配segment。</p>
+<p>需注意的是：该值设置后对以前导入的空表不产生作用，仍不能导出，只能对后面新增的表产生作用。如需导出之前的空表，只能用第一种方法。<br>搞了我好久，最后查到这个方法。<br>先查询一下当前用户下的所有空表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select table_name from user_tables where NUM_ROWS=0;</div></pre></td></tr></table></figure></p>
+<p>用以下这句查找空表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select &apos;alter table &apos;||table_name||&apos; allocate extent;&apos; from user_tables where num_rows=0</div></pre></td></tr></table></figure></p>
+<p>把查询结果导出，执行导出的语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&apos;ALTERTABLE&apos;||TABLE_NAME||&apos;ALLOCATEEXTENT;&apos;</div><div class="line">-----------------------------------------------------------</div><div class="line">alter table AQ$_AQ$_MEM_MC_H allocate extent;</div><div class="line">alter table AQ$_AQ$_MEM_MC_G allocate extent;</div><div class="line">alter table AQ$_AQ$_MEM_MC_I allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_T allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_H allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_G allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_I allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_T allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_H allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_G allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_I allocate extent;</div><div class="line">&apos;ALTERTABLE&apos;||TABLE_NAME||&apos;ALLOCATEEXTENT;&apos;</div><div class="line">-----------------------------------------------------------</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_T allocate extent;</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_H allocate extent;</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_G allocate extent;</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_I allocate extent;</div></pre></td></tr></table></figure></p>
+<p>然后再执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">exp 用户名/密码@数据库名 file=/home/oracle/exp.dmp log=/home/oracle/exp_smsrun.log</div></pre></td></tr></table></figure></p>
+<p><strong>成功！</strong></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/我的异常/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/我的异常/" itemprop="url">我的异常</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T22:17:26+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/10/07/我的异常/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/10/07/我的异常/" class="cy_cmt_count" data-xid="2017/10/07/我的异常/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/10/07/我的异常/" class="leancloud_visitors" data-flag-title="我的异常">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#####1、Linux vsftp “上传 553 Could not create file” 问题：</p>
+<blockquote>
+<p>解决这个问题步骤：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1. setsebool -P ftpd_disable_trans 1</div><div class="line">2. service vsftpd restart</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h5 id="2、Java-OOM-java-lang-OutOfMemory-常见错误原因分析："><a href="#2、Java-OOM-java-lang-OutOfMemory-常见错误原因分析：" class="headerlink" title="2、Java OOM (java.lang.OutOfMemory)常见错误原因分析："></a>2、Java OOM (java.lang.OutOfMemory)常见错误原因分析：</h5><p>1.程序死循环，导致内存泄露，造成OOM。<br>2.读取大量信息（读文件内容，查询海量数据信息，构建对象加载大量信息，……等），堆内存空间分配不足造成OOM。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Linux-Telnet安装及配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1542,520 +2048,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Redis学习笔记-sets类型及操作2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Redis学习笔记-sets类型及操作2/" itemprop="url">Redis学习笔记--sets类型及操作2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T17:58:28+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/2017/10/07/Redis学习笔记-sets类型及操作2/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/10/07/Redis学习笔记-sets类型及操作2/" class="cy_cmt_count" data-xid="2017/10/07/Redis学习笔记-sets类型及操作2/" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-             <span id="/2017/10/07/Redis学习笔记-sets类型及操作2/" class="leancloud_visitors" data-flag-title="Redis学习笔记--sets类型及操作2">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>smove</strong><br>从第一个key 对应的set 中移除member 并添加到第二个对应set 中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smove myset2 myset7 three</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset7</div><div class="line">1) &quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>通过本例可以看到，myset2 的three 被移到myset7 中了</p>
-<hr>
-<p><strong>scard</strong><br>返回名称为key的set的元素个数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; scard myset2</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>通过本例可以看到，myset2 的成员数量为1</p>
-<hr>
-<p><strong>sismember</strong><br>测试member 是否是名称为key 的set 的元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sismember myset2 two</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sismember myset2 one</div><div class="line">(integer) 0</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-<p>通过本例可以看到，two 是myset2 的成员，而one 不是。</p>
-<hr>
-<p><strong>srandmember</strong><br>随机返回名称为key 的set 的一个元素，但是不删除元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; srandmember myset3</div><div class="line">&quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; srandmember myset3</div><div class="line">&quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/决策树学习/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/决策树学习/" itemprop="url">决策树学习</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T17:56:38+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/2017/10/07/决策树学习/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/10/07/决策树学习/" class="cy_cmt_count" data-xid="2017/10/07/决策树学习/" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-             <span id="/2017/10/07/决策树学习/" class="leancloud_visitors" data-flag-title="决策树学习">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="决策树学习的适用问题"><a href="#决策树学习的适用问题" class="headerlink" title="决策树学习的适用问题"></a>决策树学习的适用问题</h4><p>通常决策树学习最适合具有以下特征的问题：</p>
-<ul>
-<li><strong>实例是由“属性-值”对（pair）表示的</strong>。实例是用一系列固定的属性（例如，Temperature）和它们的值（例如，Hot）来描述的。最简单的决策树学习中，每一个属性取少数的分离的值（例如，Hot、Mild、Cold）。然而，扩展的算法也运行处理值域为实数的属性（利润，数字表示的温度）。</li>
-<li><strong>目标函数具有离散的输出值</strong>。决策树给每个实例赋予一个布尔型的分类（例如，yes或no）。决策树方法很容易扩展到学习有两个以上输出值的函数。一种更强有力的扩展算法运行学习具有实数值输出的函数，尽管决策树在这种情况下的应用不太常见。</li>
-<li><strong>可能需要析取的描述</strong>，决策树很自然代表了析取表达式。</li>
-<li><strong>训练数据可以包含错误</strong>。决策树学习对错误有很好的鲁棒性，无论是训练样例所属的分类错误还是描述这些样例的属性值错误。</li>
-<li><strong>训练数据可以包含缺少属性值的实例</strong>。决策树学习甚至可以在未知属性值的训练样例中使用（仅有一部分训练样例知道当天的湿度）。</li>
-</ul>
-<h4 id="基本的决策树学习算法"><a href="#基本的决策树学习算法" class="headerlink" title="基本的决策树学习算法"></a>基本的决策树学习算法</h4><p>ID3算法，通过自顶向下构造决策树来进行学习。构造过程是从“哪一个属性将在树的根节点被测试？”这个问题开始的。为了回答这个问题，使用统计测试来确定每一个实例属性单独分类训练样例的能力。分类能力最好的属性被选作为树的根节点的测试。然后为根节点属性的每个可能值产生一个分支，并把训练样例排列到适当的分支之下。然后重复整个过程，用每个分支节点关联的训练样例来选取在该点呗测试的最佳 属性。这形成了对合格决策树的贪婪搜索，也就是算法从不回溯重新考虑以前的选择。</p>
-<p>ID3算法的核心问题是选取在树的每个节点要测试的属性。我们希望选择的是最有助于分类实例的属性。那么衡量属性价值的一个好的定量标准是什么呢？这里将定义一个统计属性，称为“信息增益”，用来衡量给定的属性区分训练样例的能力。ID3算法在增长树的每一步使用这个信息增益标准从候选属性中选择属性。</p>
-<p>用<strong> “熵” </strong>度量样例的均一性，它刻画了任意样例的纯度（purity），熵介于0~1之间。在信息论中，熵被用来衡量一个随机变量出现的期望值。</p>
-<p>与其它的归纳学习算法一样，ID3算法可以被描述为从一个假设空间搜索一个拟合训练样例的假设。被ID3算法搜索的假设空间就是可能的决策树的集合。ID3算法以一种简单到复杂的爬山算法遍历这个假设空间，从空的树开始，然后逐步考虑更加复杂的假设，目的是搜索到一个正确分类训练数据的决策树。引导这种爬山搜索的评估函数是<strong>信息增益度</strong>。</p>
-<p><strong>决策树学习的常见问题</strong><br>决策树学习的实际问题包括确定决策树增长的深度；处理连续值的属性；选择一个适当的属性筛选度量标准；处理属性值不完整的训练数据；处理不同代价的属性；以及提高计算效率。</p>
-<p><strong>过度拟合</strong>：给定一个假设空间 H，一个假设h∈H，如果存在其他的假设h´∈H，使得在训练样例上h 的错误率比h´小，但在整个实例分布上h´的错误率比h 小，那么就说假设h <strong>过度拟合</strong>（overfit）训练数据。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/python-os-path-模块/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/python-os-path-模块/" itemprop="url">python os.path 模块</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T17:54:29+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/2017/10/07/python-os-path-模块/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/10/07/python-os-path-模块/" class="cy_cmt_count" data-xid="2017/10/07/python-os-path-模块/" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-             <span id="/2017/10/07/python-os-path-模块/" class="leancloud_visitors" data-flag-title="python os.path 模块">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>os.path.abspath(path) #返回绝对路径<br>os.path.basename(path) #返回文件名<br>os.path.commonprefix(list) #返回list(多个路径)中，所有path共有的最长的路径。<br>os.path.dirname(path) #返回文件路径<br>os.path.exists(path)  #路径存在则返回True,路径损坏返回False<br>os.path.lexists  #路径存在则返回True,路径损坏也返回True<br>os.path.expanduser(path)  #把path中包含的”~”和”~user”转换成用户目录<br>os.path.expandvars(path)  #根据环境变量的值替换path中包含的”$name”和”${name}”<br>os.path.getatime(path)  #返回最后一次进入此path的时间。<br>os.path.getmtime(path)  #返回在此path下最后一次修改的时间。<br>os.path.getctime(path)  #返回path的大小<br>os.path.getsize(path)  #返回文件大小，如果文件不存在就返回错误<br>os.path.isabs(path)  #判断是否为绝对路径<br>os.path.isfile(path)  #判断路径是否为文件<br>os.path.isdir(path)  #判断路径是否为目录<br>os.path.islink(path)  #判断路径是否为链接<br>os.path.ismount(path)  #判断路径是否为挂载点（）<br>os.path.join(path1[, path2[, …]])  #把目录和文件名合成一个路径<br>os.path.normcase(path)  #转换path的大小写和斜杠<br>os.path.normpath(path)  #规范path字符串形式<br>os.path.realpath(path)  #返回path的真实路径<br>os.path.relpath(path[, start])  #从start开始计算相对路径<br>os.path.samefile(path1, path2)  #判断目录或文件是否相同<br>os.path.sameopenfile(fp1, fp2)  #判断fp1和fp2是否指向同一文件<br>os.path.samestat(stat1, stat2)  #判断stat tuple stat1和stat2是否指向同一个文件<br>os.path.split(path)  #把路径分割成dirname和basename，返回一个元组<br>os.path.splitdrive(path)   #一般用在windows下，返回驱动器名和路径组成的元组<br>os.path.splitext(path)  #分割路径，返回路径名和文件扩展名的元组<br>os.path.splitunc(path)  #把路径分割为加载点与文件<br>os.path.walk(path, visit, arg)  #遍历path，进入每个目录都调用visit函数，visit函数必须有<br>3个参数(arg, dirname, names)，dirname表示当前目录的目录名，names代表当前目录下的所有<br>文件名，args则为walk的第三个参数<br>os.path.supports_unicode_filenames  #设置是否支持unicode路径名</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2106,7 +2098,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2117,7 +2109,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -2128,7 +2120,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-count">50</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -2311,7 +2303,7 @@
 
 
   
-    <script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytgs68Ad"></script>
+    <script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytgviwqu"></script>
   
 
 

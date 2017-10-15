@@ -330,6 +330,551 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Java-容器学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/Java-容器学习/" itemprop="url">Java 容器学习</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:34:34+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/10/08/Java-容器学习/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/10/08/Java-容器学习/" class="cy_cmt_count" data-xid="2017/10/08/Java-容器学习/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/10/08/Java-容器学习/" class="leancloud_visitors" data-flag-title="Java 容器学习">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h4><p>实现Set接口包括 HashSet, TreeSet, LinkedHashSet 。在没有其它限制的情况下，建议使用<strong>HashSet</strong>，因为它对速度/效率进行了优化。</p>
+<ul>
+<li><strong>Set (interface) ：</strong> 存入Set的每个元素都必须是唯一性，因为Set不保存重复元素。加入Set的元素必须定义equals()方法以确保对象的唯一性。Set与Collection有完全一样的接口。Set接口不保证维护元素的次序。</li>
+<li><strong>HashSet * ：</strong> 为了快速查找而设计的Set。 存入HashSet的元素必须定义<strong>hashCode()</strong>方法。</li>
+<li><strong>TreeSet ：</strong> 保持次序的Set，底层为树结构。使用它可以从Set中提取有序的序列。元素必须实现<strong>Comparable</strong>接口。</li>
+<li><strong>LinkedHashSet：</strong> 具有HashSet的查询速度，且内部使用链表维护元素的的顺序（插入的次序）。于是在使用迭代器遍历Set时，结果会按元素插入的次序显示。元素必须定义hashCode()方法。</li>
+</ul>
+<blockquote>
+<p>对于良好的编程风格而言，你应该覆盖equals()方法时，总是覆盖hashCode()方法。</p>
+</blockquote>
+<h4 id="队列-Queue"><a href="#队列-Queue" class="headerlink" title="队列 Queue"></a>队列 Queue</h4><p>除了并发应用，Queue在Java SE5中仅有的两个实现是<strong>LinkedList</strong>和<strong>PriorityQueue</strong>，它们的差异在于排序行为而不是性能。</p>
+<p>LinkedList双向队列（<em>双端队列</em>），就像是一个队列，但是你可以在任何一端添加和移除元素。在LinkedList 中包含支持双向队列的方法。</p>
+<h4 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h4><ul>
+<li><strong>HashMap * ：</strong> Map基于散列表的实现（它取代了Hashtable）。插入和查询“键值对”的开销是固定的。可以通过构造器设置容量和负载因子，以调整容器的性能。</li>
+<li><strong>LinkedHashMap ：</strong> 类似于HashMap，但是迭代遍历它时，取得“键值对”的顺序是其插入次序，或者是最近少使用（LRU）的次序。只比HashMap慢一点；而在<em>迭代访问时反而速度更快</em>，因为它使用链表维护内部次序。</li>
+<li><strong>TreeMap ： </strong> 基于红黑树的实现。查看“键”或“键值对”时，它们会被排序（次序由Comparable或Comparator决定）。TreeMap的特定在于，所得到的结果是经过排序的。TreeMap是唯一的带有<strong>subMap()</strong>方法的Map，它可以返回一个子树。</li>
+<li><strong>WeakHashMap：</strong> 弱键（weak key）映射，允许释放映射所指向的对象；这是为解决某些特殊问题而设计的。如果映射之外没有引用指向某个“键”，则此“键”可以被垃圾收集器回收。</li>
+<li><strong>ConcurrentHashMap： </strong> 一种线程安全的Map，它不涉及同步加锁。</li>
+<li><strong>IdentityHashMap：</strong> 使用==代替equals()对“键”进行比较的散列映射。专为解决特殊问题而设计的。</li>
+</ul>
+<p>对Map中使用的键值要求与Set中的元素要求一致。任何键都必须具有一个equals()方法，如果键被用于散列Map，那么它必须还具有恰当的hashCode()方法；如果键被用于TreeMap，那么它必须实现Comparable。</p>
+<blockquote>
+<p>Java 数组的效率比ArrayList效率高</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Comparable-和-Comparator比较/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/Comparable-和-Comparator比较/" itemprop="url">Comparable 和 Comparator比较</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:33:34+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/10/08/Comparable-和-Comparator比较/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/10/08/Comparable-和-Comparator比较/" class="cy_cmt_count" data-xid="2017/10/08/Comparable-和-Comparator比较/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/10/08/Comparable-和-Comparator比较/" class="leancloud_visitors" data-flag-title="Comparable 和 Comparator比较">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>对集合或数组进行排序有两种方法：</strong><br>1.集合中的对象所属的类实现了java.lang.Comparable 接口，然后调用<strong>Collections.sort()</strong>或者<strong>Arrays.sort()</strong><br>2.实现java.lang.Comparator接口，把这个实现接口的类作为参数传递给上述的sort()方法。</p>
+<p><strong>1、Comparable<t> java.lang Interface Comparable<t></t></t></strong><br>属于Java集合框架下的一个接口。它只有一个方法 <strong>int compareTo(T o)</strong> 用于提供排序所需要的比较逻辑。实现这个接口的类，其对象都可以通过调用<strong>Collections.sort()</strong>或者<strong>Arrays.sort()</strong>进行排序，根据<strong>compareTo</strong>的逻辑升序排列。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">class Person implements Comparable&lt;Person&gt;&#123;</div><div class="line">    String name;</div><div class="line">    public Person(String name) &#123;</div><div class="line">        this.name = name;</div><div class="line">    &#125; </div><div class="line"></div><div class="line">    public int compareTo(Person other) &#123;</div><div class="line">        //按名字的字母顺序从z~a排    </div><div class="line">        if(name.compareTo(other.name) &lt; 0)  //当前的字符串，在比较字符串之前，那就返回1</div><div class="line">            return 1;</div><div class="line">        else</div><div class="line">            if(name.compareTo(other.name) &gt; 0)</div><div class="line">                return -1;</div><div class="line">            else</div><div class="line">                return 0;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>2、再来看Comparator<t> java.util Interface Comparator<t></t></t></strong><br>简单来说，Comparator是策略模式的一种实现，体现了将类和排序算法相分离的原则。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class ComparatorImp implements Comparator&lt;Person&gt;&#123;</div><div class="line">	public int compare(Person p1, Person p2)	&#123;</div><div class="line">		if(p1.name.compareTo(p2.name) &lt; 0)</div><div class="line">			return -1;</div><div class="line">		else</div><div class="line">			return (p1.name.compareTo(p2.name) &gt; 0) ? 1 : 0;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">public class TestComparable &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		Person[] aPersons = new Person[4];</div><div class="line">		aPersons[0] = new Person(&quot;Jony&quot;);</div><div class="line">		aPersons[1] = new Person(&quot;Pun&quot;);</div><div class="line">		aPersons[2] = new Person(&quot;HelloKitty&quot;);</div><div class="line">		aPersons[3] = new Person(&quot;Brown&quot;);</div><div class="line"></div><div class="line">		Arrays.sort(aPersons);</div><div class="line">		for(Person p: aPersons )	&#123;</div><div class="line">			System.out.print(p.name + &quot; &quot;);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		System.out.println();</div><div class="line">		Arrays.sort(aPersons, new ComparatorImp());</div><div class="line">		for(Person p: aPersons )	&#123;</div><div class="line">			System.out.print(p.name + &quot; &quot;);</div><div class="line">		&#125;</div><div class="line">		System.out.println();</div><div class="line"></div><div class="line">		List&lt;Person&gt; lperson = new LinkedList&lt;Person&gt;();</div><div class="line">		for(Person p : aPersons) &#123;</div><div class="line">			lperson.add(p);</div><div class="line">		&#125;</div><div class="line">		Collections.sort(lperson);</div><div class="line">		for(int i = 0 ; i &lt; lperson.size(); i++)		&#123;</div><div class="line">			System.out.print(lperson.get(i).name+ &quot; &quot;);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/python学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/08/python学习笔记/" itemprop="url">python学习笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:31:48+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/10/08/python学习笔记/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/10/08/python学习笔记/" class="cy_cmt_count" data-xid="2017/10/08/python学习笔记/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/10/08/python学习笔记/" class="leancloud_visitors" data-flag-title="python学习笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>python类支持多重继承，当使用多重继承时，需要注意：</p>
+<blockquote>
+<p>如果一个方法从多个超类继承（也就是说你有两个具有相同名字的不同方法），那么必须要注意一下超类的顺序（在class语句中）：先继承的类中的方法会重写后继承的类中的方法。</p>
+</blockquote>
+<p>python魔法方法，就是在方法名前后加双下划线“__”，例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">class FooBar:</div><div class="line">   def __init__(self, value = 42):</div><div class="line">         self.somevar = value</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：Python中有一个魔法方法叫做”__del<strong>“，也就是析构方法。它在对象就要被垃圾回收之前调用。但发生调用的具体时间是不可知的。所以建议读者尽力避免使用”\</strong>del__”函数。</p>
+</blockquote>
+<p>Python中类的继承，如果一个子类直接重写了构造器的方法，这将恢复完全覆盖了在超类中构造器方法的作用。<strong>如果要想保留超类构造器方法的作用：调用超类构造方法的未绑定版本，或者使用 super函数。</strong><br>__init__ 方法为一个类创建后第一个执行的方法。<br>什么是self ？ 它是类实例自身的引用。其它面向对象语言通常使用一个名为 this 的标识符。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">class SongBird(Bird):</div><div class="line">    def __init__(self):</div><div class="line">         Bird.__init__(self)  # 调用超类构造器方法</div><div class="line">         self.sound = &apos;Squawk !&apos;</div><div class="line">    </div><div class="line">     def sing(self):</div><div class="line">          print self.sound</div><div class="line"></div><div class="line">__metaclass__ = type </div><div class="line">class SongBird(Bird):</div><div class="line">    def __init__(self):</div><div class="line">         super(SongBird.self).__init__()  # super函数只在新式类中起作用</div><div class="line">         self.sound = &apos;Squawk !&apos;</div><div class="line">    </div><div class="line">     def sing(self):</div><div class="line">          print self.sound</div></pre></td></tr></table></figure></p>
+<p>解决python文件显示中文build错误问题：</p>
+<blockquote>
+<p>需要在程序的第一行或者第二行声明编码，就可以解决问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># coding =encoding name 或者  # -*- coding: -*-</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>下面的链接是原文地址 <a href="http://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">http://www.python.org/dev/peps/pep-0263/</a></p>
+<p><strong>raw_input</strong>　，python3.0版本后用<strong>input</strong>替换了raw_input</p>
+<p>python编程时，每一行语句结束时直接换行，不需要像C，Java那样用“；”结尾；但是同一行书写多个预计时，可以用“ ; “分割</p>
+<blockquote>
+<p>注意：在python语言中，赋值并不是直接将一个值赋给一个变量，对象是通过<strong>引用传递</strong>的。</p>
+</blockquote>
+<p>python不支持类似 x++ 或 –x 这样的前置/后置自增/自减运算。</p>
+<p>专用下划线标识符：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">_xxx   #不用 &apos; from module import * &apos; 导入</div><div class="line">_xxx_  #系统定义名字</div><div class="line">_xxx   #类中的私有变量名</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>核心风格建议：避免用下划线作为变量名的开始，因为下划线对解释器有特殊的意义，而且是内建标识符所使用的符号，我们建议程序员避免用下划线作为变量名的开始。一般来讲，变量名 _xxx 被看做是“私有的”，在模块或类外都不可以使用。当变量是私有的时候，用_xxx来表示变量是很好的习惯。因为变量或类外不可以使用。当变量是私有的时候，用_xxx来表示变量是很好的习惯。因为变量名__xxx__对python来说有特殊含义，对于普通的变量应当避免这种命名风格。</p>
+</blockquote>
+<p>python 变量量无需事先声明，也无需声明类型。</p>
+<blockquote>
+<p>提醒：print语句默认在输出内容末尾后加一个换行符，而在语句后加一个“逗号”可以避免这个新闻。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/Effective-Java-随笔（异常）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1559,547 +2104,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Linux-modprobe命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/Linux-modprobe命令/" itemprop="url">Linux modprobe命令</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:13:57+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/2017/10/07/Linux-modprobe命令/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/10/07/Linux-modprobe命令/" class="cy_cmt_count" data-xid="2017/10/07/Linux-modprobe命令/" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-             <span id="/2017/10/07/Linux-modprobe命令/" class="leancloud_visitors" data-flag-title="Linux modprobe命令">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Linux modprobe命令用于自动处理可载入模块。<br>modprobe可载入指定的个别模块，或是载入一组相依的模块。modprobe会根据depmod所产生的相依关系，决定要载入哪些模块。若在载入过程中发生错误，在modprobe会卸载整组的模块。</p>
-<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">modprobe [-acdlrtvV][--help][模块文件][符号名称 = 符号值]</div></pre></td></tr></table></figure></p>
-<p><strong>参数</strong>：</p>
-<blockquote>
-<ul>
-<li>-a或–all 　载入全部的模块。</li>
-<li>-c或–show-conf 　显示所有模块的设置信息。</li>
-<li>-d或–debug 　使用排错模式。</li>
-<li>-l或–list 　显示可用的模块。</li>
-<li>-r或–remove 　模块闲置不用时，即自动卸载模块。</li>
-<li>-t或–type 　指定模块类型。</li>
-<li>-v或–verbose 　执行时显示详细的信息。</li>
-<li>-V或–version 　显示版本信息。</li>
-<li>-help 　显示帮助。</li>
-</ul>
-</blockquote>
-<p>实例<br>安装软驱模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@w3cschool.cc ~]# modprobe -v floppy</div></pre></td></tr></table></figure></p>
-<p>卸载软驱模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@w3cschool.cc ~]# modprobe -v -r floppy</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/索引失效/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/索引失效/" itemprop="url">索引失效</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:09:00+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/2017/10/07/索引失效/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/10/07/索引失效/" class="cy_cmt_count" data-xid="2017/10/07/索引失效/" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-             <span id="/2017/10/07/索引失效/" class="leancloud_visitors" data-flag-title="索引失效">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在编写sql语句时，一般都会用到索引来提升sql性能，但是有些sql语句使用索引是不生效的。</p>
-<ol>
-<li><p><strong>is null  和 is not null</strong>：  在sql语句的条件中用上述表达式来作为条件执行sql时，条件中即便字段是创建索引了亦不会被使用而是用全表扫描。</p>
-</li>
-<li><p><strong>连接符||</strong>： 在sql语句中使用连接符||来作为条件表达式时，如果连接连边有一个字段没有创建索引那么整个表达式将不会使用索引而是全表扫描。</p>
-</li>
-<li><p><strong>使用like通配符%</strong>：  使用like时如果用“%xxx%”这种使用方式也会造成全变扫描，所建的索引字段也会被废弃。</p>
-</li>
-<li><p><strong>orderby</strong>：  使用orderby时一定要注意后面所需排序的字段要是建了索引的，否则会大大降低sql执行效率。</p>
-</li>
-<li><p><strong>not 和 &lt;&gt;</strong>：  在使用不等于时所创建的索引也将不会使用而是用全表扫描</p>
-</li>
-<li><p>对索引列进行运算.需要建立函数索引。</p>
-</li>
-<li><p>当变量采用的是times变量，而表的字段采用的是date变量时.或相反情况。</p>
-</li>
-<li><p><strong>sql的书写规范也会影响sql语句执行效率</strong>：  要确保所写的sql语句格式统一，这样在调用的时候才会避免不必要的资源浪费。</p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/转-lombok-介绍及基本使用方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/07/转-lombok-介绍及基本使用方法/" itemprop="url">[转]lombok 介绍及基本使用方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T23:06:45+08:00">
-                2017-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/2017/10/07/转-lombok-介绍及基本使用方法/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/10/07/转-lombok-介绍及基本使用方法/" class="cy_cmt_count" data-xid="2017/10/07/转-lombok-介绍及基本使用方法/" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-             <span id="/2017/10/07/转-lombok-介绍及基本使用方法/" class="leancloud_visitors" data-flag-title="[转]lombok 介绍及基本使用方法">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>转自<a href="http://www.blogjava.net/fancydeepin/archive/2012/07/12/lombok.html" target="_blank" rel="external">http://www.blogjava.net/fancydeepin/archive/2012/07/12/lombok.html</a></p>
-</blockquote>
-<h5 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h5><p>　　逛开源社区的时候无意发现的，用了一段时间，觉得还可以，特此推荐一下。<br>　　<strong>    lombok</strong> 提供了简单的注解的形式来帮助我们简化消除一些必须有但显得很臃肿的 java 代码。特别是相对于 POJO，光说不做不是我的风格，先来看看吧。</p>
-<p>lombok 的官方网址：<a href="http://projectlombok.org/" target="_blank" rel="external">http://projectlombok.org/</a> </p>
-<p>lombok 其实到这里我就介绍完了，开个玩笑，其实官网上有 lombok 三分四十九秒的视频讲解，里面讲的也很清楚了，而且还有文档可以参考。在这里我就不扯太多，先来看一下<strong>lombok 的安装</strong>，其实这个官网视频上也有讲到啦</p>
-<h5 id="lombok-安装"><a href="#lombok-安装" class="headerlink" title="lombok 安装"></a>lombok 安装</h5><p>　　使用 lombok 是需要安装的，如果不安装，IDE 则无法解析 lombok 注解。先在官网下载最新版本的 JAR 包，现在是 0.11.2 版本，我用的是 0.11.0    第一次使用的时候我下载的是最新版本的，也就是我现在用的 0.11.0，到现在已经更新了两个版本，更新的好快啊 … …</p>
-<p><strong>1. 双击下载下来的 JAR 包安装 lombok</strong><br>　　我选择这种方式安装的时候提示没有发现任何 IDE，所以我没安装成功，我是手动安装的。如果你想以这种方式安装，请参考官网的视频。</p>
-<p><strong>2.eclipse / myeclipse 手动安装 lombok</strong><br>　　1. 将 lombok.jar 复制到 myeclipse.ini / eclipse.ini 所在的文件夹目录下<br>　　2. 打开 eclipse.ini / myeclipse.ini，在最后面插入以下两行并保存：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-Xbootclasspath/a:lombok.jar        </div><div class="line">-javaagent:lombok.jar</div></pre></td></tr></table></figure></p>
-<p>　　3.重启 eclipse / myeclipse</p>
-<h5 id="lombok-注解："><a href="#lombok-注解：" class="headerlink" title="lombok 注解："></a>lombok 注解：</h5><p>　　lombok 提供的注解不多，可以参考官方视频的讲解和官方文档。<br>　　Lombok 注解在线帮助文档：<a href="http://projectlombok.org/features/index.html" target="_blank" rel="external">http://projectlombok.org/features/index.</a><br>　　下面介绍几个我常用的 lombok 注解：</p>
-<blockquote>
-<p><strong>@Data：</strong>注解在类上；提供类所有属性的 getting 和 setting 方法，此外还提供了equals、canEqual、hashCode、toString 方法<br><strong>@Setter：</strong>注解在属性上；为属性提供 setting 方法<br><strong>@Getter：</strong>注解在属性上；为属性提供 getting 方法<br><strong>@Log4j ：</strong>注解在类上；为类提供一个 属性名为log 的 log4j 日志对象<br><strong>@NoArgsConstructor：</strong>注解在类上；为类提供一个无参的构造方法<br><strong>@AllArgsConstructor：</strong>注解在类上；为类提供一个全参的构造方法</p>
-</blockquote>
-<p>下面是简单示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@Data</div><div class="line">@Log4j</div><div class="line">@NoArgsConstructor</div><div class="line">@AllArgsConstructor</div><div class="line">public class Person	&#123;</div><div class="line">	private String id;</div><div class="line">	private String name;</div><div class="line">	private String identity;	</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2150,7 +2154,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2161,7 +2165,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -2172,7 +2176,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-count">50</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -2355,7 +2359,7 @@
 
 
   
-    <script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytgs68Ad"></script>
+    <script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytgviwqu"></script>
   
 
 

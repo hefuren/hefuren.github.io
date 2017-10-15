@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="艾尔温Blog">
 <meta property="og:description" content="Docker 的核心组件  Docker客户端和服务器 Docker 镜像 Registry Docker容器  Docker客户端和服务器：Docker是一个客户-服务器（C/S）架构的呈现。Docker客户端只需向Docker服务器或守护进程发出请求，服务器或守护进程将完成所有工作并返回结果。Docker提供一个命令行工具docker以及一整套RESTful API。你可以在同一台宿主机上运行">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-14T16:22:39.667Z">
+<meta property="og:updated_time" content="2017-10-15T09:22:47.473Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker 学习笔记">
 <meta name="twitter:description" content="Docker 的核心组件  Docker客户端和服务器 Docker 镜像 Registry Docker容器  Docker客户端和服务器：Docker是一个客户-服务器（C/S）架构的呈现。Docker客户端只需向Docker服务器或守护进程发出请求，服务器或守护进程将完成所有工作并返回结果。Docker提供一个命令行工具docker以及一整套RESTful API。你可以在同一台宿主机上运行">
@@ -454,8 +454,7 @@
 <p><strong>Docker客户端和服务器</strong>：Docker是一个客户-服务器（C/S）架构的呈现。Docker客户端只需向Docker服务器或守护进程发出请求，服务器或守护进程将完成所有工作并返回结果。Docker提供一个命令行工具docker以及一整套RESTful API。你可以在同一台宿主机上运行Docker守护进程和客户端，可以从本地的Docker客户端连接到允许在另一台宿主机上远程Docker守护进程。</p>
 <p><strong>Docker 镜像</strong>：用户基于镜像来允许自己的容器，镜像也是Docker生命周期的“构建”部分。镜像是基于联合(Union)文件系统的一种层次的结果，由一系列指令一步步构建出来的。<em>例如：添加一个文件；执行一个命令；打开一个端口。</em>也可以把镜像当做容器的“源代码”。镜像体积很小，非常“便携”，易于分享、存储和更新。</p>
 <p><strong>Registry</strong>：Docker用Registry来保存用户构建的镜像。Registry分为公共和私有两种。Docker运营的公共Registry叫做Docker Hub。用户可以在Docker Hub注册账号，分享并保存自己的镜像。你也可以架设自己的私有Registry。</p>
-<p>#####安装Docker</p>
-<blockquote>
+<h4 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h4><blockquote>
 <p>建议读者了解一下如何使用Puppet 或 Chef这样的工具来安装Docker，而不是纯手动安装。例如，可以在网上找到安装Docker的Puppet模块和Chef cookbook。</p>
 </blockquote>
 <p>docker支持很多Linux环境，OS X和Microsoft Windows也能安装Docker。在OS X系统和Windows系统中可以用Boot2Docker工具安装Docker。</p>
@@ -472,6 +471,35 @@
 
     
 
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果觉得我的文章对您有用，请随意赞赏。您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span style="line-height:35px;font-size:14px;"><strong>赞赏支持</strong></span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="ElwinHe WeChat Pay"/>
+        <p>微信打赏</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="ElwinHe Alipay"/>
+        <p>支付宝打赏</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
     
 
     
@@ -504,6 +532,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/15/Keras-函数式模型API/" rel="prev" title="Keras 函数式模型API">
+                Keras 函数式模型API <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -557,8 +589,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/me.jpg"
@@ -573,7 +614,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -584,7 +625,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -595,7 +636,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-count">50</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -620,6 +661,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Docker"><span class="nav-number">1.</span> <span class="nav-text">安装Docker</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -780,8 +837,8 @@
   
     <script type="text/javascript">
     (function(){
-      var appid = 'cytgs68Ad';
-      var conf = '8f544d5b3e8e6b2b1b23131a7436a23b';
+      var appid = 'cytgviwqu';
+      var conf = 'ef70c894e5be1181cad737488b1a0867';
       var width = window.innerWidth || document.documentElement.clientWidth;
       if (width < 960) {
       window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
