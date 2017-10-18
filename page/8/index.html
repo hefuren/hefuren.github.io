@@ -330,6 +330,192 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Redis学习笔记-sets类型及操作1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/07/Redis学习笔记-sets类型及操作1/" itemprop="url">Redis学习笔记--sets类型及操作1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T19:26:50+08:00">
+                2017-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/10/07/Redis学习笔记-sets类型及操作1/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/10/07/Redis学习笔记-sets类型及操作1/" class="cy_cmt_count" data-xid="2017/10/07/Redis学习笔记-sets类型及操作1/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+             <span id="/2017/10/07/Redis学习笔记-sets类型及操作1/" class="leancloud_visitors" data-flag-title="Redis学习笔记--sets类型及操作1">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>set 是集合，和我们数学中的集合概念相似，对集合的操作有添加删除元素，有对多个集合求交并差等操作，操作中key 理解为集合的名字。</p>
+<p>Redis 的set 是string 类型的无序集合。set 元素最大可以包含(2 的32 次方)个元素。</p>
+<p>set 的是通过hash table 实现的，所以添加、删除和查找的复杂度都是O(1)。hash table 会随着添加或者删除自动的调整大小。需要注意的是调整hash table 大小时候需要同步（获取写锁）会阻塞其他读写操作，可能不久后就会改用跳表（skip list）来实现，跳表已经在sortedset 中使用了。关于set 集合类型除了基本的添加删除操作，其他有用的操作还包含集合的取并集(union)，交集(intersection)，差集(difference)。通过这些操作可以很容易的实现sns中的好友推荐和blog 的tag 功能。下面详细介绍set 相关命令：</p>
+<p><strong>sadd</strong><br>向名称为key的set中添加元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; sadd myset &quot;hello&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset &quot;world&quot;</div><div class="line">(integer) 1</div><div class="line"></div><div class="line"> #向set中添加重复的数据，添加将失败，并返回0</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset &quot;world&quot; </div><div class="line">(integer) 0  </div><div class="line"></div><div class="line">redis 127.0.0.1:6379&gt; smembers myset</div><div class="line">1) &quot;world&quot;</div><div class="line">2) &quot;hello&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<p>本例中，我们向myset 中添加了三个元素，但由于第三个元素跟第二个元素是相同的，所以第三个元素没有添加成功，最后我们用smembers 来查看myset 中的所有元素。</p>
+<hr>
+<p><strong>srem</strong><br>删除名称为key的set中的元素member<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; sadd myset2 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset2 &quot;two&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset2 &quot;three&quot;</div><div class="line">(integer) 1</div><div class="line"></div><div class="line">#本例中，我们向myset2 中添加了三个元素后，再调用srem 来删除one 和four，但由于元素中没有four 所以，此条srem 命令执行失败。</div><div class="line">redis 127.0.0.1:6379&gt; srem myset2 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; srem myset2 &quot;four&quot;</div><div class="line">(integer) 0</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>spop</strong><br>随机返回并删除名称为key的set中的一个元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; sadd myset3 &quot;one&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset3 &quot;two&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; sadd myset3 &quot;three&quot;</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; spop myset3</div><div class="line">&quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<p>本例中，我们向myset3 中添加了三个元素后，再调用spop 来随机删除一个元素，可以看到three 元素被删除了。</p>
+<hr>
+<p><strong>sdiff</strong><br>返回所有给定key与第一个key的差集。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sdiff myset2 myset3</div><div class="line">1) &quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div><div class="line"></div><div class="line">#我们也可以将myset2 和myset3 换个顺序来看一下结果:</div><div class="line">redis 127.0.0.1:6379&gt; sdiff myset3 myset2</div><div class="line">1) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>sdiffstore</strong><br>返回所有给定key与第一个key的差集，并将结果存为另一个key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sdiffstore myset4 myset2 myset3</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset4</div><div class="line">1) &quot;three&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>sinterstore</strong><br>返回所有给定key的交集，并将结果存为另一个key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sinterstore myset5 myset2 myset3</div><div class="line">(integer) 1</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset5</div><div class="line">1) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<p>通过本例的结果可以看出, myset2 和myset3 的交集被保存到myset5 中了</p>
+<hr>
+<p><strong>sunion</strong><br>返回所有给定key 的并集<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sunion myset2 myset3</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">3) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<p>通过本例的结果可以看出, myset2 和myset3 的并集被查出来了</p>
+<hr>
+<p><strong>sunionstore</strong><br>返回所有给定key 的并集，并将结果存为另一个key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">redis 127.0.0.1:6379&gt; smembers myset2</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset3</div><div class="line">1) &quot;two&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">redis 127.0.0.1:6379&gt; sunionstore myset6 myset2 myset3</div><div class="line">(integer) 3</div><div class="line">redis 127.0.0.1:6379&gt; smembers myset6</div><div class="line">1) &quot;three&quot;</div><div class="line">2) &quot;one&quot;</div><div class="line">3) &quot;two&quot;</div><div class="line">redis 127.0.0.1:6379&gt;</div></pre></td></tr></table></figure></p>
+<p>通过本例的结果可以看出, myset2 和myset3 的并集被保存到myset6 中了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/07/Redis学习笔记-sets类型及操作2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1767,7 +1953,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1778,7 +1964,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1789,7 +1975,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">51</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1972,7 +2158,7 @@
 
 
   
-    <script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytgviwqu"></script>
+    <script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytgs68Ad"></script>
   
 
 
