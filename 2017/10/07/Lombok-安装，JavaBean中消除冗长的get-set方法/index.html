@@ -549,9 +549,11 @@
           
   <div class="comments" id="comments">
     
-      <div id="SOHUCS"></div>
-
-
+       
+         <div id="gitment-container"></div
+		 
+       	  
+    
   </div>
 
 
@@ -840,6 +842,27 @@
 
 
 
+
+
+   
+   
+   
+   
+   <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+   <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+   
+       <script type="text/javascript">
+           var gitment = new Gitment({
+               id: window.location.pathname, 
+               owner: 'hefuren',
+               repo: 'blogComments',
+               oauth: {
+                   client_id: '621cbe566aa9f43e6dd3',
+                   client_secret: '006000c4529c1838c4155a046ff623963b55bbc9',
+               }});
+           gitment.render('gitment-container');
+       </script>
+   
 
 
   
