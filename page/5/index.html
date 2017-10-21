@@ -434,14 +434,16 @@
       
         
           
-            <p>Java并发编程中，用到了一些专门为并发编程准备的 Annotation。主要包括三类：<br><strong>1、类 Annotation（注解）</strong><br>就像名字一样，这些注解是针对类的。主有要以下三个：<br>@Immutable<br>@ThreadSafe<br>@NotThreadSafe</p>
-<p>@ThreadSafe 是表示这个类是线程安全的。具体是否真安全，那要看实现者怎么实现的了，反正打上这个标签只是表示一下。不线程安全的类打上这个注解也没事儿。<br>@Immutable 表示，类是不可变的，包含了　@ThreadSafe　的意思。<br>      @NotThreadSafe 表示这个类不是线程安全的。如果是线程安全的非要打上这个注解，那也不会报错。</p>
-<p>这三个注解，对用户和维护者是有益的，用户可以立即看出来这个类是否是线程安全的，维护者则是可以根据这个注解，重点检查线程安全方面。另外，代码分析工具可能会利用这个注解。</p>
-<p><strong>2、域 Annotation（注解）</strong><br>域注解是对类里面成员变量加的注解。</p>
-<p><strong>3、方法 Annotation（注解）</strong><br>方法注解是对类里面方法加的注解。</p>
-<p>域注解和方法注解都是用@GuardedBy( lock )来标识。里面的Lock是告诉维护者：这个状态变量，这个方法被哪个锁保护着。这样可以强烈的提示类的维护者注意这里。<br>@GuardedBy( lock )有以下几种使用形式：<br>1、@GuardedBy( “this” ) 受对象内部锁保护<br>2、@GuardedBy( “fieldName” ) 受 与fieldName引用相关联的锁 保护。<br>3、@GuardedBy( “ClassName.fieldName” ) 受 一个类的静态field的锁 保存。<br>4、@GuardedBy( “methodName()” ) 锁对象是 methodName() 方法的返值，受这个锁保护。<br>5、@GuardedBy( “ClassName.class” ) 受 ClassName类的直接锁对象保护。而不是这个类的某个实例的锁对象。</p>
-
-          
+          Java并发编程中，用到了一些专门为并发编程准备的 Annotation。主要包括三类：1、类 Annotation（注解）就像名字一样，这些注解是针对类的。主有要以下三个：@Immutable@ThreadSafe@NotThreadSafe
+@ThreadSafe 是表示这个类是线程安全的。具体是否真安全，那要看实现者怎么实现的了，反正打上这个标签只是表示一下。不线程安全的类打上这个注解也没事儿。@Immutable 表示，类是不可变的，包含了　@ThreadSafe　的意思。      @NotThreadSafe 表示这个类不是线程安全的。如果是线程安全的非要打上这个注解，那也不会报错
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/7e897a5b/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -592,32 +594,19 @@
       
         
           
-            <h4 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h4><p>实现Set接口包括 HashSet, TreeSet, LinkedHashSet 。在没有其它限制的情况下，建议使用<strong>HashSet</strong>，因为它对速度/效率进行了优化。</p>
-<ul>
-<li><strong>Set (interface) ：</strong> 存入Set的每个元素都必须是唯一性，因为Set不保存重复元素。加入Set的元素必须定义equals()方法以确保对象的唯一性。Set与Collection有完全一样的接口。Set接口不保证维护元素的次序。</li>
-<li><strong>HashSet * ：</strong> 为了快速查找而设计的Set。 存入HashSet的元素必须定义<strong>hashCode()</strong>方法。</li>
-<li><strong>TreeSet ：</strong> 保持次序的Set，底层为树结构。使用它可以从Set中提取有序的序列。元素必须实现<strong>Comparable</strong>接口。</li>
-<li><strong>LinkedHashSet：</strong> 具有HashSet的查询速度，且内部使用链表维护元素的的顺序（插入的次序）。于是在使用迭代器遍历Set时，结果会按元素插入的次序显示。元素必须定义hashCode()方法。</li>
-</ul>
-<blockquote>
-<p>对于良好的编程风格而言，你应该覆盖equals()方法时，总是覆盖hashCode()方法。</p>
-</blockquote>
-<h4 id="队列-Queue"><a href="#队列-Queue" class="headerlink" title="队列 Queue"></a>队列 Queue</h4><p>除了并发应用，Queue在Java SE5中仅有的两个实现是<strong>LinkedList</strong>和<strong>PriorityQueue</strong>，它们的差异在于排序行为而不是性能。</p>
-<p>LinkedList双向队列（<em>双端队列</em>），就像是一个队列，但是你可以在任何一端添加和移除元素。在LinkedList 中包含支持双向队列的方法。</p>
-<h4 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h4><ul>
-<li><strong>HashMap * ：</strong> Map基于散列表的实现（它取代了Hashtable）。插入和查询“键值对”的开销是固定的。可以通过构造器设置容量和负载因子，以调整容器的性能。</li>
-<li><strong>LinkedHashMap ：</strong> 类似于HashMap，但是迭代遍历它时，取得“键值对”的顺序是其插入次序，或者是最近少使用（LRU）的次序。只比HashMap慢一点；而在<em>迭代访问时反而速度更快</em>，因为它使用链表维护内部次序。</li>
-<li><strong>TreeMap ： </strong> 基于红黑树的实现。查看“键”或“键值对”时，它们会被排序（次序由Comparable或Comparator决定）。TreeMap的特定在于，所得到的结果是经过排序的。TreeMap是唯一的带有<strong>subMap()</strong>方法的Map，它可以返回一个子树。</li>
-<li><strong>WeakHashMap：</strong> 弱键（weak key）映射，允许释放映射所指向的对象；这是为解决某些特殊问题而设计的。如果映射之外没有引用指向某个“键”，则此“键”可以被垃圾收集器回收。</li>
-<li><strong>ConcurrentHashMap： </strong> 一种线程安全的Map，它不涉及同步加锁。</li>
-<li><strong>IdentityHashMap：</strong> 使用==代替equals()对“键”进行比较的散列映射。专为解决特殊问题而设计的。</li>
-</ul>
-<p>对Map中使用的键值要求与Set中的元素要求一致。任何键都必须具有一个equals()方法，如果键被用于散列Map，那么它必须还具有恰当的hashCode()方法；如果键被用于TreeMap，那么它必须实现Comparable。</p>
-<blockquote>
-<p>Java 数组的效率比ArrayList效率高</p>
-</blockquote>
+          Set实现Set接口包括 HashSet, TreeSet, LinkedHashSet 。在没有其它限制的情况下，建议使用HashSet，因为它对速度/效率进行了优化。
 
-          
+Set (interface) ： 存入Set的每个元素都必须是唯一性，因为Set不保存重复元素。加入Set的元素必须定义equals()方法以确保对象的唯一性。Set与Collection有完全一样的接口。Set接口不保证维护元素的次序。
+HashSet * ： 为了快速查找而设计的Set。 存入HashSet的元素必须定义hashCode()方法。
+TreeSet ： 保持次序的Set，底层为树结构。使用它可以从Set
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/6956966a/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -768,12 +757,16 @@
       
         
           
-            <p><strong>对集合或数组进行排序有两种方法：</strong><br>1.集合中的对象所属的类实现了java.lang.Comparable 接口，然后调用<strong>Collections.sort()</strong>或者<strong>Arrays.sort()</strong><br>2.实现java.lang.Comparator接口，把这个实现接口的类作为参数传递给上述的sort()方法。</p>
-<p><strong>1、Comparable<t> java.lang Interface Comparable<t></t></t></strong><br>属于Java集合框架下的一个接口。它只有一个方法 <strong>int compareTo(T o)</strong> 用于提供排序所需要的比较逻辑。实现这个接口的类，其对象都可以通过调用<strong>Collections.sort()</strong>或者<strong>Arrays.sort()</strong>进行排序，根据<strong>compareTo</strong>的逻辑升序排列。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">class Person implements Comparable&lt;Person&gt;&#123;</div><div class="line">    String name;</div><div class="line">    public Person(String name) &#123;</div><div class="line">        this.name = name;</div><div class="line">    &#125; </div><div class="line"></div><div class="line">    public int compareTo(Person other) &#123;</div><div class="line">        //按名字的字母顺序从z~a排    </div><div class="line">        if(name.compareTo(other.name) &lt; 0)  //当前的字符串，在比较字符串之前，那就返回1</div><div class="line">            return 1;</div><div class="line">        else</div><div class="line">            if(name.compareTo(other.name) &gt; 0)</div><div class="line">                return -1;</div><div class="line">            else</div><div class="line">                return 0;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>2、再来看Comparator<t> java.util Interface Comparator<t></t></t></strong><br>简单来说，Comparator是策略模式的一种实现，体现了将类和排序算法相分离的原则。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class ComparatorImp implements Comparator&lt;Person&gt;&#123;</div><div class="line">	public int compare(Person p1, Person p2)	&#123;</div><div class="line">		if(p1.name.compareTo(p2.name) &lt; 0)</div><div class="line">			return -1;</div><div class="line">		else</div><div class="line">			return (p1.name.compareTo(p2.name) &gt; 0) ? 1 : 0;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">public class TestComparable &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		Person[] aPersons = new Person[4];</div><div class="line">		aPersons[0] = new Person(&quot;Jony&quot;);</div><div class="line">		aPersons[1] = new Person(&quot;Pun&quot;);</div><div class="line">		aPersons[2] = new Person(&quot;HelloKitty&quot;);</div><div class="line">		aPersons[3] = new Person(&quot;Brown&quot;);</div><div class="line"></div><div class="line">		Arrays.sort(aPersons);</div><div class="line">		for(Person p: aPersons )	&#123;</div><div class="line">			System.out.print(p.name + &quot; &quot;);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		System.out.println();</div><div class="line">		Arrays.sort(aPersons, new ComparatorImp());</div><div class="line">		for(Person p: aPersons )	&#123;</div><div class="line">			System.out.print(p.name + &quot; &quot;);</div><div class="line">		&#125;</div><div class="line">		System.out.println();</div><div class="line"></div><div class="line">		List&lt;Person&gt; lperson = new LinkedList&lt;Person&gt;();</div><div class="line">		for(Person p : aPersons) &#123;</div><div class="line">			lperson.add(p);</div><div class="line">		&#125;</div><div class="line">		Collections.sort(lperson);</div><div class="line">		for(int i = 0 ; i &lt; lperson.size(); i++)		&#123;</div><div class="line">			System.out.print(lperson.get(i).name+ &quot; &quot;);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
+          对集合或数组进行排序有两种方法：1.集合中的对象所属的类实现了java.lang.Comparable 接口，然后调用Collections.sort()或者Arrays.sort()2.实现java.lang.Comparator接口，把这个实现接口的类作为参数传递给上述的sort()方法。
+1、Comparable java.lang Interface Comparable属于Java集合框架下的一个接口。它只有一个方法 int compareTo(T o) 用于提供排序所需要的比较逻辑。实现这个接口的类，其对象都可以通过调用Collections.sort()或者Arrays.sort
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/ae6b923/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -924,36 +917,21 @@
       
         
           
-            <p>python类支持多重继承，当使用多重继承时，需要注意：</p>
-<blockquote>
-<p>如果一个方法从多个超类继承（也就是说你有两个具有相同名字的不同方法），那么必须要注意一下超类的顺序（在class语句中）：先继承的类中的方法会重写后继承的类中的方法。</p>
-</blockquote>
-<p>python魔法方法，就是在方法名前后加双下划线“__”，例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">class FooBar:</div><div class="line">   def __init__(self, value = 42):</div><div class="line">         self.somevar = value</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意：Python中有一个魔法方法叫做”__del<strong>“，也就是析构方法。它在对象就要被垃圾回收之前调用。但发生调用的具体时间是不可知的。所以建议读者尽力避免使用”\</strong>del__”函数。</p>
-</blockquote>
-<p>Python中类的继承，如果一个子类直接重写了构造器的方法，这将恢复完全覆盖了在超类中构造器方法的作用。<strong>如果要想保留超类构造器方法的作用：调用超类构造方法的未绑定版本，或者使用 super函数。</strong><br>__init__ 方法为一个类创建后第一个执行的方法。<br>什么是self ？ 它是类实例自身的引用。其它面向对象语言通常使用一个名为 this 的标识符。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">class SongBird(Bird):</div><div class="line">    def __init__(self):</div><div class="line">         Bird.__init__(self)  # 调用超类构造器方法</div><div class="line">         self.sound = &apos;Squawk !&apos;</div><div class="line">    </div><div class="line">     def sing(self):</div><div class="line">          print self.sound</div><div class="line"></div><div class="line">__metaclass__ = type </div><div class="line">class SongBird(Bird):</div><div class="line">    def __init__(self):</div><div class="line">         super(SongBird.self).__init__()  # super函数只在新式类中起作用</div><div class="line">         self.sound = &apos;Squawk !&apos;</div><div class="line">    </div><div class="line">     def sing(self):</div><div class="line">          print self.sound</div></pre></td></tr></table></figure></p>
-<p>解决python文件显示中文build错误问题：</p>
-<blockquote>
-<p>需要在程序的第一行或者第二行声明编码，就可以解决问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># coding =encoding name 或者  # -*- coding: -*-</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p>下面的链接是原文地址 <a href="http://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">http://www.python.org/dev/peps/pep-0263/</a></p>
-<p><strong>raw_input</strong>　，python3.0版本后用<strong>input</strong>替换了raw_input</p>
-<p>python编程时，每一行语句结束时直接换行，不需要像C，Java那样用“；”结尾；但是同一行书写多个预计时，可以用“ ; “分割</p>
-<blockquote>
-<p>注意：在python语言中，赋值并不是直接将一个值赋给一个变量，对象是通过<strong>引用传递</strong>的。</p>
-</blockquote>
-<p>python不支持类似 x++ 或 –x 这样的前置/后置自增/自减运算。</p>
-<p>专用下划线标识符：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">_xxx   #不用 &apos; from module import * &apos; 导入</div><div class="line">_xxx_  #系统定义名字</div><div class="line">_xxx   #类中的私有变量名</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>核心风格建议：避免用下划线作为变量名的开始，因为下划线对解释器有特殊的意义，而且是内建标识符所使用的符号，我们建议程序员避免用下划线作为变量名的开始。一般来讲，变量名 _xxx 被看做是“私有的”，在模块或类外都不可以使用。当变量是私有的时候，用_xxx来表示变量是很好的习惯。因为变量或类外不可以使用。当变量是私有的时候，用_xxx来表示变量是很好的习惯。因为变量名__xxx__对python来说有特殊含义，对于普通的变量应当避免这种命名风格。</p>
-</blockquote>
-<p>python 变量量无需事先声明，也无需声明类型。</p>
-<blockquote>
-<p>提醒：print语句默认在输出内容末尾后加一个换行符，而在语句后加一个“逗号”可以避免这个新闻。</p>
-</blockquote>
+          python类支持多重继承，当使用多重继承时，需要注意：
 
-          
+如果一个方法从多个超类继承（也就是说你有两个具有相同名字的不同方法），那么必须要注意一下超类的顺序（在class语句中）：先继承的类中的方法会重写后继承的类中的方法。
+
+python魔法方法，就是在方法名前后加双下划线“__”，例如:123class FooBar:   def __init__(self, value = 42):         self.somevar = value
+
+注意：Python中有一个魔法方法叫做”__del“，也就是析构方法。它在对象就要被垃圾回收之前调用。但发生调用的具体时间是不可知的。所以建议读
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/743c31e9/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1104,12 +1082,16 @@
       
         
           
-            <p><strong>异常</strong><br><strong>第57条：只针对异常的情况使用异常</strong><br>　　Java程序设计的时候，只针对有异常的情况，才考了使用异常。实际上，<strong>基于异常的模式比标准模式要慢很多。</strong>异常是为了在异常情况下使用而设计的，不要将它们用于普通的控制流。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">try&#123;</div><div class="line">    //do someting</div><div class="line">    ......</div><div class="line">&#125;catch(Exception ex)&#123;</div><div class="line">    ......</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>第58条：对可恢复的情况使用受检异常，对变成错误使用允许时异常</strong><br>　　Java程序设计语言提供了三种可抛出结构（throwable）：受检异常（checked exception）、运行时异常（run-time exception）和错误（error）。<strong>使用原则：如果期望调用者能够适当地恢复，对于这种情况就应该使用受检的异常</strong>通过抛出受检的异常，强迫调用者在一个catch子句中处理异常，或者将它传播出去。因此，方法中声明要抛出的每个受检的异常，都是对API用户的一种潜在提示：与异常相关的条件是调用这个方法的一种可能的结果。</p>
-<p><strong>并发</strong><br><strong>第66条：同步访问共享的可变数据</strong><br>　　<em>当多个线程共享可变数据的时候，每个读或者写数据的线程都必须执行同步。</em></p>
-<p>　　</p>
-
-          
+          异常第57条：只针对异常的情况使用异常　　Java程序设计的时候，只针对有异常的情况，才考了使用异常。实际上，基于异常的模式比标准模式要慢很多。异常是为了在异常情况下使用而设计的，不要将它们用于普通的控制流。123456try&#123;    //do someting    ......&#125;catch(Exception ex)&#123;    ......&#125;
+第58条：对可恢复的情况使用受检异常，对变成错误使用允许时异常　　Java程序设计语言提供了三种可抛出结构（throwable）：受检异常（checked exception）、运行时异常（run-time ex
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/beb8e864/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1260,16 +1242,16 @@
       
         
           
-            <p><strong>第22条：优先考虑静态成员类</strong>　　<br>　　Java程序中共有四种不同的嵌套类，每一种都有自己的用途。如果一个嵌套类需要在单个方法之外仍然是可见的，或者它太长了，不适合于放在方法内部，就应该使用成员类。如果成员类的每个实例都需要一个指向其外围实例的引用，就要把成员类做成非静态的；否则，就做成静态的。假设这个嵌套类属于一个方法的内部，如果你只需要在一个地方创建实例，并且已经有了一个预置的类似可以说吗这个类的特征，就要把它做成匿名类；否则，就做成局部类。</p>
-<p><strong>泛型</strong><br><strong>第23条：请不要在新代码中使用原生态类型</strong><br>　　Java 1.5之后支持泛型，建议在代码中不要使用原生态类型。如果使用原生态类型，就失掉了泛型在安全性和表述性方面的所有优势。，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//不建议这样定义List</div><div class="line">private List list ;</div><div class="line"></div><div class="line">//支持泛型的对象，建议如下定义</div><div class="line">private List&lt;String&gt; list;</div></pre></td></tr></table></figure></p>
-<p><strong>第30条：用enum代替int常量</strong><br>　　在编程语言中还没有引入枚举类型之前，表示枚举类型的常用模式是声明一组具名的int常量，每个类型成员一个常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// The int enum pattern - severely dificient !</div><div class="line">public static final int APPLE_FUJI = 0;</div><div class="line">public static final int APPLE_PIPPIN =1</div><div class="line">......</div><div class="line"></div><div class="line">public static final int ORANGE_NAVEL = 0;</div><div class="line">public static final int ORANGE_TEMPLE =1;</div><div class="line">......</div></pre></td></tr></table></figure></p>
-<p>　　这种方法称作int枚举模式，存在诸多不足。它在类型安全性和使用方便性方面没有任何帮组。如果将apple传到想要的orange的方法中，编译器也不会出现警告。建议在诸如类似常量定义时，考虑使用 enum type。</p>
-<p><strong>方法</strong><br><em>**第38条：检查参数的有效性</em><br>　　每当编写方法或者构造器的时候，应该考虑它的参数有哪些限制。应该把这些限制写到文档中，并且在方法体的开头处，通过显示的简称来实施这些限制。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">  * Returns a BigInteger whose value is (this mod m). This method</div><div class="line">  * differs form the remainder method in that it always returns a </div><div class="line">  * non-negative BigInteger</div><div class="line">  *</div><div class="line">  * @param m the modeulus, thich must be positive</div><div class="line">  * @return this mod m</div><div class="line">  * @throws ArithmeticException if m is less than or equal to 0</div><div class="line">  */</div><div class="line">public BigInteger mod(BigInteger m)&#123;</div><div class="line">    if(m.signum() &lt;= 0)</div><div class="line">        throw new ArithmeticException(&quot;Modulus &lt;= 0 : &quot; + m );</div><div class="line"></div><div class="line">      ...... // Do the computation</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>通用程序设计</strong><br><strong>第49条：基本类型优先于装箱基本类型（基本类型的包装类）</strong><br>1.什么时候应该使用装箱基本类型呢？<br>　　第一是作为集合中的元素、健和值。你不能将基本类型放在集合中，因此必须使用装箱基本类型。这是一种更通用的特例。在参数化类型中，必须使用装箱基本类型作为类型参数，因为Java不能运行使用基本类型。<br>　　基本类型性能优于装箱基本类型，总之，当可以选择的时候，基本类型要优先于装箱基本类型。</p>
-<p><strong>第52条：通过接口引用对象</strong><br>　　应该优先使用接口而不是类的引用对象。<em>如果有合适的接口类型存在，那么对于参数、返回值、变量或域来说，就都应该使用接口类型进行声明。</em>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//Good - user interface as type</div><div class="line">List&lt;Subscriber&gt; subscribers = new ArrayList&lt;Subscriber&gt;();</div><div class="line"></div><div class="line">//Bad - user class as type</div><div class="line">ArrayList&lt;Subscriber&gt; subscribers = new ArrayList&lt;Subscriber&gt;();</div></pre></td></tr></table></figure></p>
-<p><em>如果没有合适的接口存在，完全可以用类而不是接口来引用对象。（建议使用类层次接口中提供了必要功能的最基础的类）</em></p>
-
-          
+          第22条：优先考虑静态成员类　　　　Java程序中共有四种不同的嵌套类，每一种都有自己的用途。如果一个嵌套类需要在单个方法之外仍然是可见的，或者它太长了，不适合于放在方法内部，就应该使用成员类。如果成员类的每个实例都需要一个指向其外围实例的引用，就要把成员类做成非静态的；否则，就做成静态的。假设这个嵌套类属于一个方法的内部，如果你只需要在一个地方创建实例，并且已经有了一个预置的类似可以说吗这个类的特征，就要把它做成匿名类；否则，就做成局部类。
+泛型第23条：请不要在新代码中使用原生态类型　　Java 1.5之后支持泛型，建议在代码中不要使用原生态类型。如果使用原生态类型，就失掉了泛型在安全性和
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/9c616f22/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1420,10 +1402,16 @@
       
         
           
-            <p><strong>第16条：复合优于继承</strong>　　<br>　　只有当子类真正是超类的子类型（subtype）时，才适合用继承。换句话说，对于两个类A和B，只有当两者之间确实存在“is-a”关系的时候，类B才应该扩展类A。如果你打算让类B扩展类A，就应该问问之间：每个B确实也是A吗？如果你不能确定这个问题的答案是肯定的，那么B就不应该扩展A。如果答案是否定的，通常情况下，B应该包含A的一个私有实例，并且暴露一个较小的、较简单的API：A本质上不是B的一部分，只是它的实现细节而已。</p>
-<p><strong>第17条：要么为继承而设计，并提供文档说明，要么就禁止继承</strong><br>　　专门为继承而设计，就需要具有良好的文档说明。该类的文档必须精确地描述覆盖每个方法所带来的影响，换句话说，<em>该类必须有文档说明它可覆盖（overridable）的方法的自用性（self-use）</em>。<br>　　为了允许继承，类还必须遵守其他一些约束。<em>构造器决不能调用可被覆盖的方法</em>，无论是直接调用还是间接调用。如果违反了这条规则，很有可能导致程序失败。<br>　　如果你决定在一个为了继承而设计的类中实现了Cloneable或者Serializable接口，就应该意识到，因为clone和readObject方法在行为非常类似于构造器，所以类似的限制规则也是适合用的：无论是clone还是readObject，都不可以调用覆盖的方法，不管是以直接还是间接的方式。对于readObject方法，覆盖版本的方法将在子类的状态被反序列化之前被允许；而对于clone方法，覆盖版本的方法则是在子类的clone方法有机会修正被克隆对象中的状态之前被允许。无论哪种情形，都不可避免将导致程序失败。</p>
-
-          
+          第16条：复合优于继承　　　　只有当子类真正是超类的子类型（subtype）时，才适合用继承。换句话说，对于两个类A和B，只有当两者之间确实存在“is-a”关系的时候，类B才应该扩展类A。如果你打算让类B扩展类A，就应该问问之间：每个B确实也是A吗？如果你不能确定这个问题的答案是肯定的，那么B就不应该扩展A。如果答案是否定的，通常情况下，B应该包含A的一个私有实例，并且暴露一个较小的、较简单的API：A本质上不是B的一部分，只是它的实现细节而已。
+第17条：要么为继承而设计，并提供文档说明，要么就禁止继承　　专门为继承而设计，就需要具有良好的文档说明。该类的文档必须精确地描述覆盖每个方法所带来
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/84d15982/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1574,22 +1562,29 @@
       
         
           
-            <p>环境：VMware Workstation Pro 12 + Suse linux 11 SP1</p>
-<p><strong>第一步：配置虚拟机网络适配器，这里我采用 NAT 方式</strong></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/3164735-7e840ec0e91ff3b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-01.png"></p>
-<p><strong>第二步：在VMware虚拟网络编辑器中，配置NAT模式下的子网IP</strong></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/3164735-74f9c07567139b75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-02.png"></p>
-<p><strong>第三步：在Suse linux 中通过界面配置静态IP</strong></p>
-<p>1、全局设置<br><img src="http://upload-images.jianshu.io/upload_images/3164735-f8bfd16d31fe237d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-03.png"></p>
-<p>2、IP设置<br><img src="http://upload-images.jianshu.io/upload_images/3164735-180ae18aafc65a1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-04.png"></p>
-<blockquote>
-<p><em>注意：配置静态IP是，IP网段要与网络虚拟机配置的网段一致。</em></p>
-</blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/3164735-a2f5ff633d37f452.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-05.png"></p>
-<p>3、配置DNS<br><img src="http://upload-images.jianshu.io/upload_images/3164735-0364fab1590fd500.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-06.png"></p>
-<p>4、配置网关（<em>网关配置需要与虚拟机的虚拟网络配置的网关一致</em>）<br><img src="http://upload-images.jianshu.io/upload_images/3164735-856d9ab30e7590ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="picture-07.png"></p>
+          环境：VMware Workstation Pro 12 + Suse linux 11 SP1
+第一步：配置虚拟机网络适配器，这里我采用 NAT 方式
+
+第二步：在VMware虚拟网络编辑器中，配置NAT模式下的子网IP
+
+第三步：在Suse linux 中通过界面配置静态IP
+1、全局设置
+2、IP设置
+
+注意：配置静态IP是，IP网段要与网络虚拟机配置的网段一致。
+
+
+3、配置DNS
+4、配置网关（网关配置需要与虚拟机的虚拟网络配置的网关一致）
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/dec0d98a/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1740,44 +1735,18 @@
       
         
           
-            <blockquote>
-<p>转自<a href="http://www.infoq.com/cn/news/2015/08/monitoring-applications-category" target="_blank" rel="external">http://www.infoq.com/cn/news/2015/08/monitoring-applications-category</a></p>
-</blockquote>
-<p>　　在基于云的服务中，正常运行时间应该是最为重要的运维指标之一。服务如果频繁地中断，不仅会导致正常使用的中断，还会对品牌带来负面影响。99.9%或99.99%已经算不上高水准的高可用性了，用户期望的是100%的可用性。为了达到这一点，我们不仅需要遵循良好的设计模式并保持服务的可扩展性，同时还要保证硬件、应用服务器以及数据库服务器的健康运行。<br>近日，来自<a href="https://www.getzephyr.com/" target="_blank" rel="external">Zephyr</a>的CTO <a href="https://twitter.com/sxm20" target="_blank" rel="external">Shailesh Mangal</a>撰文<a href="https://developer.atlassian.com/blog/2015/08/monitoring-connect-applications/" target="_blank" rel="external">总结了各种监控类型以及所需的工具</a>。Zephyr致力于为开发和QA团队提供解决方案，帮助交付高质量的软件，他们所提供的企业级测试管理产品能够与各种工具集成，实现测试的实时管理。<br>在Shailesh Mangal的文章中，他总结了核心基础设施监控、应用级别监控、微服务监控以及多租户日志监控的工具以及各自的指标，为我们进行应用的全方位监控提供了指导。</p>
-<p><strong>核心基础设施监控（Core Infrastructure Monitoring**</strong>，CIM<strong>**）</strong><br>　　在目前的云基础设施中，出现硬件故障是难以避免的。核心基础设施监控会探测硬件瓶颈相关的早期迹象并捕获硬件故障信号，在出现更大的问题之前对其进行应对。基础设施监控的范围包括机器的健康状况、CPU使用、内存消耗以及网络带宽，基于这些监控信息，能够判断基础设施的当前状态，从而进行必要的扩展。<br>有众多的工具都能帮助我们获取硬件的健康状态。在大多数情况下，托管提供商（如<a href="http://aws.amazon.com/" target="_blank" rel="external">Amazon AWS</a>、<a href="https://www.heroku.com/" target="_blank" rel="external">Heroku</a>）的工具基本上就能满足这种监控的需要。</p>
-<p>CIM的指标包括：</p>
-<ul>
-<li>CPU的平均使用率</li>
-<li>CPU峰值的持续时间</li>
-<li>内存的平均使用情况</li>
-<li>带宽的输入输出情况</li>
-</ul>
-<p><strong>应用级别监控（Application Level Monitoring**</strong>，ALM<strong>**）</strong><br>　　应用级别的监控涉及到监控各种服务器的状态，如数据库服务器、应用服务器、分析服务器以及Hadoop集群，而要监控的参数则是与应用或工具相关的。<br>应用监控方面有不少伟大的工具，如<a href="https://www.datadoghq.com/" target="_blank" rel="external">Datadog</a>和<a href="http://newrelic.com/" target="_blank" rel="external">New Relic</a>。</p>
-<p>应用监控的指标包括：</p>
-<ul>
-<li>JVM进程的内存</li>
-<li>内部线程的数量</li>
-<li>磁盘IO</li>
-<li>索引的读取/写入操作</li>
-</ul>
-<p><strong>微服务监控（Micro Service Monitoring**</strong>，MSM<strong>**）</strong><br>　　微服务是现代云架构的组成部分，是实现水平扩展的关键。不管你运行的是传统的单块系统还是设计良好且组织精密的微服务，这些系统都会有不同的API端点，遵循不同的协议，满足不同的SLA需求。微服务监控就是要监控每个服务的吞吐量和性能，进而确保在任何时间都能满足SLA的需求。这种类型的监控一般都需要对应用进行instrument操作，让instrumentation是可配置的，通过收集器（collector）收集应用的状态，并阶段性地将这些状态发送到永久存储、分析器和预警系统中。此类监控往往会产生大量的数据，因此有可能会影响到性能，因此需要仔细设计。<br>微服务监控的工具方面，存储引擎可以选择<a href="http://graphite.wikidot.com/" target="_blank" rel="external">GraphiteDB</a>或<a href="https://influxdb.com/" target="_blank" rel="external">InfluxDB</a>，可视化工具可以选择<a href="https://www.elastic.co/products/kibana" target="_blank" rel="external">Kibana</a>或<a href="http://grafana.org/" target="_blank" rel="external">Grafana</a>。</p>
-<p>微服务监控的指标包括：</p>
-<ul>
-<li>请求所需的最大时间</li>
-<li>请求所需的平均时间</li>
-<li>每分钟请求的平均速度</li>
-<li>每天峰值的请求速度</li>
-</ul>
-<p><strong>多租户日志监控（Multitenant Log Monitoring**</strong>，MLM<strong>**）</strong><br>　　对于多租户部署的系统来讲，很大的一个挑战就是监控日志并推断系统的内部情况，或者当出现问题时识别出根本的原因。无数的客户端会产生大量的日志，因此对于日志隔离来说，有唯一的标识（如tenantId）是第一步。除此之外，日志还需要根据请求分组，如果请求要跨多个服务时，这一点尤为重要，每个服务都产生一些日志信息将会有助于识别问题。<br>多租户日志监控中有非常经典的工具，也就是ELK（<a href="https://www.elastic.co/products/elasticsearch" target="_blank" rel="external">Elasticsearch</a>, <a href="https://www.elastic.co/products/logstash" target="_blank" rel="external">Logstash</a>, <a href="https://www.elastic.co/products/kibana" target="_blank" rel="external">Kibana</a>）技术栈。</p>
-<p>多租户日志监控的指标包括：</p>
-<ul>
-<li>每个租户的日志</li>
-<li>每个请求的日志</li>
-<li>每天总的错误数量</li>
-</ul>
-<p>　　总而言之，好的监控要涉及到系统各个方面，从硬件、应用再到服务。如果需要构建多租户应用的话，使用配置恰当的ELK技术栈也有助于快速诊断问题。<br>目前，随着云服务和移动应用的发展，在国内外APM（Application Performance Management）相关的服务得到了空前的关注，希望Shailesh Mangal的这篇文章能够帮助读者对该领域有一个宏观的了解和掌握。</p>
-
           
+转自http://www.infoq.com/cn/news/2015/08/monitoring-applications-category
+
+　　在基于云的服务中，正常运行时间应该是最为重要的运维指标之一。服务如果频繁地中断，不仅会导致正常使用的中断，还会对品牌带来负面影响。99.9%或99.99%已经算不上高水准的高可用性了，用户期望的是100%的可用性。为了达到这一点，我们不仅需要遵循良好的设计模式并保持服务的可扩展性，同时还要保证硬件、应用服务器以及数据库服务器的健康运行。近日，来自Zephyr的CTO Shailesh Mangal撰文总结了各种监控类型以及所需的工具。Zephy
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/fbaf30a5/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1928,29 +1897,19 @@
       
         
           
-            <p>　　在解决java内存溢出问题之前，需要对jvm（java虚拟机）的内存管理有一定的认识。jvm管理的内存大致包括三种不同类型的内存区域：</p>
-<ul>
-<li><strong>Permanent Generation space（永久保存区域）</strong>：永久保存区域主要存放Class（类）和Meta的信息，Class第一次被Load的时候被放入PermGen space区域，Class需要存储的内容主要包括方法和静态属性</li>
-<li><strong>Heap space(堆区域)</strong>：堆区域用来存放Class的实例（即对象），对象需要存储的内容主要是非静态属性。每次用new创建一个对象实例后，对象实例存储在堆区域中，这部分空间也被jvm的垃圾回收机制管理。</li>
-<li><strong>Java Stacks(Java栈）</strong>：Java栈跟大多数编程语言包括汇编语言的栈功能相似，主要基本类型变量以及方法的输入输出参数。Java程序的每个线程中都有一个独立的堆栈。</li>
-</ul>
-<p>　　容易发生内存溢出问题的内存空间包括：Permanent Generation space和Heap space。</p>
-<h4 id="第一种OutOfMemoryError：-PermGen-space"><a href="#第一种OutOfMemoryError：-PermGen-space" class="headerlink" title="第一种OutOfMemoryError： PermGen space"></a>第一种OutOfMemoryError： PermGen space</h4><p>　　发生这种问题的原意是程序中使用了大量的jar或class，使java虚拟机装载类的空间不够，与Permanent Generation space有关。解决这类问题有以下两种办法：<br><strong>1. </strong>增加Java虚拟机中的<strong>XX:PermSize</strong>和<strong>XX:MaxPermSize</strong>参数的大小，其中<strong>XX:PermSize</strong>是初始永久保存区域大小，<strong>XX:MaxPermSize</strong>是最大永久保存区域大小。<br>       如针对tomcat6.0，在catalina.sh 或catalina.bat文件中一系列环境变量名说明结束处（大约在70行左右） 增加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">JAVA_OPTS=&quot; -XX:PermSize=64M -XX:MaxPermSize=128m&quot;</div></pre></td></tr></table></figure></p>
-<p>　　如果是windows服务器还可以在系统环境变量中设置。感觉用tomcat发布sprint+struts+hibernate架构的程序时很容易发生这种内存溢出错误。使用上述方法，我成功解决了部署ssh项目的tomcat服务器经常宕机的问题。</p>
-<p><strong>2. </strong>清理应用程序中web-inf/lib下的jar。<br>　　如果tomcat部署了多个应用，很多应用都使用了相同的jar，可以将共同的jar移到tomcat共同的lib下，减少类的重复加载。这种方法是网上部分人推荐的，我没试过，但感觉减少不了太大的空间，最靠谱的还是第一种方法。</p>
-<h4 id="第二种OutOfMemoryError：-Java-heap-space"><a href="#第二种OutOfMemoryError：-Java-heap-space" class="headerlink" title="第二种OutOfMemoryError：  Java heap space"></a>第二种OutOfMemoryError：  Java heap space</h4><p>　　发生这种问题的原因是java虚拟机创建的对象太多，在进行垃圾回收之间，虚拟机分配的到堆内存空间已经用满了，与Heap space有关。解决这类问题有两种思路：<br><strong>1. </strong>检查程序，看是否有死循环或不必要地重复创建大量对象。找到原因后，修改程序和算法。<br><strong>2.</strong> 增加Java虚拟机中Xms（初始堆大小）和Xmx（最大堆大小）参数的大小。如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">set JAVA_OPTS= -Xms256m -Xmx1024m</div></pre></td></tr></table></figure></p>
-<h4 id="第三种OutOfMemoryError：unable-to-create-new-native-thread"><a href="#第三种OutOfMemoryError：unable-to-create-new-native-thread" class="headerlink" title="第三种OutOfMemoryError：unable to create new native thread"></a>第三种OutOfMemoryError：unable to create new native thread</h4><p>　　这种错误在Java线程个数很多的情况下容易发生，我暂时还没遇到过，发生原意和解决办法可以参考：</p>
-<p><strong>从JVM层面去解决</strong>：减小thread stack的大小，JVM默认thread stack的大小为1024，这样当线程多时导致Native virtual memory被耗尽，实际上当thread stack的大小为128K 或 256K时是足够的，所以我们如果明确指定thread stack为128K 或 256K即可，具体使用-Xss，例如在JVM启动的JVM_OPT中添加如下配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Xss128k</div></pre></td></tr></table></figure></p>
-<p><strong>减小heap或permgen初始分配的大小</strong>：如果JVM启动的JVM_OPT中有如下配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Xms1303m -Xmx1303m -XX:PermSize=256m -XX:MaxPermSize=256m</div></pre></td></tr></table></figure>
-<p>我们可以删除或减小初始化最小值的配置，如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-Xms256m -Xmx1303m -XX:PermSize=64m -XX:MaxPermSize=256m  </div><div class="line">-Xmx1303m -XX:MaxPermSize=256m</div></pre></td></tr></table></figure></p>
-<p><strong>升级JVM到最新的版本</strong>：最新版本的JVM一般在内存优化方面做的更好，升级JVM到最新的版本可能会缓解测问题。</p>
-<p><strong>从操作系统层面去解决</strong>：使用64位操作系统，如果使用32位操作系统遇到unable to create new native thread，建议使用64位操作系统。</p>
-<p><strong>增大OS对线程的限制</strong>：在Linux操作系统设定nofile和nproc，具体编辑/etc/security/limits.conf添加如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">soft    nofile          2048  </div><div class="line">hard    nofile          8192</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">soft    nproc           2048  </div><div class="line">hard    nproc           8192</div></pre></td></tr></table></figure>
-<p>如果使用Red Hat Enterprise Linux 6，编辑/etc/security/limits.d/90-nproc.conf，添加如下配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># cat /etc/security/limits.d/90-nproc.conf  </div><div class="line">*          soft    nproc     1024  </div><div class="line">root       soft    nproc     unlimited  </div><div class="line">  </div><div class="line">user       -       nproc     2048</div></pre></td></tr></table></figure></p>
+          　　在解决java内存溢出问题之前，需要对jvm（java虚拟机）的内存管理有一定的认识。jvm管理的内存大致包括三种不同类型的内存区域：
 
-          
+Permanent Generation space（永久保存区域）：永久保存区域主要存放Class（类）和Meta的信息，Class第一次被Load的时候被放入PermGen space区域，Class需要存储的内容主要包括方法和静态属性
+Heap space(堆区域)：堆区域用来存放Class的实例（即对象），对象需要存储的内容主要是非静态属性。每次用new创建一个对象实例后，对象实例存储在堆区域中，这部分空间也被jvm的垃圾回收机制管理。
+Java
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/5018d17f/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

@@ -434,18 +434,21 @@
       
         
           
-            <p>####初识Redis<br>Redis是一个开源使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、key-value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。</p>
-<p>####数据类型<br>作为Key-Value型数据库，Redis也提供键（key）和键值（Value）的映射关系。但是，除了常规的数值或字符串，Redis的键值还可以是以下形式之一：</p>
-<ul>
-<li>List （列表）</li>
-<li>Set（集合）</li>
-<li>Sorted sets （有序集合）</li>
-<li>Hashes （哈希表）<br>键值的数据类型决定了该键值支持的操作。Redis支持诸如列表、集合或有序集合的交集、并集、查集等高级原子操作；同时，如果键值的类型是普通数字，Redis则提供自增等原子操作。</li>
-</ul>
-<p>####持久化<br>通常，Redis将数据存储在内存中，或被配置为使用虚拟内存。通过两种方式可以实现数据持久化：使用截图的方式，将内存的数据不断写入磁盘；或使用类似MySQL的日志方式，记录每次更新的日志。前者性能较高，但是可能会引起一定程度的数据丢失；后者相反。</p>
-<p>####操作数据库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">#插入数据</div><div class="line">&gt; set name wwl</div><div class="line">OK</div><div class="line"></div><div class="line">#查询数据</div><div class="line">&gt; get name</div><div class="line">&quot;wwl&quot;</div><div class="line"></div><div class="line">#删除键值</div><div class="line">&gt; del name</div><div class="line"></div><div class="line">#验证键值是否存在</div><div class="line">&gt; exists name</div><div class="line">(integer)0</div></pre></td></tr></table></figure></p>
+          ####初识RedisRedis是一个开源使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、key-value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。
+####数据类型作为Key-Value型数据库，Redis也提供键（key）和键值（Value）的映射关系。但是，除了常规的数值或字符串，Redis的键值还可以是以下形式之一：
 
-          
+List （列表）
+Set（集合）
+Sorted sets （有序集合）
+Hashes （哈希表）键值的数据类型决定了该键值支持的操作。Redis支持诸如列表、集合或有序集合的交集、并集、查集等
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/fb55fc23/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -596,27 +599,18 @@
       
         
           
-            <h4 id="启动和停止MongoDB"><a href="#启动和停止MongoDB" class="headerlink" title="启动和停止MongoDB"></a>启动和停止MongoDB</h4><p><strong>从命令行启动：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#启动MongoDB服务器，让其作为守护进程监听5586端口，并将所有输出记录到mongodb.log</div><div class="line">$ ./mongod --port 5586 --fork --logpath mongodb.log</div></pre></td></tr></table></figure></p>
-<p><strong>停止MongoDB：</strong></p>
-<p>如果服务器是作为前台经常运行在终端的，就直接按“Ctrl-C”。否则，就用kill这种命令发出信号。如果mongod的PID是10014,就可以通过命令停止MongoDB：<br><strong> kill -2 10014 (SIGINT) 或者 kill 10014 (SIGINT) </strong></p>
-<p>另一种稳妥的方式就是使用 <em>shutdown</em>命令，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; use admin</div><div class="line">switched to db admin</div><div class="line">&gt; db.shutdownServer();</div><div class="line">server should be down......</div></pre></td></tr></table></figure></p>
-<h4 id="备份与恢复"><a href="#备份与恢复" class="headerlink" title="备份与恢复"></a>备份与恢复</h4><p>mongodump 和 mongorestore命名，对MongoDB进行备份与恢复。和大多数MongoDB的命令工具一样，mongodump也可以通过运行 –help选项查看所有选项 ：$ ./mongodump  –help</p>
-<p>备份与恢复命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//如果你想备份数据库test</div><div class="line">$ ./mongodump -d test -o test/ </div><div class="line"></div><div class="line">//如果你想恢复数据库test</div><div class="line">$ ./mongorestore -d test -c user test/test/user.bson  //利用mongorestore表恢复刚才利用mongodump备份的数据</div></pre></td></tr></table></figure></p>
-<p>虽然用mongodump和mongorestore能不停机备份，但是我们却失去了获取实时数据视图的能力。MongoDB的fsync命令能在MongoDB运行时复制数据目录还不会毁坏数据。</p>
-<p>fsync命令会强制服务器将所有暖冲区写入磁盘。还可以选择上锁阻止对数据库的进一步写入，直到释放锁为止。写入锁是让fsync在备份时发挥作用的关键。下面的例子展示了如何在shell中操作，强制执行了fsync并获得了写入锁：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&gt; user admin</div><div class="line">switched to db admin</div><div class="line">&gt; db.runCommand(&#123;&quot;fsync&quot;:1,&quot;lock&quot;:1&#125;);</div><div class="line">&#123;</div><div class="line">   &quot;info&quot;:&quot;now locked against writes, use db.$cmd.sys.unlock.findOne() to unlock&quot;,</div><div class="line">    &quot;ok&quot;:1</div><div class="line">&#125;</div><div class="line"></div><div class="line">#备份好，就要解锁</div><div class="line">&gt; db.$cmd.sys.unlock.findOne();</div><div class="line">&#123;&quot;ok&quot;:1,&quot;info&quot;:&quot;unlock requested&quot;&#125;</div><div class="line"></div><div class="line">&gt; db.currentOp(); #运行currentOp是为了确保已经解锁了。</div><div class="line">&#123;&quot;inprog&quot;:[]&#125;</div></pre></td></tr></table></figure></p>
-<p>有了fsync命令，就能够非常灵活地备份，不用停掉服务器，也不用牺牲备份的实时性。要付出的代价就是一些写入操作暂时被阻塞。</p>
-<h4 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h4><p>修复所有数据库最简单的方式就是加上 –repair: mongod –repair来启动服务器。修复数据库实际过程实际上非常简单：将所有的文档导出然后马上导入。忽略那些无效的文档。完成以后，会建立索引。</p>
-<blockquote>
-<p>修复数据库还能起到压缩数据的作用。闲置的空间（比如删除体积较大的集合或者删除大量文档后腾出的空间）在修复后被重新回收。</p>
-<hr>
-<p>修复损坏的数据是不得已时的最后一招，尽可能稳妥的停掉服务器，利用复制功能实现故障恢复，经常做备份，这些才是最有效管理数据的手段。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; use test</div><div class="line">switched to db test</div><div class="line">&gt; db.repairDatabase()</div><div class="line">&#123;&quot;ok&quot;:1&#125;</div></pre></td></tr></table></figure>
-<h4 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h4><p><strong>主从复制</strong><br>主从复制是MongoDB最常用的复制方式。可用于备份、故障恢复、读扩展等。最基本的设置方式就是建立一个主节点和一个或者多个从节点，每个从节点要知道主节点的地址。运行<strong>mongod –master</strong>就启动了主服务器。运行<strong>mongod –slave –source master_address</strong>则启动了从服务器，其中<em>master_address</em>就是上面的主节点的地址。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># 设置主节点，并绑定端口10000</div><div class="line">$ mkdir -p ~/dbs/master</div><div class="line">$ ./mongod --dbpath ~/dbs/master --port 10000 --master</div><div class="line"></div><div class="line">#设置从节点，选择不同的目录和端口（示例配置从节点与主节点在同一台服务器上）</div><div class="line">$ mkdir -p ~/dbs/slave</div><div class="line">$ ./mongod --dbpath ~/dbs/slave --port 10001 --slave --source localhost:10000</div></pre></td></tr></table></figure>
-<p><strong>副本集</strong><br>简单地说，副本集就是有自动故障恢复功能的主从集群。主从集群和副本集最为明显的区别是副本集没有固定的“主节点”：整个集群会选举出一个“主节点”，当其不能工作时则变更到其他节点。副本集中会有一个活跃节点和一个或多个备份节点。副本集最美妙的地方就是所有东西都是自动化的。</p>
-
-          
+          启动和停止MongoDB从命令行启动：12#启动MongoDB服务器，让其作为守护进程监听5586端口，并将所有输出记录到mongodb.log$ ./mongod --port 5586 --fork --logpath mongodb.log
+停止MongoDB：
+如果服务器是作为前台经常运行在终端的，就直接按“Ctrl-C”。否则，就用kill这种命令发出信号。如果mongod的PID是10014,就可以通过命令停止MongoDB： kill -2 10014 (SIGINT) 或者 kill 10014 (SIGINT) 
+另一种稳妥的方式就是使用 shutdown命令，例如：1234
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/3ec2b753/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -767,30 +761,19 @@
       
         
           
-            <p><strong>1、$where查询</strong></p>
-<blockquote>
-<p>　　不是非常必要时，一定要避免使用“$where”查询，因为它们在速度上要比常规查询慢很多。每个文档要从<strong>BSON转换成Javascript对象</strong>，然后通过“$where”的表达式来运行。同样<strong>还不能利用索引</strong>。所以，只在走投无路时才考虑“$where”这种用法。<br>　　<strong>将常规查询作为前置过滤</strong>，与“$where”组合使用可以不牺牲性能。如果可能的话，用索引根据非“$where”子句进行过滤，“$where”只用于对结果进行调优。</p>
-</blockquote>
-<p><strong>2、游标</strong><br>　　数据库使用<em>游标</em>来返回find的执行结果，客户端对游标的实现通常能够对最终结果进行有效的控制。可以限制结果的数量，略过部分结果，根据任意方向任意键的组合对结果进行各种排序，或者是执行其他一些功能强大的操作。<br>　　要想从shell中创建一个游标，首先要对集合填充一些文档，然后对其执行查询，并将结果分配给一个局部变量（用var声明的变量就是局部变量）。要迭代结果，可以使用游标的next方法，也可以使用hasNext来查看有没有其他结果。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt; var cursor =  db.collection.find();</div><div class="line">&gt; while (cursor.hasNext())&#123;</div><div class="line">       obj = cursor.next();</div><div class="line">       // do stuff</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>3、索引</strong><br>建立索引的方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">db.people.ensureIndex(&#123;&quot;username&quot;:1&#125;)  #以username为索引 </div><div class="line">db.people.ensureIndex(&#123;&quot;date&quot;:1,&quot;username&quot;:1&#125;) #以date,username为索引</div><div class="line">db.people.ensureIndex(&#123;&quot;comments.date&quot;:1&#125;) #索引内嵌文档中的键和普通的键创建索引没有什么区别</div><div class="line">db.people.ensureIndex(&#123;&quot;username&quot;:1&#125;,&#123;&quot;background&quot;:true&#125;) #建立索引既耗时也费力，还需要消耗很多资源。使用&#123;&quot;background&quot;:true&#125;选项可以使这个过程在后台完成，同时正常处理请求</div></pre></td></tr></table></figure></p>
-<p>建立索引时要考虑如下问题：</p>
-<ul>
-<li>会做什么样的查询？其中哪些键需要索引？</li>
-<li>每个键的索引方向是怎样的？</li>
-<li>如何应对扩展？有没有种不同的键的排列可以使常用数据更多地保留在内存中？<br>要是能回答这些问题，说明你已经做好了索引的准备了。</li>
-</ul>
-<p>创建索引的缺点就是每次插入、更新和删除时都会产生额外的开销。这是因为数据库不但需要执行这些操作，还要将这些操作在集合的索引中标记。因此，要尽可能少创建索引。每个集合默认的最大索引个数为64个。</p>
-<blockquote>
-<p><strong>注意：</strong>一定不要索引每一个键。这会导致插入非常慢，还会占用很多空间，并且很可能对查询速度提升不大。</p>
-</blockquote>
-<p>MongoDB排序需要将所有数据提取到内存来排序，因此，可以做无索引排序是有个上限的，那就是不可能在内存里面做T级别数据的排序。一旦集合大到不能在内存中排序，MongoDB就会报错。</p>
-<p>索引管理：索引的元信息存储在每个数据库的system.indexes集合中。这是一个保留集合，不能对其插入或者删除文档。操作只能通过ensureIndex或者dropIndexes进行。<br>建立索引既耗时也费力，还需要消耗很多资源。使用{“background”:true}选项可以使这个过程在后台完成，同时正常处理请求。</p>
-<p>MongoDB支持动态建立普通集合，还支持固定集合（<em>要实现创建，而且大小固定。如果固定集合空间不足，最早的文档就会被删除，为新的文档腾出空间，这意味着固定集合在新文档插入的时候自动淘汰最早的文档。</em>）</p>
-<p>固定集合和普通集合还有一个区别，就是在默认情况下固定集合没有索引，即便是“_id”上也没有索引。</p>
-<p>固定集合有种特殊的排序方式，叫做“自然排序”。自然排序就是文档在磁盘上的顺序顺时针方向依次的。文档总数安装插入的顺序存储的，自然顺序就是与此相同的。也可以使用自然排序按照反向插入的顺序查询。</p>
-<p>尾部游标只能在固定集合上使用。</p>
+          1、$where查询
 
-          
+　　不是非常必要时，一定要避免使用“$where”查询，因为它们在速度上要比常规查询慢很多。每个文档要从BSON转换成Javascript对象，然后通过“$where”的表达式来运行。同样还不能利用索引。所以，只在走投无路时才考虑“$where”这种用法。　　将常规查询作为前置过滤，与“$where”组合使用可以不牺牲性能。如果可能的话，用索引根据非“$where”子句进行过滤，“$where”只用于对结果进行调优。
+
+2、游标　　数据库使用游标来返回find的执行结果，客户端对游标的实现通常能够对最终结果进行有效的控制。可以限制结果的数量，略过部分结果，根据任意方向任
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/a36562d7/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -941,13 +924,17 @@
       
         
           
-            <p>转自：<a href="http://www.cnblogs.com/stephen-liu74/archive/2012/08/03/2553803.html" target="_blank" rel="external">http://www.cnblogs.com/stephen-liu74/archive/2012/08/03/2553803.html</a></p>
-<p><strong>1、基本查询</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">//构造查询数据</div><div class="line"> &gt; db.test.findOne()   </div><div class="line"> &#123;         </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;),</div><div class="line">     &quot;name&quot; : &quot;stephen&quot;,        </div><div class="line">     &quot;age&quot; : 35,         </div><div class="line">     &quot;genda&quot; : &quot;male&quot;,         </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot;    </div><div class="line">&#125;</div><div class="line"></div><div class="line">// 多条件查询。下面的示例等同于SQL语句的where name = &quot;stephen&quot; and age = 35</div><div class="line">  &gt; db.test.find(&#123;&#125;, &#123;&quot;name&quot;:1,&quot;age&quot;:1&#125;)</div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 指定不返回的文档键值对。下面的示例将返回除name之外的所有键值对。</div><div class="line">&gt; db.test.find(&#123;&#125;, &#123;&quot;name&quot;:0&#125;)    // 0 表示不查询name属性</div><div class="line">&#123;</div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;),</div><div class="line">     &quot;age&quot; : 35, </div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p><strong>2、查询条件</strong><br>MongoDB提供了一组比较操作符：<strong>$lt / $lte / $gt / $gte / $ne</strong>，依次等价于<strong>&lt;,&lt;=, &gt;, &gt;=, != </strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line"> //下面的示例返回符合条件age &gt;= 18 &amp;&amp; age &lt;= 40的文档  </div><div class="line">&gt; db.test.find(&#123;&quot;age&quot;:&#123;&quot;$gte&quot;:18, &quot;$lte&quot;:40&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot;</div><div class="line"> &#125;</div><div class="line"></div><div class="line">//下面的示例返回条件符合name != &quot;stephen1&quot;</div><div class="line">&gt; db.test.find(&#123;&quot;name&quot;:&#123;&quot;$ne&quot;:&quot;stephen1&quot;&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125;</div><div class="line"></div><div class="line">//$in等同于SQL中的in，下面的示例等同于SQL中的in (&quot;stephen&quot;,&quot;stephen1&quot;)</div><div class="line"> &gt; db.test.find(&#123;&quot;name&quot;:&#123;&quot;$in&quot;:[&quot;stephen&quot;,&quot;stephen1&quot;]&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125; </div><div class="line"></div><div class="line">//和SQL不同的是，MongoDB的in list中的数据可以是不同类型。这种情况可用于不同类型的别名场景。    </div><div class="line">&gt; db.test.find(&#123;&quot;name&quot;:&#123;&quot;$in&quot;:[&quot;stephen&quot;,123]&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125; </div><div class="line"></div><div class="line">//$nin等同于SQL中的not in，同时也是$in的取反。如：   </div><div class="line">&gt; db.test.find(&#123;&quot;name&quot;:&#123;&quot;$nin&quot;:[&quot;stephen2&quot;,&quot;stephen1&quot;]&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125;</div><div class="line"></div><div class="line">// $or等同于SQL中的or，$or所针对的条件被放到一个数组中，每个数组元素表示or的一个条件。</div><div class="line">//下面的示例等同于name = &quot;stephen1&quot; or age = 35*    </div><div class="line">&gt; db.test.find(&#123;&quot;$or&quot;: [&#123;&quot;name&quot;:&quot;stephen1&quot;&#125;, &#123;&quot;age&quot;:35&#125;]&#125;)    </div><div class="line">&#123; </div><div class="line">     &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">     &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">     &quot;age&quot; : 35,</div><div class="line">     &quot;genda&quot; : &quot;male&quot;, </div><div class="line">     &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125; </div><div class="line"></div><div class="line">//下面的示例演示了如何混合使用$or和$in。</div><div class="line">&gt; db.test.find(&#123;&quot;$or&quot;: [&#123;&quot;name&quot;:&#123;&quot;$in&quot;:[&quot;stephen&quot;,&quot;stephen1&quot;]&#125;&#125;, &#123;&quot;age&quot;:36&#125;]&#125;)   </div><div class="line">&#123; </div><div class="line">    &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">    &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">    &quot;age&quot; : 35,</div><div class="line">    &quot;genda&quot; : &quot;male&quot;, </div><div class="line">    &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125;</div><div class="line"></div><div class="line">//$not表示取反，等同于SQL中的not。    </div><div class="line">&gt; db.test.find(&#123;&quot;name&quot;: &#123;&quot;$not&quot;: &#123;&quot;$in&quot;:[&quot;stephen2&quot;,&quot;stephen1&quot;]&#125;&#125;&#125;)    </div><div class="line">&#123; </div><div class="line">    &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;), </div><div class="line">    &quot;name&quot; : &quot;stephen&quot;, </div><div class="line">    &quot;age&quot; : 35,</div><div class="line">    &quot;genda&quot; : &quot;male&quot;, </div><div class="line">    &quot;email&quot; : &quot;stephen@hotmail.com&quot; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>3、null数据类型的查询</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">//在进行值为null数据的查询时，所有值为null，以及不包含指定键的文档均会被检索出来。</div><div class="line">&gt; db.test.find(&#123;&quot;x&quot;:null&#125;)</div><div class="line">&#123; </div><div class="line">    &quot;_id&quot; : ObjectId(&quot;4fd59d30b9ac507e96276f1b&quot;), </div><div class="line">     &quot;x&quot; : null</div><div class="line"> &#125;</div><div class="line">&#123; </div><div class="line">    &quot;_id&quot; : ObjectId(&quot;4fd59d49b9ac507e96276f1c&quot;), </div><div class="line">    &quot;y&quot; : 1 </div><div class="line">&#125;</div><div class="line"> </div><div class="line">//需要将null作为数组中的一个元素进行相等性判断，即便这个数组中只有一个元素。</div><div class="line">//再有就是通过$exists判断指定键是否存在。</div><div class="line">&gt; db.test.find(&#123;&quot;x&quot;: &#123;&quot;$in&quot;: [null], &quot;$exists&quot;:true&#125;&#125;)</div><div class="line">&#123; &quot;_id&quot; : ObjectId(&quot;4fd59d30b9ac507e96276f1b&quot;), &quot;x&quot; : null &#125;</div></pre></td></tr></table></figure></p>
-
-          
+          转自：http://www.cnblogs.com/stephen-liu74/archive/2012/08/03/2553803.html
+1、基本查询
+1234567891011121314151617181920212223242526//构造查询数据 &gt; db.test.findOne()    &#123;              &quot;_id&quot; : ObjectId(&quot;4fd58ecbb9ac507e96276f1a&quot;),     &quot;name&quot; : &quot;stephen&quot;,             &
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/a995f898/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1098,11 +1085,15 @@
       
         
           
-            <p><strong>MongoDB基本命令</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">//查询所有数据库列表</div><div class="line">show dbs </div><div class="line"></div><div class="line">//查看当前连接哪个数据库</div><div class="line">db</div><div class="line"></div><div class="line">//切换到需要使用的数据库，例如：use test</div><div class="line">use database Name</div><div class="line"></div><div class="line">//查看当前数据库下有哪些表或者collection</div><div class="line">show collections</div><div class="line"></div><div class="line">//想知道mongodb支持哪些命令，可以直接输入help </div><div class="line">help</div><div class="line"></div><div class="line">//如果想知道当前数据库支持哪些方法</div><div class="line">db.help();</div><div class="line"></div><div class="line">//如果想知道当前数据库下的表或者表collection支持哪些方法，可以使用一下命令如</div><div class="line">db.user.help();  //user为表名 </div><div class="line"></div><div class="line">//如果你想备份数据库test</div><div class="line">$ ./mongodump -d test -o test/ </div><div class="line"></div><div class="line">//如果你想恢复数据库test</div><div class="line">$ ./mongorestore -d test -c user test/test/user.bson  //利用mongorestore表恢复刚才利用mongodump备份的数据</div></pre></td></tr></table></figure></p>
-<p><strong>help命令：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">HELP</div><div class="line">      show dbs                     show database names</div><div class="line">      show collections             show collections in current database</div><div class="line">      show users                   show users in current database</div><div class="line">      show profile                 show most recent system.profile entries with time &gt;= 1ms</div><div class="line">      use &lt;db name&gt;                set curent database to &lt;db name&gt;</div><div class="line">      db.help()                    help on DB methods</div><div class="line">      db.foo.help()                help on collection methods</div><div class="line">      db.foo.find()                list objects in collection foo</div><div class="line">      db.foo.find( &#123; a : 1 &#125; )     list objects in foo where a == 1</div><div class="line">      it                           result of the last line evaluated; use to further iterate</div></pre></td></tr></table></figure></p>
-<p><strong>db.help()命令：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">DB methods:</div><div class="line">      db.addUser(username, password) 添加数据库授权用户</div><div class="line">      db.auth(username, password)                访问认证</div><div class="line">      db.cloneDatabase(fromhost) 克隆数据库</div><div class="line">      db.commandHelp(name) returns the help for the command</div><div class="line">      db.copyDatabase(fromdb, todb, fromhost)  复制数据库</div><div class="line">      db.createCollection(name, &#123; size : ..., capped : ..., max : ... &#125; ) 创建表</div><div class="line">      db.currentOp() displays the current operation in the db</div><div class="line">      db.dropDatabase()        删除当前数据库</div><div class="line">      db.eval_r(func, args) run code server-side</div><div class="line">      db.getCollection(cname) same as db[&apos;cname&apos;] or db.cname</div><div class="line">      db.getCollectionNames()        获取当前数据库的表名</div><div class="line">      db.getLastError() - just returns the err msg string</div><div class="line">      db.getLastErrorObj() - return full status object</div><div class="line">      db.getMongo() get the server connection object</div><div class="line">      db.getMongo().setSlaveOk() allow this connection to read from the nonmaster member of a replica pair</div><div class="line">      db.getName()</div><div class="line">      db.getPrevError()</div><div class="line">      db.getProfilingLevel()</div><div class="line">      db.getReplicationInfo()</div><div class="line">      db.getSisterDB(name) get the db at the same server as this onew</div><div class="line">      db.killOp() kills the current operation in the db</div><div class="line">      db.printCollectionStats()   打印各表的状态信息</div><div class="line">      db.printReplicationInfo()        打印主数据库的复制状态信息</div><div class="line">      db.printSlaveReplicationInfo()        打印从数据库的复制状态信息</div><div class="line">      db.printShardingStatus()                打印分片状态信息</div><div class="line">      db.removeUser(username) 删除数据库用户</div><div class="line">      db.repairDatabase() 修复数据库</div><div class="line">      db.resetError()</div><div class="line">      db.runCommand(cmdObj) run a database command.  if cmdObj is a string, turns it into &#123; cmdObj : 1 &#125;</div><div class="line">      db.setProfilingLevel(level) 0=off 1=slow 2=all</div><div class="line">      db.shutdownServer()</div><div class="line">      db.version() current version of the server</div></pre></td></tr></table></figure></p>
-
-          
+          MongoDB基本命令1234567891011121314151617181920212223242526//查询所有数据库列表show dbs //查看当前连接哪个数据库db//切换到需要使用的数据库，例如：use testuse database Name//查看当前数据库下有哪些表或者collectionshow collections//想知道mongodb支持哪些命令，可以直接输入help help//如果想知道当前数据库支持哪些方法db.help();//如果想知道当前数据库下的表或者表collection支持哪些方法，可以使用一下命令如db.user.help();  //us
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/5b072929/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1253,10 +1244,17 @@
       
         
           
-            <p>转自：<a href="http://jingyan.baidu.com/article/f3e34a12ac10cef5eb653583.html" target="_blank" rel="external">http://jingyan.baidu.com/article/f3e34a12ac10cef5eb653583.html</a></p>
-<p><a href="http://www.cnblogs.com/lzrabbit/p/3682510.html" target="_blank" rel="external">http://www.cnblogs.com/lzrabbit/p/3682510.html</a></p>
+          转自：http://jingyan.baidu.com/article/f3e34a12ac10cef5eb653583.html
+http://www.cnblogs.com/lzrabbit/p/3682510.html
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/f2670fb0/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1407,15 +1405,15 @@
       
         
           
-            <h4 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h4><p>　　RestFul是一种软件架构风格，而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。<br>　　<br>　　REST（英文：Representational State Transfer，简称REST）描述了一个架构样式的网络系统，比如 web 应用程序。在目前主流的三种Web服务交互方案中，REST相比于SOAP（Simple Object Access protocol，简单对象访问协议）以及XML-RPC更加简单明了，无论是对URL的处理还是对Payload的编码，REST都倾向于用更加简单轻量的方法设计和实现。值得注意的是REST并没有一个明确的标准，而更像是一种设计的风格。<br>　　<br>　　要理解RESTful架构，最好的方法就是去理解Representational State Transfer这个词组到底是什么意思，它的每一个词代表了什么涵义。如果你把这个名称搞懂了，也就不难体会REST是一种什么样的设计。</p>
-<p>　　<strong>● 资源（Resources）</strong><br>　　REST的名称”表现层状态转化”中，省略了主语。”表现层”其实指的是”资源”（Resources）的”表现层”。<br>　　所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。它可以是一段文本、一张图片、一首歌曲、一种服务，总之就是一个具体的实在。你可以用一个URI（统一资源定位符）指向它，每种资源对应一个特定的URI。要获取这个资源，访问它的URI就可以，因此URI就成了每一个资源的地址或独一无二的识别符。所谓”上网”，就是与互联网上一系列的”资源”互动，调用它的URI。</p>
-<p>　　<strong>● 表现层（Representation）</strong><br>　　“资源”是一种信息实体，它可以有多种外在表现形式。我们把”资源”具体呈现出来的形式，叫做它的”表现层”（Representation）。比如，文本可以用txt格式表现，也可以用HTML格式、XML格式、JSON格式表现，甚至可以采用二进制格式；图片可以用JPG格式表现，也可以用PNG格式表现。<br>　　URI只代表资源的实体，不代表它的形式。严格地说，有些网址最后的”.html”后缀名是不必要的，因为这个后缀名表示格式，属于”表现层”范畴，而URI应该只代表”资源”的位置。它的具体表现形式，应该在HTTP请求的头信息中用Accept和Content-Type字段指定，这两个字段才是对”表现层”的描述。</p>
-<p>　　<strong>● 状态转化（State Transfer）</strong><br>　　访问一个网站，就代表了客户端和服务器的一个互动过程。在这个过程中，势必涉及到数据和状态的变化。互联网通信协议HTTP协议，是一个无状态协议。这意味着，<strong>所有的状态都保存在服务器端</strong>。因此，如果客户端想要操作服务器，必须通过某种手段，让服务器端发生”状态转化”（State Transfer）。而这种转化是建立在表现层之上的，所以就是”表现层状态转化”。客户端用到的手段，只能是HTTP协议。具体来说，就是HTTP协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。它们分别对应四种基本操作：GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源。</p>
-<blockquote>
-<p><strong>因此RESTful架构可以理解为：</strong><br>1、每一个URI代表一种资源；<br>2、客户端和服务器之间，传递这种资源的某种表现层；<br>3、客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。</p>
-</blockquote>
-
-          
+          一、概述　　RestFul是一种软件架构风格，而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。　　　　REST（英文：Representational State Transfer，简称REST）描述了一个架构样式的网络系统，比如 web 应用程序。在目前主流的三种Web服务交互方案中，REST相比于SOAP（Simple Object Access protocol，简单对象访问协议）以及XML-RPC更加简单明了，无论是对URL的处理还是对Payload的编码，REST都倾向于用更加简单轻
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/3cf861a2/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1566,16 +1564,17 @@
       
         
           
-            <h4 id="第一代：代码辅助手段"><a href="#第一代：代码辅助手段" class="headerlink" title="第一代：代码辅助手段**"></a>第一代：代码辅助手段**</h4><p><strong>应用定制开放依然以原生C++/JAVA代码为主</strong>，元数据主要用于生成原代码的一种辅助手段。</p>
-<p>当前很多系统中，大部分元数据处于这个阶段，前端重点只有Gadget元数据其他元数据未抽象呈现，甚至前端没有元数据的概念；后端服务编排（以POJO实现为主）、服务实现（BO全是代码）、数据对象（VO全是代码）也是以代码为主开发。</p>
-<h4 id="第二代：端到端元数据（Siebel）"><a href="#第二代：端到端元数据（Siebel）" class="headerlink" title="第二代：端到端元数据（Siebel）"></a>第二代：端到端元数据（Siebel）</h4><p><strong>应用定制开发基于元数据对象视图进行</strong>，从前端界面、组件、事件、接口、流程、服务、模型整个端到端都已经抽象成元数据对象，任意定制需求最终都分解成一个Task去完成整个元数据的配置，定制开发工具以离线IDE为主，在线提供受限的能力。</p>
-<p>Siebel <em>版本开发定制处于这个阶段。</em></p>
-<h4 id="第三代：元数据SaaS化（Salesforce）"><a href="#第三代：元数据SaaS化（Salesforce）" class="headerlink" title="第三代：元数据SaaS化（Salesforce）"></a>第三代：元数据SaaS化（Salesforce）</h4><p><strong>应用定制开发在现场在定制闭环</strong>，应用的定制开发能力通过SaaS化的能力对外提供出来，支持多租户的并发定制，定制开发人员通过Chrome等浏览器就可以完成现场定制需求的配置开发，可在线完成界面主体调整、界面Gadget组件、新Gadget开发、在线流程变更、业务规则调整、模型扩展，甚至新流程、新服务、新模型、新界面的中小特性开发。</p>
-<p>同时保证在线配置元数据（包括服务脚本逻辑）的安全性，通过元数据引擎沙箱技术对运行所耗费的CPU时间、内容容量、SQL语句数量等数据来判断元数据是否正常，以避免影响到属于其他租户的应用，对于脚本需要自带能覆盖其75%代码的测试用例否则不允许调用等措施，从而确保平台整体运行的稳定。</p>
-<p>Salesforce 版本开发定制处于这个阶段。</p>
-<h4 id="第四代：元数据人性化"><a href="#第四代：元数据人性化" class="headerlink" title="第四代：元数据人性化"></a>第四代：元数据人性化</h4><p>就像CRM从以OCRM为主向以ACRM为主转变，未来可能像HCRM（HappyCRM）转变，不过可以确定的是未来编程肯定会越来越简单，就像公司另外一个同事在硅谷调研发现硅谷有很多创新公司就做一件事：为编程者提供极易的软件创造平台，这样对大部分软件人员来说，编程并不是最重要的，业务本身创造才是；所以抽象的<strong>元数据可能会逐步往自然语言</strong>的方向进行发展，当然第四代还不是很清晰。</p>
-
-          
+          第一代：代码辅助手段**应用定制开放依然以原生C++/JAVA代码为主，元数据主要用于生成原代码的一种辅助手段。
+当前很多系统中，大部分元数据处于这个阶段，前端重点只有Gadget元数据其他元数据未抽象呈现，甚至前端没有元数据的概念；后端服务编排（以POJO实现为主）、服务实现（BO全是代码）、数据对象（VO全是代码）也是以代码为主开发。
+第二代：端到端元数据（Siebel）应用定制开发基于元数据对象视图进行，从前端界面、组件、事件、接口、流程、服务、模型整个端到端都已经抽象成元数据对象，任意定制需求最终都分解成一个Task去完成整个元数据的配置，定制开发工具以离线IDE为主，在线提供受限的能
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/b3220428/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1726,16 +1725,20 @@
       
         
           
-            <h3 id="先看一个例子："><a href="#先看一个例子：" class="headerlink" title="先看一个例子："></a>先看一个例子：</h3><p><strong>Case1：</strong><br><strong>客户资料</strong>的一条记录，是我们通常理解的“数据”，描述<em>客户资料</em>的数据结构定义的数据就是“元数据”（<em>描述数据的数据</em>）。</p>
-<p><strong>Case2：</strong><br><strong>系统参数</strong>的一条记录，是我们配置出来的“数据”，描述<em>系统参数</em>的数据结构定义的数据也是“元数据”。</p>
-<p><strong>Case1和Case2的差别：</strong><br>Case1的数据的产生或变化不会在运行期直接改变软件的预置业务功能，只会影响后续业务功能的处理结果。</p>
-<p>Case2的数据的产生或变化会在运行期改变软件的行为，直接提供不同的<strong>业务功能</strong>。</p>
-<p>把Case2中的这种通过建模定义元数据的方式，期望提供一种配置化的设计方案从而改变软件提供的业务功能的<strong>设计方法</strong>称为基于<strong>元数据驱动架构</strong>。</p>
-<p>这种直接基于case2大的类别的元数据，针对性的进行配置从而提供软件不同的业务功能的方式称为<strong>元数据驱动开发</strong>。<br>元数据驱动开发的基本思想，就是<strong>基于元数据对象声明式开发</strong>整个应用，围绕元数据对象创建界面、业务流程、领域服务、领域对象及物理存储表结构，围绕元数据对象进行测试（包括测试数据生成、用例管理等），围绕元数据对象进行局点个性化需求定制（包括界面、流程、服务、表结构等），围绕元数据对象进行问题定位，从而达到通过元数据对象驱动整个应用开发过程的进行。</p>
-<p>如果基于元数据还把业务需求的需求分析+调测+安装部署+资料都搞定了，那么就是<strong>元数据驱动交付</strong>。</p>
-<p>注意：CASE1和CASE2是相对一个特定系统边界来说的，反例是：对于系统A来说，CASE2中的这个数据就是CASE1的类别，比如：SM就是要管理这个系统参数实体，对系统参数实体的CRUD是SM的“业务”功能，再比如PM会管理商品/产品数据，这个数据对于PM来说是CASE1类型，对于OM来说就是CASE2类型的，因为不同的商品/产品,相同商品/产品的不同属性对于OM来说是要提供不同的业务功能的。</p>
-
-          
+          先看一个例子：Case1：客户资料的一条记录，是我们通常理解的“数据”，描述客户资料的数据结构定义的数据就是“元数据”（描述数据的数据）。
+Case2：系统参数的一条记录，是我们配置出来的“数据”，描述系统参数的数据结构定义的数据也是“元数据”。
+Case1和Case2的差别：Case1的数据的产生或变化不会在运行期直接改变软件的预置业务功能，只会影响后续业务功能的处理结果。
+Case2的数据的产生或变化会在运行期改变软件的行为，直接提供不同的业务功能。
+把Case2中的这种通过建模定义元数据的方式，期望提供一种配置化的设计方案从而改变软件提供的业务功能的设计方法称为基于元数据驱动架构。
+这种
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/42023a9c/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1886,24 +1889,18 @@
       
         
           
-            <h3 id="项目结构定义：-Sample-Repository"><a href="#项目结构定义：-Sample-Repository" class="headerlink" title="项目结构定义： Sample Repository"></a>项目结构定义： Sample Repository</h3><p>This is what Kenneth Reitz recommends.<br>This repository is <a href="https://github.com/kennethreitz/samplemod" target="_blank" rel="external">available on GitHub.</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">README.rst</div><div class="line">LICENSE</div><div class="line">setup.py</div><div class="line">requirements.txt</div><div class="line">sample/__init__.py</div><div class="line">sample/core.py</div><div class="line">sample/helpers.py</div><div class="line">docs/conf.py</div><div class="line">docs/index.rst</div><div class="line">tests/test_basic.py</div><div class="line">tests/test_advanced.py</div></pre></td></tr></table></figure>
-<hr>
-<h4 id="Very-bad"><a href="#Very-bad" class="headerlink" title="Very bad"></a>Very bad</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[...]</div><div class="line">from modu import *</div><div class="line">[...]</div><div class="line">x = sqrt(4) # Is sqrt part of modu? A builtin? Defined above?</div></pre></td></tr></table></figure>
-<h4 id="Better"><a href="#Better" class="headerlink" title="Better"></a>Better</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">from modu import sqrt</div><div class="line">[...]</div><div class="line">x = sqrt(4) # sqrt may be part of modu, if not redefined in between</div></pre></td></tr></table></figure>
-<h4 id="Best"><a href="#Best" class="headerlink" title="Best"></a>Best</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import modu</div><div class="line">[...]</div><div class="line">x = modu.sqrt(4) # sqrt is visibly part of modu&apos;s namespace</div></pre></td></tr></table></figure>
-<hr>
-<h3 id="Decorators"><a href="#Decorators" class="headerlink" title="Decorators"></a>Decorators</h3><p>The Python language provides a simple yet powerful syntax called ‘decorators’. A decorator is a function or a class that wraps (or decorates) a function or a method. The ‘decorated’ function or method will replace the original ‘undecorated’ function or method. Because functions are first-class objects in Python, this can be done ‘manually’, but using the @decorator syntax is clearer and thus preferred.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">def foo():</div><div class="line">    # do something</div><div class="line"></div><div class="line">def decorator(func):</div><div class="line">    # manipulate func</div><div class="line">    return func</div><div class="line"></div><div class="line">foo = decorator(foo) # Manually decorate</div><div class="line"></div><div class="line">@decorator</div><div class="line">def bar():</div><div class="line">    # Do something</div><div class="line"></div><div class="line"># bar() is decorated</div></pre></td></tr></table></figure>
-<hr>
-<p><strong>Bad</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">items = &apos;a b c d&apos; # This is a string...</div><div class="line">items = items.split(&apos; &apos;) # ...becoming a list</div><div class="line">items = set(items) # ...and then a set</div></pre></td></tr></table></figure></p>
-<p><strong>Good</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">count = 1</div><div class="line">msg = &apos;a string&apos;</div><div class="line">def func():</div><div class="line">    pass # Do something</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>Bad</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># create a concatenated string from 0 to 19 (e.g. &quot;012..1819&quot;)</div><div class="line">nums = &quot;&quot;</div><div class="line">for n in range(20):</div><div class="line">    nums += str(n) # slow and inefficient</div><div class="line">print nums</div></pre></td></tr></table></figure></p>
-<p><strong>Good</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># create a concatenated string from 0 to 19 (e.g. &quot;012..1819&quot;)</div><div class="line">nums = []</div><div class="line">for n in range(20):</div><div class="line">    nums.append(str(n))</div><div class="line">print &quot;&quot;.join(nums) # much more efficient</div></pre></td></tr></table></figure></p>
-<p><strong>Best</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># create a concatenated string from 0 to 19 (e.g. &quot;012..1819&quot;)</div><div class="line">nums = [str(n) for n in range(20)]</div><div class="line">print &quot;&quot;.join(nums)</div></pre></td></tr></table></figure></p>
+          项目结构定义： Sample RepositoryThis is what Kenneth Reitz recommends.This repository is available on GitHub.
+1234567891011README.rstLICENSEsetup.pyrequirements.txtsample/__init__.pysample/core.pysample/helpers.pydocs/conf.pydocs/index.rsttests/test_basic.pytests/test_advanced.py
 
-          
+Very bad1234[...]from mod
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/cf66995/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

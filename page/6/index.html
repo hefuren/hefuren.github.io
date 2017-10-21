@@ -434,24 +434,21 @@
       
         
           
-            <p>在Ubuntu下，apt-get近乎是最常用的shell命令之一了，因为他是Ubuntu通过新立得安装软件的常用工具命令。<br>本文列举了常用的APT命令参数：<br>apt-cache search package 搜索软件包</p>
-<p>apt-cache show package  获取包的相关信息，如说明、大小、版本等</p>
-<p><strong>sudo apt-get install package 安装包</strong></p>
-<p>sudo apt-get install package –reinstall   重新安装包</p>
-<p>sudo apt-get -f install   修复安装</p>
-<p><strong>sudo apt-get remove package 删除包</strong></p>
-<p>sudo apt-get remove package –purge 删除包，包括配置文件等</p>
-<p><strong>sudo apt-get update  更新源</strong></p>
-<p><strong>sudo apt-get upgrade 更新已安装的包</strong></p>
-<p>sudo apt-get dist-upgrade 升级系统</p>
-<p>apt-cache depends package 了解使用该包依赖那些包</p>
-<p>apt-cache rdepends package 查看该包被哪些包依赖</p>
-<p>sudo apt-get build-dep package 安装相关的编译环境</p>
-<p><strong>apt-get source package  下载该包的源代码</strong></p>
-<p>sudo apt-get clean &amp;&amp; sudo apt-get autoclean 清理无用的包</p>
-<p>sudo apt-get check 检查是否有损坏的依赖</p>
-
-          
+          在Ubuntu下，apt-get近乎是最常用的shell命令之一了，因为他是Ubuntu通过新立得安装软件的常用工具命令。本文列举了常用的APT命令参数：apt-cache search package 搜索软件包
+apt-cache show package  获取包的相关信息，如说明、大小、版本等
+sudo apt-get install package 安装包
+sudo apt-get install package –reinstall   重新安装包
+sudo apt-get -f install   修复安装
+sudo apt-get remove package 删除包
+sudo
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/90cf494a/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -602,26 +599,25 @@
       
         
           
-            <p>Linux modprobe命令用于自动处理可载入模块。<br>modprobe可载入指定的个别模块，或是载入一组相依的模块。modprobe会根据depmod所产生的相依关系，决定要载入哪些模块。若在载入过程中发生错误，在modprobe会卸载整组的模块。</p>
-<p><strong>语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">modprobe [-acdlrtvV][--help][模块文件][符号名称 = 符号值]</div></pre></td></tr></table></figure></p>
-<p><strong>参数</strong>：</p>
-<blockquote>
-<ul>
-<li>-a或–all 　载入全部的模块。</li>
-<li>-c或–show-conf 　显示所有模块的设置信息。</li>
-<li>-d或–debug 　使用排错模式。</li>
-<li>-l或–list 　显示可用的模块。</li>
-<li>-r或–remove 　模块闲置不用时，即自动卸载模块。</li>
-<li>-t或–type 　指定模块类型。</li>
-<li>-v或–verbose 　执行时显示详细的信息。</li>
-<li>-V或–version 　显示版本信息。</li>
-<li>-help 　显示帮助。</li>
-</ul>
-</blockquote>
-<p>实例<br>安装软驱模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@w3cschool.cc ~]# modprobe -v floppy</div></pre></td></tr></table></figure></p>
-<p>卸载软驱模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@w3cschool.cc ~]# modprobe -v -r floppy</div></pre></td></tr></table></figure></p>
+          Linux modprobe命令用于自动处理可载入模块。modprobe可载入指定的个别模块，或是载入一组相依的模块。modprobe会根据depmod所产生的相依关系，决定要载入哪些模块。若在载入过程中发生错误，在modprobe会卸载整组的模块。
+语法1modprobe [-acdlrtvV][--help][模块文件][符号名称 = 符号值]
+参数：
 
-          
+
+-a或–all 　载入全部的模块。
+-c或–show-conf 　显示所有模块的设置信息。
+-d或–debug 　使用排错模式。
+-l或–list 　显示可用的模块。
+-r或–remove 　模块闲置不用时，即自动卸载模块。
+-t或–t
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/d6fabb9e/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -772,27 +768,23 @@
       
         
           
-            <p>在编写sql语句时，一般都会用到索引来提升sql性能，但是有些sql语句使用索引是不生效的。</p>
-<ol>
-<li><p><strong>is null  和 is not null</strong>：  在sql语句的条件中用上述表达式来作为条件执行sql时，条件中即便字段是创建索引了亦不会被使用而是用全表扫描。</p>
-</li>
-<li><p><strong>连接符||</strong>： 在sql语句中使用连接符||来作为条件表达式时，如果连接连边有一个字段没有创建索引那么整个表达式将不会使用索引而是全表扫描。</p>
-</li>
-<li><p><strong>使用like通配符%</strong>：  使用like时如果用“%xxx%”这种使用方式也会造成全变扫描，所建的索引字段也会被废弃。</p>
-</li>
-<li><p><strong>orderby</strong>：  使用orderby时一定要注意后面所需排序的字段要是建了索引的，否则会大大降低sql执行效率。</p>
-</li>
-<li><p><strong>not 和 &lt;&gt;</strong>：  在使用不等于时所创建的索引也将不会使用而是用全表扫描</p>
-</li>
-<li><p>对索引列进行运算.需要建立函数索引。</p>
-</li>
-<li><p>当变量采用的是times变量，而表的字段采用的是date变量时.或相反情况。</p>
-</li>
-<li><p><strong>sql的书写规范也会影响sql语句执行效率</strong>：  要确保所写的sql语句格式统一，这样在调用的时候才会避免不必要的资源浪费。</p>
-</li>
-</ol>
+          在编写sql语句时，一般都会用到索引来提升sql性能，但是有些sql语句使用索引是不生效的。
 
-          
+is null  和 is not null：  在sql语句的条件中用上述表达式来作为条件执行sql时，条件中即便字段是创建索引了亦不会被使用而是用全表扫描。
+
+连接符||： 在sql语句中使用连接符||来作为条件表达式时，如果连接连边有一个字段没有创建索引那么整个表达式将不会使用索引而是全表扫描。
+
+使用like通配符%：  使用like时如果用“%xxx%”这种使用方式也会造成全变扫描，所建的索引字段也会被废弃。
+
+orderby：  使用orderby时一定要注意后面所需排序的字段要是建了索
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/6df5e6f5/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -943,23 +935,20 @@
       
         
           
-            <blockquote>
-<p>转自<a href="http://www.blogjava.net/fancydeepin/archive/2012/07/12/lombok.html" target="_blank" rel="external">http://www.blogjava.net/fancydeepin/archive/2012/07/12/lombok.html</a></p>
-</blockquote>
-<h5 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h5><p>　　逛开源社区的时候无意发现的，用了一段时间，觉得还可以，特此推荐一下。<br>　　<strong>    lombok</strong> 提供了简单的注解的形式来帮助我们简化消除一些必须有但显得很臃肿的 java 代码。特别是相对于 POJO，光说不做不是我的风格，先来看看吧。</p>
-<p>lombok 的官方网址：<a href="http://projectlombok.org/" target="_blank" rel="external">http://projectlombok.org/</a> </p>
-<p>lombok 其实到这里我就介绍完了，开个玩笑，其实官网上有 lombok 三分四十九秒的视频讲解，里面讲的也很清楚了，而且还有文档可以参考。在这里我就不扯太多，先来看一下<strong>lombok 的安装</strong>，其实这个官网视频上也有讲到啦</p>
-<h5 id="lombok-安装"><a href="#lombok-安装" class="headerlink" title="lombok 安装"></a>lombok 安装</h5><p>　　使用 lombok 是需要安装的，如果不安装，IDE 则无法解析 lombok 注解。先在官网下载最新版本的 JAR 包，现在是 0.11.2 版本，我用的是 0.11.0    第一次使用的时候我下载的是最新版本的，也就是我现在用的 0.11.0，到现在已经更新了两个版本，更新的好快啊 … …</p>
-<p><strong>1. 双击下载下来的 JAR 包安装 lombok</strong><br>　　我选择这种方式安装的时候提示没有发现任何 IDE，所以我没安装成功，我是手动安装的。如果你想以这种方式安装，请参考官网的视频。</p>
-<p><strong>2.eclipse / myeclipse 手动安装 lombok</strong><br>　　1. 将 lombok.jar 复制到 myeclipse.ini / eclipse.ini 所在的文件夹目录下<br>　　2. 打开 eclipse.ini / myeclipse.ini，在最后面插入以下两行并保存：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-Xbootclasspath/a:lombok.jar        </div><div class="line">-javaagent:lombok.jar</div></pre></td></tr></table></figure></p>
-<p>　　3.重启 eclipse / myeclipse</p>
-<h5 id="lombok-注解："><a href="#lombok-注解：" class="headerlink" title="lombok 注解："></a>lombok 注解：</h5><p>　　lombok 提供的注解不多，可以参考官方视频的讲解和官方文档。<br>　　Lombok 注解在线帮助文档：<a href="http://projectlombok.org/features/index.html" target="_blank" rel="external">http://projectlombok.org/features/index.</a><br>　　下面介绍几个我常用的 lombok 注解：</p>
-<blockquote>
-<p><strong>@Data：</strong>注解在类上；提供类所有属性的 getting 和 setting 方法，此外还提供了equals、canEqual、hashCode、toString 方法<br><strong>@Setter：</strong>注解在属性上；为属性提供 setting 方法<br><strong>@Getter：</strong>注解在属性上；为属性提供 getting 方法<br><strong>@Log4j ：</strong>注解在类上；为类提供一个 属性名为log 的 log4j 日志对象<br><strong>@NoArgsConstructor：</strong>注解在类上；为类提供一个无参的构造方法<br><strong>@AllArgsConstructor：</strong>注解在类上；为类提供一个全参的构造方法</p>
-</blockquote>
-<p>下面是简单示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@Data</div><div class="line">@Log4j</div><div class="line">@NoArgsConstructor</div><div class="line">@AllArgsConstructor</div><div class="line">public class Person	&#123;</div><div class="line">	private String id;</div><div class="line">	private String name;</div><div class="line">	private String identity;	</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
           
+转自http://www.blogjava.net/fancydeepin/archive/2012/07/12/lombok.html
+
+前言：　　逛开源社区的时候无意发现的，用了一段时间，觉得还可以，特此推荐一下。　　    lombok 提供了简单的注解的形式来帮助我们简化消除一些必须有但显得很臃肿的 java 代码。特别是相对于 POJO，光说不做不是我的风格，先来看看吧。
+lombok 的官方网址：http://projectlombok.org/ 
+lombok 其实到这里我就介绍完了，开个玩笑，其实官网上有 lombok 三分四十九秒的视频讲解，里面讲的也很清楚了，而且还有文档
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/b4c12e03/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1110,40 +1099,19 @@
       
         
           
-            <blockquote>
-<p>本文摘自<a href="http://blog.csdn.net/guwei9111986/article/details/51649240" target="_blank" rel="external">http://blog.csdn.net/guwei9111986/article/details/51649240</a></p>
-</blockquote>
-<p>　　伴随着微服务<a href="http://lib.csdn.net/base/16" target="_blank" rel="external">架构</a>被宣传得如火如荼，一些概念也被推到了我们面前（管你接受不接受），其实大多数概念以前就有，但很少被提的这么频繁（现在好像不提及都不好意思交流了）。想起有人总结的一句话，微服务架构的特点就是：“一解释就懂，一问就不知，一讨论就吵架”。</p>
-<p>　　其实对老外的总结能力一直特别崇拜，Kevin Kelly、Martin Fowler、Werner Vogels……，都是著名的“演讲家”。正好这段时间看了些微服务、容器的相关资料，也在我们新一代产品中进行了部分实践，回过头来，再来谈谈对一些概念的理解。</p>
-<p>　　今天先来说说“<strong>服务熔断</strong>”和“<strong>服务降级</strong>”。为什么要说这个呢，因为我很长时间里都把这两个概念同质化了，不知道这两个词大家怎么理解，一个意思or有所不同？现在的我是这么来看的：</p>
-<ol>
-<li>在股票市场，熔断这个词大家都不陌生，是指当股指波幅达到某个点后，交易所为控制风险采取的暂停交易措施。相应的，服务熔断一般是指软件系统中，由于某些原因使得服务出现了过载现象，为防止造成整个系统故障，从而采用的一种保护措施，所以很多地方把熔断亦称为过载保护。</li>
-<li>大家都见过女生旅行吧，大号的旅行箱是必备物，平常走走近处绰绰有余，但一旦出个远门，再大的箱子都白搭了，怎么办呢？常见的情景就是把物品拿出来分分堆，比了又比，最后一些非必需品的就忍痛放下了，等到下次箱子够用了，再带上用一用。而服务降级，就是这么回事，整体资源快不够了，忍痛将某些服务先关掉，待渡过难关，再开启回来。</li>
-</ol>
-<p>　　所以从上述分析来看，两者其实从有些角度看是有一定的类似性的：</p>
-<ol>
-<li><strong>目的很一致</strong>，都是从可用性可靠性着想，为防止系统的整体缓慢甚至崩溃，采用的技术手段；</li>
-<li><strong>最终表现类似</strong>，对于两者来说，最终让用户体验到的是某些功能暂时不可达或不可用；</li>
-<li><strong>粒度一般都是服务级别</strong>，当然，业界也有不少更细粒度的做法，比如做到数据持久层（允许查询，不允许增删改）；</li>
-<li><strong>自治性要求很高</strong>，熔断模式一般都是服务基于策略的自动触发，降级虽说可人工干预，但在微服务架构下，完全靠人显然不可能，开关预置、配置中心都是必要手段；</li>
-</ol>
-<p>　　而两者的区别也是明显的：</p>
-<ol>
-<li><strong>触发原因不太一样</strong>，服务熔断一般是某个服务（下游服务）故障引起，而服务降级一般是从整体负荷考虑；</li>
-<li><strong>管理目标的层次不太一样</strong>，熔断其实是一个框架级的处理，每个微服务都需要（无层级之分），而降级一般需要对业务有层级之分（比如降级一般是从最外围服务开始）</li>
-<li><strong>实现方式不太一样</strong>，这个区别后面会单独来说；</li>
-</ol>
-<p>当然这只是我个人对两者的理解，外面把两者归为完全一致的也不在少数，或者把熔断机制理解为应对降级目标的一种实现也说的过去，可能“一讨论就吵架”也正是这个原因吧！概念算是说完了，避免空谈，我再总结下对常用的实现方法的理解。对于这两个概念，号称支持的框架可不少，Hystrix当属其中的佼佼者。先说说最裸的熔断器的设计思路，下面这张图大家应该不陌生（我只是参考着又画了画），简明扼要的给出了好的熔断器实现的三个状态机：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/3164735-de2047f769e7654d?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<ol>
-<li>Closed：熔断器关闭状态，调用失败次数积累，到了阈值（或一定比例）则启动熔断机制；</li>
-<li>Open：熔断器打开状态，此时对下游的调用都内部直接返回错误，不走网络，但设计了一个时钟选项，默认的时钟达到了一定时间（这个时间一般设置成平均故障处理时间，也就是MTTR），到了这个时间，进入半熔断状态；</li>
-<li>Half-Open：半熔断状态，允许定量的服务请求，如果调用都成功（或一定比例）则认为恢复了，关闭熔断器，否则认为还没好，又回到熔断器打开状态；</li>
-</ol>
-<p>那Hystrix，作为Netflix开源框架中的最受喜爱组件之一，是怎么处理依赖隔离，实现熔断机制的呢，他的处理远比我上面说个实现机制复杂的多，一起来看看核心代码吧，我只保留了代码片段的关键部分：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-
           
+本文摘自http://blog.csdn.net/guwei9111986/article/details/51649240
+
+　　伴随着微服务架构被宣传得如火如荼，一些概念也被推到了我们面前（管你接受不接受），其实大多数概念以前就有，但很少被提的这么频繁（现在好像不提及都不好意思交流了）。想起有人总结的一句话，微服务架构的特点就是：“一解释就懂，一问就不知，一讨论就吵架”。
+　　其实对老外的总结能力一直特别崇拜，Kevin Kelly、Martin Fowler、Werner Vogels……，都是著名的“演讲家”。正好这段时间看了些微服务、容器的相关资料，也在我们新一代产品中进行了部分实
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/246b112b/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1294,15 +1262,17 @@
       
         
           
-            <p>　　静态工厂和构造器有一个共同的局限性：它们都不能很好地扩展到大量的可选参数。如果一个构造器的参数有10,11,12，…或更多时。一长串类型相同的参数会导致一些微妙的错误，如果不小心颠倒了其中两个参数的顺序，编译器也不会出错，但是程序在运行时会出现错误的行为。<br>　　遇到许多构造参数的时候，<strong>还有第二种代替办法，及JavaBean模式</strong>，在这种模式下调用一个无惨构造器来创建对象，调用setter方法来设置每个必要的参数，以及每个相关的可选参数。</p>
-<blockquote>
-<p>Effective Java一书中提到：JavaBean模式自身有着很严重的缺点，因为构造过程分到了几个调用中，<strong>在构造过程中JavaBean可能处于不一致的状态。</strong>类无法仅仅通过检验构造器参数的有效性来保证一致性。视图使用处于不一致的对象，将会导致失败。这种失败与包含错误的代码大相径庭。与此相关的另一点不足在于，<strong>JavaBean模式阻止了把类做成不可变的可能，</strong>这就需要程序员付出额外的努力来确保它的线程是安全的。</p>
-</blockquote>
-<p><em>附注：个人在使用中，还没有发现这个问题，如有了解的大神，还请不吝赐教。</em></p>
-<p>　　最佳替代方法<strong>Builder模式</strong>，既能保证像重叠构造器模式那样的安全性，也能保证像JavaBean模式那么好的可读性。Builder模式，不直接生成想要的对象，而是让客户端在builder对象上调用类似于setter的方法，来深圳每个相关的可选参数。最后，客户端调用无参的builder方法生成不可变的对象。这个builder是它构建的类的静态成员类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">public class NutritionFacts &#123;</div><div class="line">    private final int servingSize;</div><div class="line">    private final int servings;</div><div class="line">    private final int calories;</div><div class="line">    private final int fat;</div><div class="line">    private final int sodium;</div><div class="line">    private final int carbohydrate;</div><div class="line"></div><div class="line">    public static class Builder &#123;</div><div class="line">        // Required parameters</div><div class="line">        private final int servingSize;</div><div class="line">        private final int servings;</div><div class="line"></div><div class="line">        // Optional parameters - initialized to default values</div><div class="line">        private int calories      = 0;</div><div class="line">        private int fat           = 0;</div><div class="line">        private int carbohydrate  = 0;</div><div class="line">        private int sodium        = 0;</div><div class="line"></div><div class="line">        public Builder(int servingSize, int servings) &#123;</div><div class="line">            this.servingSize = servingSize;</div><div class="line">            this.servings    = servings;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public Builder calories(int val)</div><div class="line">            &#123; calories = val;      return this; &#125;</div><div class="line">        public Builder fat(int val)</div><div class="line">            &#123; fat = val;           return this; &#125;</div><div class="line">        public Builder carbohydrate(int val)</div><div class="line">            &#123; carbohydrate = val;  return this; &#125;</div><div class="line">        public Builder sodium(int val)</div><div class="line">            &#123; sodium = val;        return this; &#125;</div><div class="line"></div><div class="line">        public NutritionFacts build() &#123;</div><div class="line">            return new NutritionFacts(this);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private NutritionFacts(Builder builder) &#123;</div><div class="line">        servingSize  = builder.servingSize;</div><div class="line">        servings     = builder.servings;</div><div class="line">        calories     = builder.calories;</div><div class="line">        fat          = builder.fat;</div><div class="line">        sodium       = builder.sodium;</div><div class="line">        carbohydrate = builder.carbohydrate;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        NutritionFacts cocaCola = new NutritionFacts.Builder(240, 8).</div><div class="line">            calories(100).sodium(35).carbohydrate(27).build();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>　　此处Builder类作为一个静态内部类。我们最终要获得的是NutritionFacts对象，从他的构造函数可以看出，是通过builder对象来对他的属性进行初始化的。而builder对象的属性是通过多个setter方法设置的。 </p>
+          　　静态工厂和构造器有一个共同的局限性：它们都不能很好地扩展到大量的可选参数。如果一个构造器的参数有10,11,12，…或更多时。一长串类型相同的参数会导致一些微妙的错误，如果不小心颠倒了其中两个参数的顺序，编译器也不会出错，但是程序在运行时会出现错误的行为。　　遇到许多构造参数的时候，还有第二种代替办法，及JavaBean模式，在这种模式下调用一个无惨构造器来创建对象，调用setter方法来设置每个必要的参数，以及每个相关的可选参数。
 
-          
+Effective Java一书中提到：JavaBean模式自身有着很严重的缺点，因为构造过程分到了几个调用中，在构造过程中JavaBean可能处于不一致的
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/b3a294b7/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1453,21 +1423,15 @@
       
         
           
-            <h3 id="第1条：使用静态工厂方法替代构造函数"><a href="#第1条：使用静态工厂方法替代构造函数" class="headerlink" title="第1条：使用静态工厂方法替代构造函数"></a>第1条：使用静态工厂方法替代构造函数</h3><p>　　对于类而言，为了让客户端获取它自身的一个实例，最常用的方法就是提供一个公有的构造器，还有一种就是方法。类可以提供一个公有的<em>静态工程方法(static factory method)</em>，它只是一个返回类的实例的静态方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">// 通过isMale字段标识性别</div><div class="line">class Person &#123;    </div><div class="line">    private bool isMale;        </div><div class="line">    // 不容易理解参数的含义    </div><div class="line">   public Person(bool _isMale) &#123;        </div><div class="line">        this.isMale = isMale;    </div><div class="line">    &#125;</div><div class="line"> &#125;</div><div class="line">// 采用静态工厂方法替代构造函数</div><div class="line">class Person &#123;    </div><div class="line">    private bool isMale;        </div><div class="line">    // 一目了然    </div><div class="line">    public static Man() &#123;        </div><div class="line">        Persion p = new Persion();        </div><div class="line">        p.isMale = true;        </div><div class="line">        return p;    </div><div class="line">    &#125;    </div><div class="line">    public static Woman() &#123;</div><div class="line">        Persion p = new Persion();</div><div class="line">        p.isMale = false;</div><div class="line">        return p;    </div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>静态工厂方法的优势：</strong></p>
-<ul>
-<li><strong>静态工厂方法与构造器不同的第一大优势在于，它们有名称。</strong> 如果构造器的参数本身没有确切的描述正被返回的对象，那么具有适当名称的静态工厂会更容易使用，更易于阅读。</li>
-<li><strong>静态工厂方法与构造器不同的第二大优势在于，不必在每次调用它们的时候创建一个新的对象。</strong> 这使得不可变类可以使用预先构建好的实例，或者将构建好的实例缓存起来，进行重复利用，从而避免创建不必要的重复对象。<em>（如果程序经常请求创建相同的对象，并且创建对象的代价很高，则这项技术可以极大地提升性能。）</em></li>
-<li><strong>静态工厂方法与构造器不同的第三大优势在于，它们可以返回原返回类型的任何子类型的对象。</strong> 这样我们在选择返回对象的类时就有了更大的灵活性。</li>
-<li><strong>静态工厂方法的第四大优势在于，在创建参数化类型实例的时候，它们使代码变得更加简洁。</strong></li>
-</ul>
-<p><strong>静态工厂方法的缺点：</strong></p>
-<ul>
-<li>缺点1：类如果不含公有的或者受保护的构造器，就不能被子类化。</li>
-<li>缺点2：它们与其他的静态方法实际上没有任何区别。</li>
-</ul>
-
-          
+          第1条：使用静态工厂方法替代构造函数　　对于类而言，为了让客户端获取它自身的一个实例，最常用的方法就是提供一个公有的构造器，还有一种就是方法。类可以提供一个公有的静态工程方法(static factory method)，它只是一个返回类的实例的静态方法。1234567891011121314151617181920212223// 通过isMale字段标识性别class Person &#123;        private bool isMale;            // 不容易理解参数的含义       public Person(bool _isMale) &#123;     
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/1bb33093/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1618,20 +1582,20 @@
       
         
           
-            <blockquote>
-<p>原文摘自：<a href="http://blog.csdn.net/tennysonsky/article/details/44562435" target="_blank" rel="external">http://blog.csdn.net/tennysonsky/article/details/44562435</a></p>
-</blockquote>
-<p>HTTP 是一个属于应用层的面向对象的协议，HTTP 协议一共有五大特点：1、支持客户/服务器模式；2、简单快速；3、灵活；<strong>4、无连接；5、无状态</strong>。</p>
-<p><strong>无连接</strong><br><strong>无连接的含义</strong>是限制每次连接只处理一个请求。服务器处理完客户的请求，并收到客户的应答后，即断开连接。采用这种方式可以节省传输时间。</p>
-<p>早期这么做的原因是 HTTP 协议产生于互联网，因此服务器需要处理同时面向全世界数十万、上百万客户端的网页访问，但每个客户端（即浏览器）与服务器之间交换数据的间歇性较大（即传输具有突发性、瞬时性），并且网页浏览的联想性、发散性导致两次传送的数据关联性很低，大部分通道实际上会很空闲、无端占用资源。因此 HTTP 的设计者有意利用这种特点将协议设计为<strong>请求时建连接、请求完释放连接，以尽快将资源释放出来服务其他客户端</strong>。</p>
-<p>随着时间的推移，网页变得越来越复杂，里面可能嵌入了很多图片，这时候每次访问图片都需要建立一次 TCP 连接就显得很低效。后来，Keep-Alive 被提出用来解决这效率低的问题。</p>
-<p><strong>Keep-Alive 功能使客户端到服务器端的连接持续有效，当出现对服务器的后继请求时，Keep-Alive 功能避免了建立或者重新建立连接</strong>。市场上的大部分 Web 服务器，包括 iPlanet、IIS 和 Apache，都支持 HTTP Keep-Alive。对于提供静态内容的网站来说，这个功能通常很有用。但是，对于负担较重的网站来说，这里存在另外一个问题：虽然为客户保留打开的连接有一定的好处，但它同样影响了性能，因为在处理暂停期间，本来可以释放的资源仍旧被占用。当Web服务器和应用服务器在同一台机器上运行时，Keep-Alive 功能对资源利用的影响尤其突出。 </p>
-<p>这样一来，客户端和服务器之间的 HTTP 连接就会被保持，不会断开（超过 Keep-Alive 规定的时间，意外断电等情况除外），当客户端发送另外一个请求时，就使用这条已经建立的连接。</p>
-<p><strong>无状态</strong><br><strong>无状态</strong>是指协议对于事务处理没有记忆能力，服务器不知道客户端是什么状态。即我们给服务器发送 HTTP 请求之后，服务器根据请求，会给我们发送数据过来，但是，发送完，不会记录任何信息。HTTP 是一个无状态协议，这意味着每个请求都是独立的，Keep-Alive 没能改变这个结果。缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就较快。HTTP 协议这种特性有优点也有缺点，优点在于解放了服务器，每一次请求“点到为止”不会造成不必要连接占用，缺点在于每次请求会传输大量重复的内容信息。客户端与服务器进行动态交互的 Web 应用程序出现之后，HTTP 无状态的特性严重阻碍了这些应用程序的实现，毕竟交互是需要承前启后的，简单的购物车程序也要知道用户到底在之前选择了什么商品。于是，两种用于保持 HTTP 连接状态的技术就应运而生了，一个是 Cookie，而另一个则是 Session。</p>
-<p><strong>Cookie可以保持登录信息到用户下次与服务器的会话，换句话说，下次访问同一网站时，用户会发现不必输入用户名和密码就已经登录了</strong>（当然，不排除用户手工删除Cookie）。而还有一些Cookie在用户退出会话的时候就被删除了，这样可以有效保护个人隐私。Cookies 最典型的应用是判定注册用户是否已经登录网站，用户可能会得到提示，是否在下一次进入此网站时保留用户信息以便简化登录手续，这些都是 Cookies 的功用。另一个重要应用场合是“购物车”之类处理。用户可能会在一段时间内在同一家网站的不同页面中选择不同的商品，这些信息都会写入 Cookies，以便在最后付款时提取信息。</p>
-<p><strong>与 Cookie 相对的一个解决方案是 Session，它是通过服务器来保持状态的。</strong>当客户端访问服务器时，服务器根据需求设置 Session，将会话信息保存在服务器上，同时将标示 Session 的 SessionId 传递给客户端浏览器，浏览器将这个 SessionId 保存在内存中，我们称之为无过期时间的 Cookie。浏览器关闭后，这个 Cookie 就会被清掉，它不会存在于用户的 Cookie 临时文件。以后浏览器每次请求都会额外加上这个参数值，服务器会根据这个 SessionId，就能取得客户端的数据信息。如果客户端浏览器意外关闭，服务器保存的 Session 数据不是立即释放，此时数据还会存在，只要我们知道那个 SessionId，就可以继续通过请求获得此 Session 的信息，因为此时后台的 Session 还存在，当然我们可以设置一个 Session 超时时间，一旦超过规定时间没有客户端请求时，服务器就会清除对应 SessionId 的 Session 信息。</p>
-
           
+原文摘自：http://blog.csdn.net/tennysonsky/article/details/44562435
+
+HTTP 是一个属于应用层的面向对象的协议，HTTP 协议一共有五大特点：1、支持客户/服务器模式；2、简单快速；3、灵活；4、无连接；5、无状态。
+无连接无连接的含义是限制每次连接只处理一个请求。服务器处理完客户的请求，并收到客户的应答后，即断开连接。采用这种方式可以节省传输时间。
+早期这么做的原因是 HTTP 协议产生于互联网，因此服务器需要处理同时面向全世界数十万、上百万客户端的网页访问，但每个客户端（即浏览器）与服务器之间交换数据的间歇性较大（即传输具有突发
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/9f001a67/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1782,15 +1746,16 @@
       
         
           
-            <p>安装CentOS系统时，由于最开始没有选择安装Telnet服务，现在想从Windows上通过Telnet连接Linux。于是便只能重新安装，这里介绍从光盘中进行安装。<br>1、首先进入mnt目录创建一个文件夹，用于挂载光驱；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# cd /mnt</div><div class="line">[root@localhost ~]# mkdir cdrom</div><div class="line">[root@localhost ~]# mount /dev/cdrom /mnt/cdrom (或者 mount -t ext3 /dev/cdrom /mnt/cdrom)</div><div class="line">[root@localhost ~]# cd /mnt/cdrom</div></pre></td></tr></table></figure></p>
-<p>2、安装Telnet需要安装xinetd服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]# find -name xinetd*./Packages/xinetd-2.3.14-29.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/xinetd-2.3.14-29.el6.x86_64.rpm</div></pre></td></tr></table></figure></p>
-<p>3、安装Telnet服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]# find -name telnet*./Packages/telnet-0.17-46.el6.x86_64.rpm./Packages/telnet-server-0.17-46.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/telnet-0.17-46.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/telnet-server-0.17-46.el6.x86_64.rpm</div></pre></td></tr></table></figure></p>
-<p>4、修改Telnet服务配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]#vi /etc/xinetd.d</div></pre></td></tr></table></figure></p>
-<p>将disable = yes 更改 no，或者注释掉5.开放Telnet对外端口23。</p>
-<p>6、重启xinetd服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]#service xinetd restart</div></pre></td></tr></table></figure></p>
-<p>OK，于是在windows中，便可以通过telnet方式连接 Linux系统</p>
-
-          
+          安装CentOS系统时，由于最开始没有选择安装Telnet服务，现在想从Windows上通过Telnet连接Linux。于是便只能重新安装，这里介绍从光盘中进行安装。1、首先进入mnt目录创建一个文件夹，用于挂载光驱；1234[root@localhost ~]# cd /mnt[root@localhost ~]# mkdir cdrom[root@localhost ~]# mount /dev/cdrom /mnt/cdrom (或者 mount -t ext3 /dev/cdrom /mnt/cdrom)[root@localhost ~]# cd /mnt/cdrom
+2、安装Tel
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/7e4cc69e/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1941,10 +1906,15 @@
       
         
           
-            <h6 id="JBOSS默认的各种设置文件中通常定义了以下几个端口"><a href="#JBOSS默认的各种设置文件中通常定义了以下几个端口" class="headerlink" title="JBOSS默认的各种设置文件中通常定义了以下几个端口:"></a>JBOSS默认的各种设置文件中通常定义了以下几个端口:</h6><p><strong>1: The ports found in the default configuration Port Type Service</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">。1099 TCP org.jboss.naming.NamingService</div><div class="line">。1098 TCP org.jboss.naming.NamingService</div><div class="line">。1162 UDP org.jboss.jmx.adaptor.snmp.trapd.TrapdService</div><div class="line">。4444 TCP org.jboss.invocation.jrmp.server.JRMPInvoker</div><div class="line">。4445 TCP org.jboss.invocation.pooled.server.PooledInvoker</div><div class="line">。8009 TCP org.jboss.web.tomcat.tc4.EmbeddedTomcatService</div><div class="line">。8009 TCP org.jboss.web.tomcat.tc4.EmbeddedTomcatService</div><div class="line">。8083 TCP org.jboss.web.WebService</div><div class="line">。8090 TCP org.jboss.web.OILServerILService</div><div class="line">。8092 TCP org.jboss.mq.il.oil2.OIL2ServerILService</div><div class="line">。8093 TCP org.jboss.mq.il.uil2.UILServerILService</div><div class="line">。0a TCP org.jboss.mq.il.rmi.RMIServerILService</div><div class="line">。0b UDP org.jboss.jmx.adaptor.snmp.agent.SnmpAgentService</div><div class="line">a, This service binds to an anonymous TCP port and does not support configuration of the port or bind interface currently(3.2.2).</div><div class="line">b, This service binds to an anonymous UDP port and does not support configuration of the port or bind interface.(3.2.2).</div></pre></td></tr></table></figure></p>
-<p><strong>2: Additional ports found in the all configuration Port Type Service</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">。1100 TCP org.jboss.ha.jndi.HANamingService</div><div class="line">。0a TCP org.jboss.ha.jndi.HANamingService</div><div class="line">。1102 UDP org.jboss.ha.jndi.HANamingService</div><div class="line">。3528 TCP org.jboss.invocation.iiop.IIOPInvoker</div><div class="line">。45566b TCP org.jboss.ha.framework.server.ClusterPartition</div><div class="line">a, Currently anonymous but can be set via the RmiPort attribute</div><div class="line">b, Plus two additional anonymous UDP ports, one can be set using the rcv_port, </div><div class="line"> and the other cannot be seen。</div></pre></td></tr></table></figure></p>
-
-          
+          JBOSS默认的各种设置文件中通常定义了以下几个端口:1: The ports found in the default configuration Port Type Service123456789101112131415。1099 TCP org.jboss.naming.NamingService。1098 TCP org.jboss.naming.NamingService。1162 UDP org.jboss.jmx.adaptor.snmp.trapd.TrapdService。4444 TCP org.jboss.invocation.jrmp.server.JRMPInvok
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/3f166a67/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

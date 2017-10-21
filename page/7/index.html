@@ -434,87 +434,21 @@
       
         
           
-            <p>用户帐户属性对照表,一部分经常用到,免得到处找,列在下面参考参考:<br><strong>“常规”标签</strong></p>
-<blockquote>
-<p>姓 Sn<br>名 Givename<br>英文缩写 Initials<br>显示名称 displayName<br>描述 Description<br>办公室 physicalDeliveryOfficeName<br>电话号码 telephoneNumber<br>电话号码：其它 otherTelephone 多个以英文分号分隔<br>电子邮件 Mail<br>网页 wWWHomePage<br>网页：其它 url 多个以英文分号分隔</p>
-</blockquote>
-<p><strong>“地址”标签</strong></p>
-<blockquote>
-<p>国家/地区 C 如：中国CN，英国GB<br>省/自治区 St<br>市/县 L<br>街道 streetAddress<br>邮政信箱 postOfficeBox<br>邮政编码 postalCode</p>
-</blockquote>
-<p><strong>“帐户”标签</strong></p>
-<blockquote>
-<p>用户登录名 userPrincipalName 形如：<a href="mailto:pccai1983@hotamil.com" target="_blank" rel="external"></a><a href="mailto:pccai1983@hotmail.com" target="_blank" rel="external">pccai1983@hotmail.com</a><br>用户登录名（以前版本） sAMAccountName 形如：S1<br>登录时间 logonHours<br>登录到 userWorkstations 多个以英文逗号分隔<br>用户帐户控制 userAccountControl (启用：512，禁用：514， 密码永不过期：66048)<br>帐户过期 accountExpires</p>
-</blockquote>
-<p><strong>“配置文件”标签</strong></p>
-<blockquote>
-<p>配置文件路径 profilePath<br>登录脚本 scriptPath<br>主文件夹：本地路径 homeDirectory<br>连接 homeDrive<br>到 homeDirectory</p>
-</blockquote>
-<p><strong>“电话”标签</strong></p>
-<blockquote>
-<p>家庭电话 homePhone (若是其它，在前面加other。)<br>寻呼机 Pager 如：otherhomePhone。<br>移动电话 mobile 若多个以英文分号分隔。<br>传真 FacsimileTelephoneNumber<br>IP电话 ipPhone<br>注释 Info</p>
-</blockquote>
-<p><strong>“单位”标签</strong></p>
-<blockquote>
-<p>职务 Title<br>部门 Department<br>公司 Company</p>
-</blockquote>
-<p><strong>“隶属于”标签</strong></p>
-<blockquote>
-<p>隶属于　 memberOf　 用户组的DN不需使用引号， 多个用分号分隔<br>“拨入”标签 远程访问权限（拨入或VPN） msNPAllowDialin<br>允许访问 值：TRUE<br>拒绝访问 值：FALSE<br>回拨选项 msRADIUSServiceType<br>由呼叫方设置或回拨到 值：4<br>总是回拨到 msRADIUSCallbackNumber<br>“环境”、“会话”、“远程控制”、“终端服务配置文件”、“COM+”标签</p>
-</blockquote>
-<p><strong>属性</strong></p>
-<table>
-<thead>
-<tr>
-<th>显示名称</th>
-<th>属性名称</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>First Name</td>
-<td><strong> giveName </strong> </td>
-</tr>
-<tr>
-<td>last Name</td>
-<td><strong> sn </strong></td>
-</tr>
-<tr>
-<td>Initials</td>
-<td><strong> initials </strong></td>
-</tr>
-<tr>
-<td>Description</td>
-<td><strong> description </strong></td>
-</tr>
-<tr>
-<td>Office</td>
-<td><strong> physicalDeliveryOfficeName </strong></td>
-</tr>
-<tr>
-<td>Telephone Number</td>
-<td><strong> telephoneNumber </strong></td>
-</tr>
-<tr>
-<td>Telephone: Other</td>
-<td><strong> otherTelephone</strong></td>
-</tr>
-<tr>
-<td>E-Mail</td>
-<td><strong>mail</strong></td>
-</tr>
-<tr>
-<td>Web Page</td>
-<td><strong> wwwHomePage </strong></td>
-</tr>
-<tr>
-<td>Web Page : Other</td>
-<td><strong> url </strong></td>
-</tr>
-</tbody>
-</table>
+          用户帐户属性对照表,一部分经常用到,免得到处找,列在下面参考参考:“常规”标签
 
-          
+姓 Sn名 Givename英文缩写 Initials显示名称 displayName描述 Description办公室 physicalDeliveryOfficeName电话号码 telephoneNumber电话号码：其它 otherTelephone 多个以英文分号分隔电子邮件 Mail网页 wWWHomePage网页：其它 url 多个以英文分号分隔
+
+“地址”标签
+
+国家/地区 C 如：中国CN，英国GB省/自治区 St市/县 L街道 streetAddress邮政信箱 postOfficeBox邮政
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/d05e3939/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -665,13 +599,17 @@
       
         
           
-            <p>PostgreSQL在2003和Win7系统注册成功后，但是无法启动数据库。解决办法是，修改修改pgsql\data目录下pg_hba.conf文件。</p>
-<blockquote>
-<p>win2003 修改如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># IPv4 local connections:</div><div class="line">host    all         all         127.0.0.1/32          trust</div><div class="line">#host    all         all         ::1/128               trust</div><div class="line"># IPv6 local connections:</div><div class="line">#host    all         all         ::1/128               trust</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p>win7修改如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># IPv4 local connections:</div><div class="line">host    all         all         127.0.0.1/32          trust</div><div class="line">host    all         all         ::1/128               trust</div><div class="line"># IPv6 local connections:</div><div class="line">#host    all         all         ::1/128               trust</div></pre></td></tr></table></figure></p>
+          PostgreSQL在2003和Win7系统注册成功后，但是无法启动数据库。解决办法是，修改修改pgsql\data目录下pg_hba.conf文件。
 
-          
+win2003 修改如下：12345# IPv4 local connections:host    all         all         127.0.0.1/32          trust#host    all         all         ::1/128               trust# IPv6 local connections:#host    all         all         ::1
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/e09fa2d0/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -822,15 +760,15 @@
       
         
           
-            <p>11G中有个新特性，当表无数据时，不分配segment，以节省空间　　<br><strong>解决方法：</strong><br>1、insert一行，再rollback就产生segment了。该方法是在在空表中插入数据，再删除，则产生segment。导出时则可导出空表。<br>2、设置deferred_segment_creation 参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">show parameter deferred_segment_creation</div><div class="line">NAME                               TYPE      VALUE</div><div class="line">----------------------------   ----------- ---------</div><div class="line">deferred_segment_creation        boolean     TRUE</div><div class="line"></div><div class="line">SQL&gt; alter system set deferred_segment_creation=false;</div><div class="line">系统已更改。 </div><div class="line"></div><div class="line">SQL&gt; show parameter deferred_segment_creation</div><div class="line">NAME                                  TYPE        VALUE</div><div class="line">--------------------------------- ------------ ---------</div><div class="line">deferred_segment_creation            boolean      FALSE</div></pre></td></tr></table></figure></p>
-<p>   该参数值默认是TRUE，当改为FALSE时，无论是空表还是非空表，都分配segment。</p>
-<p>需注意的是：该值设置后对以前导入的空表不产生作用，仍不能导出，只能对后面新增的表产生作用。如需导出之前的空表，只能用第一种方法。<br>搞了我好久，最后查到这个方法。<br>先查询一下当前用户下的所有空表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select table_name from user_tables where NUM_ROWS=0;</div></pre></td></tr></table></figure></p>
-<p>用以下这句查找空表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select &apos;alter table &apos;||table_name||&apos; allocate extent;&apos; from user_tables where num_rows=0</div></pre></td></tr></table></figure></p>
-<p>把查询结果导出，执行导出的语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&apos;ALTERTABLE&apos;||TABLE_NAME||&apos;ALLOCATEEXTENT;&apos;</div><div class="line">-----------------------------------------------------------</div><div class="line">alter table AQ$_AQ$_MEM_MC_H allocate extent;</div><div class="line">alter table AQ$_AQ$_MEM_MC_G allocate extent;</div><div class="line">alter table AQ$_AQ$_MEM_MC_I allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_T allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_H allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_G allocate extent;</div><div class="line">alter table AQ$_AQ_PROP_TABLE_I allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_T allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_H allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_G allocate extent;</div><div class="line">alter table AQ$_KUPC$DATAPUMP_QUETAB_I allocate extent;</div><div class="line">&apos;ALTERTABLE&apos;||TABLE_NAME||&apos;ALLOCATEEXTENT;&apos;</div><div class="line">-----------------------------------------------------------</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_T allocate extent;</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_H allocate extent;</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_G allocate extent;</div><div class="line">alter table AQ$_SYS$SERVICE_METRICS_TAB_I allocate extent;</div></pre></td></tr></table></figure></p>
-<p>然后再执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">exp 用户名/密码@数据库名 file=/home/oracle/exp.dmp log=/home/oracle/exp_smsrun.log</div></pre></td></tr></table></figure></p>
-<p><strong>成功！</strong></p>
-
-          
+          11G中有个新特性，当表无数据时，不分配segment，以节省空间　　解决方法：1、insert一行，再rollback就产生segment了。该方法是在在空表中插入数据，再删除，则产生segment。导出时则可导出空表。2、设置deferred_segment_creation 参数123456789101112show parameter deferred_segment_creationNAME                               TYPE      VALUE----------------------------   ----------- ---------
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/ee36d2a5/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -981,13 +919,20 @@
       
         
           
-            <p>#####1、Linux vsftp “上传 553 Could not create file” 问题：</p>
-<blockquote>
-<p>解决这个问题步骤：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1. setsebool -P ftpd_disable_trans 1</div><div class="line">2. service vsftpd restart</div></pre></td></tr></table></figure></p>
-</blockquote>
-<h5 id="2、Java-OOM-java-lang-OutOfMemory-常见错误原因分析："><a href="#2、Java-OOM-java-lang-OutOfMemory-常见错误原因分析：" class="headerlink" title="2、Java OOM (java.lang.OutOfMemory)常见错误原因分析："></a>2、Java OOM (java.lang.OutOfMemory)常见错误原因分析：</h5><p>1.程序死循环，导致内存泄露，造成OOM。<br>2.读取大量信息（读文件内容，查询海量数据信息，构建对象加载大量信息，……等），堆内存空间分配不足造成OOM。</p>
+          #####1、Linux vsftp “上传 553 Could not create file” 问题：
+
+解决这个问题步骤：121. setsebool -P ftpd_disable_trans 12. service vsftpd restart
+
+2、Java OOM (java.lang.OutOfMemory)常见错误原因分析：1.程序死循环，导致内存泄露，造成OOM。2.读取大量信息（读文件内容，查询海量数据信息，构建对象加载大量信息，……等），堆内存空间分配不足造成OOM。
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/3119c141/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1138,15 +1083,16 @@
       
         
           
-            <p>安装CentOS系统时，由于最开始没有选择安装Telnet服务，现在想从Windows上通过Telnet连接Linux。于是便只能重新安装，这里介绍从光盘中进行安装。<br>1、首先进入mnt目录创建一个文件夹，用于挂载光驱；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# cd /mnt</div><div class="line">[root@localhost ~]# mkdir cdrom</div><div class="line">[root@localhost ~]# mount /dev/cdrom /mnt/cdrom (或者 mount -t ext3 /dev/cdrom /mnt/cdrom)</div><div class="line">[root@localhost ~]# cd /mnt/cdrom</div></pre></td></tr></table></figure></p>
-<p>2、安装Telnet需要安装xinetd服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]# find -name xinetd*./Packages/xinetd-2.3.14-29.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/xinetd-2.3.14-29.el6.x86_64.rpm</div></pre></td></tr></table></figure></p>
-<p>3、安装Telnet服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]# find -name telnet*./Packages/telnet-0.17-46.el6.x86_64.rpm./Packages/telnet-server-0.17-46.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/telnet-0.17-46.el6.x86_64.rpm</div><div class="line">[root@localhost cdrom]# rpm -ivh ./Packages/telnet-server-0.17-46.el6.x86_64.rpm</div></pre></td></tr></table></figure></p>
-<p>4、修改Telnet服务配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]#vi /etc/xinetd.d</div></pre></td></tr></table></figure></p>
-<p>将disable = yes 更改 no，或者注释掉5.开放Telnet对外端口23。</p>
-<p>6、重启xinetd服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost cdrom]#service xinetd restart</div></pre></td></tr></table></figure></p>
-<p>OK，于是在windows中，便可以通过telnet方式连接 Linux系统</p>
-
-          
+          安装CentOS系统时，由于最开始没有选择安装Telnet服务，现在想从Windows上通过Telnet连接Linux。于是便只能重新安装，这里介绍从光盘中进行安装。1、首先进入mnt目录创建一个文件夹，用于挂载光驱；1234[root@localhost ~]# cd /mnt[root@localhost ~]# mkdir cdrom[root@localhost ~]# mount /dev/cdrom /mnt/cdrom (或者 mount -t ext3 /dev/cdrom /mnt/cdrom)[root@localhost ~]# cd /mnt/cdrom
+2、安装Tel
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/c96b77c6/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1297,21 +1243,22 @@
       
         
           
-            <p>在项目中引用Lombok lib，如果是通过Maven构建项目的，可以在pom.xml中增加对lib的依赖。</p>
-<pre><code>&lt;!-- 简化JavaBean get/set 方法 --&gt;
+          在项目中引用Lombok lib，如果是通过Maven构建项目的，可以在pom.xml中增加对lib的依赖。
+&lt;!-- 简化JavaBean get/set 方法 --&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
     &lt;artifactId&gt;lombok&lt;/artifactId&gt;
     &lt;version&gt;1.16.10&lt;/version&gt;
     &lt;scope&gt;provided&lt;/scope&gt;
-&lt;/dependency&gt;
-</code></pre><p>如果你使用eclipse/myeclipse进行开发，在项目中引用了对lombok的依赖，然后发现代码编译的时候，还是没有生成get/set方法。这个时候还需要在eclipse/myeclipse中安装lombok，安装步骤如下：<br>1、 将 lombok.jar 复制到 myeclipse.ini / eclipse.ini 所在的文件夹目录下；<br>2.、打开 eclipse.ini / myeclipse.ini，在最后面插入以下两行并保存：</p>
-<pre><code>-Xbootclasspath/a:lombok.jar        
--javaagent:lombok.jar
-</code></pre><p>3、重启 eclipse / myeclipse</p>
-<p>最后在JavaBean中如何使用，请参考Lombok 注解在线帮助文档：<a href="http://projectlombok.org/features/index.html" target="_blank" rel="external">http://projectlombok.org/features/index.</a></p>
-
-          
+&lt;/
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/bc1da2d6/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1462,20 +1409,19 @@
       
         
           
-            <p>在做招商银行项目时，需要我们的系统集成招商银行的邮件服务器。招商银行邮件服务器采用webservice方式进行集成。经过多方面的考虑后，决定采用第三方开源框架Apache CXF进行webservice客户端开发。</p>
-<p>该项目采用Apache CXF最新版本2.5.2版本，在使用该版本cxf开发时依赖的第三方包中与jaee.jar包有冲突；需要把jaee.jar中同名包下的文件进行删除。</p>
-<p>另外采用jboss部署web应用程序时，需要注意以下两点：</p>
-<blockquote>
-<p>1.将jaxb-api-2.2.3.jar,jaxws-api-2.1.jar包拷贝到jboss\lib\endorsed目录下；<br>2.将jaxb-api-2.2.3.jar,jaxws-api-2.1.jar包拷贝到jdk1.5\jre\lib\endorsed目录下。</p>
-</blockquote>
-<p>这里采用通过命令生成客户端代码进行调用：</p>
-<blockquote>
-<p>wsdl2java -d src -frontendjaxws21 -p com.easytrack.customization.cmb.integration.email -client <a href="http://99.1.101.169/coreservice/svc/coreservice.asmx?wsdl" target="_blank" rel="external">http://99.1.101.169/coreservice/svc/coreservice.asmx?wsdl</a></p>
-</blockquote>
-<p>最后根据生成的客户端代码适当的修改即可。</p>
-<p>在开发和部署时注意以上两点，同时注意引用的CXF第三方包与自己本项目包的冲突。</p>
+          在做招商银行项目时，需要我们的系统集成招商银行的邮件服务器。招商银行邮件服务器采用webservice方式进行集成。经过多方面的考虑后，决定采用第三方开源框架Apache CXF进行webservice客户端开发。
+该项目采用Apache CXF最新版本2.5.2版本，在使用该版本cxf开发时依赖的第三方包中与jaee.jar包有冲突；需要把jaee.jar中同名包下的文件进行删除。
+另外采用jboss部署web应用程序时，需要注意以下两点：
 
-          
+1.将jaxb-api-2.2.3.jar,jaxws-api-2.1.jar包拷贝到jboss\lib\endorsed目录下；2.将jaxb-ap
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/a2040dea/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1626,29 +1572,19 @@
       
         
           
-            <h3 id="基础参数"><a href="#基础参数" class="headerlink" title="基础参数"></a>基础参数</h3><blockquote>
-<p>animation  是否动画显示数据，默认为1(True)<br>showNames   是否显示横向坐标轴(x轴)标签名称<br>rotateNames  是否旋转显示标签，默认为0(False):横向显示<br>showValues  是否在图表显示对应的数据值，默认为1(True)<br>yAxisMinValue  指定纵轴(y轴)最小值，数字<br>yAxisMaxValue  指定纵轴(y轴)最小值，数字<br>showLimits 是否显示图表限值(y轴最大、最小值)，默认为1(True)</p>
-</blockquote>
-<h3 id="图表标题和轴名称"><a href="#图表标题和轴名称" class="headerlink" title="图表标题和轴名称"></a>图表标题和轴名称</h3><blockquote>
-<p>caption  图表主标题<br>subCaption  图表副标题<br>xAxisName  横向坐标轴(x轴)名称<br>yAxisName  纵向坐标轴(y轴)名称</p>
-</blockquote>
-<h3 id="图表和画布的样式"><a href="#图表和画布的样式" class="headerlink" title="图表和画布的样式"></a>图表和画布的样式</h3><blockquote>
-<p>bgColor  图表背景色，6位16进制颜色值<br>canvasBgColor  画布背景色，6位16进制颜色值<br>canvasBgAlpha  画布透明度，[0-100]<br>canvasBorderColor  画布边框颜色，6位16进制颜色值<br>canvasBorderThickness  画布边框厚度，[0-100]<br>shadowAlpha  投影透明度，[0-100]<br>showLegend  是否显示系列名，默认为1(True)</p>
-</blockquote>
-<h3 id="字体属性"><a href="#字体属性" class="headerlink" title="字体属性"></a>字体属性</h3><blockquote>
-<p>baseFont  图表字体样式<br>baseFontSize  图表字体大小<br>baseFontColor  图表字体颜色，6位16进制颜色值<br>outCnvBaseFont  图表画布以外的字体样式<br>outCnvBaseFontSize  图表画布以外的字体大小<br>outCnvBaseFontColor  图表画布以外的字体颜色，6位16进制颜色值</p>
-</blockquote>
-<h3 id="分区线和网格"><a href="#分区线和网格" class="headerlink" title="分区线和网格"></a>分区线和网格</h3><blockquote>
-<p>numDivLines  画布内部水平分区线条数，数字<br>divLineColor  水平分区线颜色，6位16进制颜色值<br>divLineThickness 水平分区线厚度，[1-5]<br>divLineAlpha  水平分区线透明度，[0-100]<br>showAlternateHGridColor  是否在横向网格带交替的颜色，默认为0(False)<br>alternateHGridColor  横向网格带交替的颜色，6位16进制颜色值<br>alternateHGridAlpha  横向网格带的透明度，[0-100]<br>showDivLinues  是否显示Div行的值，默认？？<br>numVDivLines  画布内部垂直分区线条数，数字<br>vDivLineColor  垂直分区线颜色，6位16进制颜色值<br>vDivLineThickness  垂直分区线厚度，[1-5]<br>vDivLineAlpha  垂直分区线透明度，[0-100]<br>showAlternateVGridColor  是否在纵向网格带交替的颜色，默认为0(False)<br>alternateVGridColor  纵向网格带交替的颜色，6位16进制颜色值<br>alternateVGridAlpha  纵向网格带的透明度，[0-100]</p>
-</blockquote>
-<h3 id="数字格式"><a href="#数字格式" class="headerlink" title="数字格式"></a>数字格式</h3><blockquote>
-<p>numberPrefix 增加数字前缀<br>numberSuffix 增加数字后缀%为’%’<br>formatNumberScale 是否格式化数字,默认为1(True),自动的给你的数字加上K（千）或M（百万）；若取0,则不加K或M<br>decimalPrecision 指定小数位的位数，[0-10]例如：=’0’取整<br>divLineDecimalPrecision 指定水平分区线的值小数位的位数，[0-10]<br>limitsDecimalPrecision 指定y轴最大、最小值的小数位的位数，[0-10]<br>formatNumber 逗号来分隔数字(千位，百万位),默认为1(True)；若取0,则不加分隔符<br>decimalSeparator 指定小数分隔符,默认为’.’<br>thousandSeparato r指定千分位分隔符,默认为’,’<br>Tool-tip/Hover 标题<br>showhovercap 是否显示悬停说明框，默认为1(True)<br>hoverCapBgColor 悬停说明框背景色，6位16进制颜色值<br>hoverCapBorderColor  悬停说明框边框颜色，6位16进制颜色值<br>hoverCapSepChar  指定悬停说明框内值与值之间分隔符,默认为’,’</p>
-</blockquote>
-<h3 id="折线图的参数"><a href="#折线图的参数" class="headerlink" title="折线图的参数"></a>折线图的参数</h3><blockquote>
-<p>lineThickness 折线的厚度<br>anchorRadius 折线节点半径，数字<br>anchorBgAlpha 折线节点透明度，[0-100]<br>anchorBgColor 折线节点填充颜色，6位16进制颜色值<br>anchorBorderColor 折线节点边框颜色，6位16进制颜色值<br>Set  标签使用的参数<br>value  数据值<br>color  颜色<br>link 链接（本窗口打开[Url]，新窗口打开[n-Url]，调用JS函数[JavaScript:函数]）<br>name  横向坐标轴标签名称</p>
-</blockquote>
+          基础参数
+animation  是否动画显示数据，默认为1(True)showNames   是否显示横向坐标轴(x轴)标签名称rotateNames  是否旋转显示标签，默认为0(False):横向显示showValues  是否在图表显示对应的数据值，默认为1(True)yAxisMinValue  指定纵轴(y轴)最小值，数字yAxisMaxValue  指定纵轴(y轴)最小值，数字showLimits 是否显示图表限值(y轴最大、最小值)，默认为1(True)
 
-          
+图表标题和轴名称
+caption  图表主标题subCaption  图表副标题xAxisName  横向坐标轴(x轴)名称
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/d2f90363/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1799,12 +1735,19 @@
       
         
           
-            <p><strong>1. halt 命令  关闭系统</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ halt -p  关闭系统后关闭电源；</div></pre></td></tr></table></figure></p>
-<p><strong>2. reboot 重新启动系统</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ reboot</div></pre></td></tr></table></figure></p>
-<p><strong>3. shutdown  关闭并重启系统</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ shutdown</div></pre></td></tr></table></figure></p>
-<p><strong>4. service  管理系统服务</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ service smb start</div><div class="line"></div><div class="line">$ service smb stop</div><div class="line"></div><div class="line">$ service smb restart</div></pre></td></tr></table></figure></p>
+          1. halt 命令  关闭系统1$ halt -p  关闭系统后关闭电源；
+2. reboot 重新启动系统1$ reboot
+3. shutdown  关闭并重启系统1$ shutdown
+4. service  管理系统服务12345$ service smb start$ service smb stop$ service smb restart
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/4aa4f0f0/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1955,12 +1898,17 @@
       
         
           
-            <h3 id="第3条：用私有构造器或者枚举类型强化Singleton属性"><a href="#第3条：用私有构造器或者枚举类型强化Singleton属性" class="headerlink" title="第3条：用私有构造器或者枚举类型强化Singleton属性　　"></a>第3条：用私有构造器或者枚举类型强化Singleton属性　　</h3><p>　　Singleton指仅仅被实例化一次的类，通常被用来代表那些本质上唯一的系统组件。如果项目通过Spring构建，可以通过Spring来管理Bean，默认情况下在Bean的为单例模式。</p>
-<h3 id="第4条：通过私有构造器强化不可实例化的能力"><a href="#第4条：通过私有构造器强化不可实例化的能力" class="headerlink" title="第4条：通过私有构造器强化不可实例化的能力"></a>第4条：通过私有构造器强化不可实例化的能力</h3><p>　　有的类只有静态方法和静态域时，就可以定义私有构造器来明确说明该类不可实例化，一般多用于工具类。</p>
-<h3 id="第14条：在公有类中使用访问方法而非公有域"><a href="#第14条：在公有类中使用访问方法而非公有域" class="headerlink" title="第14条：在公有类中使用访问方法而非公有域"></a>第14条：在公有类中使用访问方法而非公有域</h3><p>　　简书面向对象设计的思想，对于可变类来说，应该用包含私有域的公有设值方法（setter）类代替。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class Point &#123;</div><div class="line">    private double x;</div><div class="line">    private double y;</div><div class="line">    </div><div class="line">    public double getX()&#123;</div><div class="line">           return x;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    public double getY()&#123;</div><div class="line">           return y;</div><div class="line">    &#125;</div><div class="line">   </div><div class="line">    public void setX(double x)&#123;</div><div class="line">            this.x = x;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">     public void setY(double y)&#123;</div><div class="line">            this.y = y;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>　　如果类可以在它所在的包外部进行访问，就提供访问方法 ，避免直接访问类的域。如果类是包级私有的，或者是私有的嵌套类，直接暴露它的数据域并没有本质的错误。</p>
-
-          
+          第3条：用私有构造器或者枚举类型强化Singleton属性　　　　Singleton指仅仅被实例化一次的类，通常被用来代表那些本质上唯一的系统组件。如果项目通过Spring构建，可以通过Spring来管理Bean，默认情况下在Bean的为单例模式。
+第4条：通过私有构造器强化不可实例化的能力　　有的类只有静态方法和静态域时，就可以定义私有构造器来明确说明该类不可实例化，一般多用于工具类。
+第14条：在公有类中使用访问方法而非公有域　　简书面向对象设计的思想，对于可变类来说，应该用包含私有域的公有设值方法（setter）类代替。例如：1234567891011121314151617181920
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/49d3cb47/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
