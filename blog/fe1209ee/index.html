@@ -103,7 +103,7 @@
 <meta property="og:description" content="转自： http://www.infoq.com/cn/news/2016/07/API-background-architecture-floo Chris Richardson曾经在他的博客上详细介绍过API网关，包括API网关的背景、解决方案以及案例。对于大多数基于微服务的应用程序而言，API网关都应该是系统的入口，它会负责服务请求路由、组合及协议转换。如Chris所言，在微服务的应用程序中">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://res.infoq.com/news/2016/07/API-background-architecture-floo/zh/resources/1.png">
-<meta property="og:updated_time" content="2017-11-06T14:05:39.238Z">
+<meta property="og:updated_time" content="2017-11-06T14:39:37.650Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈API网关的背景、架构以及落地方案">
 <meta name="twitter:description" content="转自： http://www.infoq.com/cn/news/2016/07/API-background-architecture-floo Chris Richardson曾经在他的博客上详细介绍过API网关，包括API网关的背景、解决方案以及案例。对于大多数基于微服务的应用程序而言，API网关都应该是系统的入口，它会负责服务请求路由、组合及协议转换。如Chris所言，在微服务的应用程序中">
@@ -461,15 +461,27 @@
       
         <p>转自： <a href="http://www.infoq.com/cn/news/2016/07/API-background-architecture-floo" target="_blank" rel="external">http://www.infoq.com/cn/news/2016/07/API-background-architecture-floo</a></p>
 <p>Chris Richardson曾经在<a href="http://microservices.io/patterns/apigateway.html" target="_blank" rel="external">他的博客</a>上详细介绍过API网关，包括API网关的背景、解决方案以及案例。对于大多数基于微服务的应用程序而言，API网关都应该是系统的入口，它会负责服务请求路由、组合及协议转换。如Chris所言，在微服务的应用程序中，客户端和微服务之间的交互，有如下几个挑战：</p>
-<p>1.微服务提供的API粒度通常与客户端的需求不同，微服务一般提供细粒度的API，也就是说客户端需要与多个服务进行交互。</p>
-<p>2.不同的客户端需要不同的数据，不同类型客户端的网络性能不同。</p>
-<p>3.服务的划分可能会随时间而变化，因此需要对客户端隐藏细节。</p>
+<ol>
+<li><p>微服务提供的API粒度通常与客户端的需求不同，微服务一般提供细粒度的API，也就是说客户端需要与多个服务进行交互。</p>
+</li>
+<li><p>不同的客户端需要不同的数据，不同类型客户端的网络性能不同。</p>
+</li>
+<li><p>服务的划分可能会随时间而变化，因此需要对客户端隐藏细节。</p>
+</li>
+</ol>
 <p>那API网关具体是如何解决这些问题的，在API网关的落地上，需要注意哪些地方，就这些问题，InfoQ编辑采访了普元主任架构师王延炯，与他一起探讨了API网关的来龙去脉。</p>
-<p><strong>InfoQ：谈谈你所理解的API网关，以及API网关出现的背景？</strong></p>
+<p><br><br><strong>InfoQ：谈谈你所理解的API网关，以及API网关出现的背景？</strong></p>
 <blockquote>
-<p><strong>王延炯：</strong>API Gateway（API GW / API 网关），顾名思义，是出现在系统边界上的一个面向API的、串行集中式的强管控服务，这里的边界是企业IT系统的边界。<br><br>在微服务概念的流行之前，API GW的实体就已经诞生了，这时的主要应用场景是OpenAPI，也就是开放平台，面向的是企业外部合作伙伴，对于这个应用场景，相信接触的人会比较多。当在微服务概念流行起来之后，API网关似乎成了在上层应用层集成的标配组件。<br><br><img src="https://res.infoq.com/news/2016/07/API-background-architecture-floo/zh/resources/1.png" alt=""> <br><br>其实，在我所经历过的项目中，API GW的定位主要有五类：<br>1.<strong>面向Web App</strong>：<br>这类场景，在物理形态上类似前后端分离，此时的Web App已经不是全功能的Web App，而是根据场景定制、场景化的App。<br><br>2.<strong>面向Mobile App</strong>：<br>这类场景，移动App是后端Service的使用者，此时的API GW还需要承担一部分MDM（此处是指移动设备管理，不是主数据管理）的职能。<br><br>3.<strong>面向Partner OpenAPI</strong><br>这类场景，主要为了满足业务形态对外开放，与企业外部合作伙伴建立生态圈，此时的API GW需要增加配额、流控、令牌等一系列安全管控功能。<br><br>4.<strong>面向Partner ExternalAPI</strong><br>这类场景，业界提的比较少，很多时候系统的建设，都是为了满足企业自身业务的需要，实现对企业自有业务的映射。当互联网形态逐渐影响传统企业时，很多系统都会为了导入流量或者内容，依赖外部合作伙伴的能力，一些典型的例子就是使用「合作方账号登录」、「使用第三方支付平台支付」等等，这些对于企业内部来说，都是一些外部能力。此时的API GW就需要在边界上，为企业内部Service 统一调用外部的API做统一的认证、（多租户形式的）授权、以及访问控制。<br><br>5.<strong>面向IoT SmartDevice</strong><br>这类场景，业界就提的更少了，但在传统企业，尤其是工业企业，传感器、物理设备从工业控制协议向IP转换，导致具备信息处理能力的「智能产品」在被客户激活使用直至报废过程中，信息的传输不能再基于VPN或者企业内部专线，导致物理链路上会存在一部分公网链路。此时的API GW所需要满足的，就是不是前三种单向的由外而内的数据流，也不是第四种由内而外的数据流，「内外兼修」的双向数据流，对于企业的系统来说终端设备很多情况下都不是直连网关，而是进过一个「客户侧」的集中网关在和企业的接入网关进行通信。<br></p>
+<p><strong>王延炯：</strong>API Gateway（API GW / API 网关），顾名思义，是出现在系统边界上的一个面向API的、串行集中式的强管控服务，这里的边界是企业IT系统的边界。<br><br>在微服务概念的流行之前，API GW的实体就已经诞生了，这时的主要应用场景是OpenAPI，也就是开放平台，面向的是企业外部合作伙伴，对于这个应用场景，相信接触的人会比较多。当在微服务概念流行起来之后，API网关似乎成了在上层应用层集成的标配组件。<br><br><img src="https://res.infoq.com/news/2016/07/API-background-architecture-floo/zh/resources/1.png" alt=""> <br><br>其实，在我所经历过的项目中，API GW的定位主要有五类：</p>
+<ol>
+<li><strong>面向Web App</strong>：<br>这类场景，在物理形态上类似前后端分离，此时的Web App已经不是全功能的Web App，而是根据场景定制、场景化的App。<br></li>
+<li><strong>面向Mobile App</strong>：<br>这类场景，移动App是后端Service的使用者，此时的API GW还需要承担一部分MDM（此处是指移动设备管理，不是主数据管理）的职能。<br></li>
+<li><strong>面向Partner OpenAPI</strong><br>这类场景，主要为了满足业务形态对外开放，与企业外部合作伙伴建立生态圈，此时的API GW需要增加配额、流控、令牌等一系列安全管控功能。<br></li>
+<li><strong>面向Partner ExternalAPI</strong><br>这类场景，业界提的比较少，很多时候系统的建设，都是为了满足企业自身业务的需要，实现对企业自有业务的映射。当互联网形态逐渐影响传统企业时，很多系统都会为了导入流量或者内容，依赖外部合作伙伴的能力，一些典型的例子就是使用「合作方账号登录」、「使用第三方支付平台支付」等等，这些对于企业内部来说，都是一些外部能力。此时的API GW就需要在边界上，为企业内部Service 统一调用外部的API做统一的认证、（多租户形式的）授权、以及访问控制。<br></li>
+<li><strong>面向IoT SmartDevice</strong><br>这类场景，业界就提的更少了，但在传统企业，尤其是工业企业，传感器、物理设备从工业控制协议向IP转换，导致具备信息处理能力的「智能产品」在被客户激活使用直至报废过程中，信息的传输不能再基于VPN或者企业内部专线，导致物理链路上会存在一部分公网链路。此时的API GW所需要满足的，就是不是前三种单向的由外而内的数据流，也不是第四种由内而外的数据流，「内外兼修」的双向数据流，对于企业的系统来说终端设备很多情况下都不是直连网关，而是进过一个「客户侧」的集中网关在和企业的接入网关进行通信。<br></li>
+</ol>
 </blockquote>
-<p><strong>InfoQ：在一个微服务架构中，API网关会在架构中的那一层？他主要的作用是什么？</strong></p>
+<p><br><br><strong>InfoQ：在一个微服务架构中，API网关会在架构中的那一层？他主要的作用是什么？</strong></p>
 <blockquote>
 <p><strong>王延炯：</strong>接续前一个话题，我把API GW分为了五类，对于当前的企业而言被关注的是前三类或者前四类API GW。显然，它们都会出现在企业系统的边界上，也就是和企业外部交互的「独木桥」上。<br><br>它们除了保证数据的交换之外，还需要实现对接入客户端的身份认证、防报文重放与防数据篡改、功能调用的业务鉴权、响应数据的脱敏、流量与并发控制，甚至基于API调用的计量或者计费。</p>
 </blockquote>
@@ -690,7 +702,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">83</span>
+                <span class="site-state-item-count">86</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -701,7 +713,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
