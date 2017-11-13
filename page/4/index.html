@@ -164,6 +164,8 @@
    page-home 
  ">
     <div class="headband"></div>
+    <!-- ���� Fork me on GitHub -->
+    <a href="https://github.com/hefuren"><img style="position:absolute;top:0;right:0;border:0" src="http://om8u46rmb.bkt.clouddn.com/forkme_right_darkblue_121621.png?imageslim" alt="Fork me on GitHub" data-canonical-src="http://om8u46rmb.bkt.clouddn.com/forkme_right_darkblue_121621.png?imageslim"></a>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
@@ -364,6 +366,182 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/a36562d7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/a36562d7/" itemprop="url">MongoDB学习笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T12:20:17+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,084
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          1、$where查询
+
+　　不是非常必要时，一定要避免使用“$where”查询，因为它们在速度上要比常规查询慢很多。每个文档要从BSON转换成Javascript对象，然后通过“$where”的表达式来运行。同样还不能利用索引。所以，只在走投无路时才考虑“$where”这种用法。　　将常规查询作为前置过滤，与“$where”组合使用可以不牺牲性能。如果可能的话，用索引根据非“$where”子句进行过滤，“$where”只用于对结果进行调优。
+
+2、游标　　数据库使用游标来返回find的执行结果，客户端对游标的实现通常能够对最终结果进行有效的控制。可以限制结果的数量，略过部分结果，根据任意方向任
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/a36562d7/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    <!-- ����ĩβ��ӡ����Ľ�������� -->
+    <div>
+      
+    </div>
+    
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/a995f898/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -494,6 +672,11 @@
     
     
 
+    <!-- ����ĩβ��ӡ����Ľ�������� -->
+    <div>
+      
+    </div>
+    
     
 
     
@@ -661,6 +844,11 @@
     
     
 
+    <!-- ����ĩβ��ӡ����Ľ�������� -->
+    <div>
+      
+    </div>
+    
     
 
     
@@ -830,6 +1018,11 @@ http://www.cnblogs.com/lzrabbit/p/3682510.html
     
     
 
+    <!-- ����ĩβ��ӡ����Ľ�������� -->
+    <div>
+      
+    </div>
+    
     
 
     
@@ -997,6 +1190,11 @@ http://www.cnblogs.com/lzrabbit/p/3682510.html
     
     
 
+    <!-- ����ĩβ��ӡ����Ľ�������� -->
+    <div>
+      
+    </div>
+    
     
 
     
@@ -1166,6 +1364,11 @@ http://www.cnblogs.com/lzrabbit/p/3682510.html
     
     
 
+    <!-- ����ĩβ��ӡ����Ľ�������� -->
+    <div>
+      
+    </div>
+    
     
 
     
@@ -1338,6 +1541,11 @@ Case2的数据的产生或变化会在运行期改变软件的行为，直接提
     
     
 
+    <!-- ����ĩβ��ӡ����Ľ�������� -->
+    <div>
+      
+    </div>
+    
     
 
     
@@ -1508,6 +1716,11 @@ Very bad1234[...]from mod
     
     
 
+    <!-- ����ĩβ��ӡ����Ľ�������� -->
+    <div>
+      
+    </div>
+    
     
 
     
@@ -1677,6 +1890,11 @@ python apply()函数apply(func [, args [, kwargs ]]) 函数用于当函数参数
     
     
 
+    <!-- ����ĩβ��ӡ����Ľ�������� -->
+    <div>
+      
+    </div>
+    
     
 
     
@@ -1845,182 +2063,11 @@ python apply()函数apply(func [, args [, kwargs ]]) 函数用于当函数参数
     
     
 
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/3781e7a0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/blog/3781e7a0/" itemprop="url">The Twelve-Factor App</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:28:25+08:00">
-                2017-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  708
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          简介如今，软件通常会作为一种服务来交付，它们被称为网络应用程序，或软件即服务（SaaS）。12-Factor 为构建如下的 SaaS 应用提供了方法论：
-
-使用标准化流程自动配置，从而使新的开发者花费最少的学习成本加入这个项目。
-和操作系统之间尽可能的划清界限，在各个系统中提供最大的可移植性。
-适合部署在现代的云计算平台，从而在服务器和系统管理方面节省资源。
-将开发环境和生产环境的差异降至最低，并使用持续交付实施敏捷开发。
-可以在工具、架构和开发流程不发生明显变化的前提下实现扩展。
-
-这套理论适用于任意语言和后端服务（数据库、消息队列、缓存等）开发的应用程序。
-背景本文的贡献者者参与过数以百计
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blog/3781e7a0/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <!-- ����ĩβ��ӡ����Ľ�������� -->
+    <div>
       
     </div>
     
-    
-    
-
     
 
     
@@ -2097,7 +2144,7 @@ python apply()函数apply(func [, args [, kwargs ]]) 函数用于当函数参数
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">87</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2119,7 +2166,7 @@ python apply()函数apply(func [, args [, kwargs ]]) 函数用于当函数参数
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-count">54</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
