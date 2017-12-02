@@ -8,7 +8,7 @@ var changeBackgroundFun = function(){
  	var randNum;
  	//生成[min,max]的随机数 Math.floor(Math.random()*(max-min+1)+min);
  	var min = 1;
- 	var max = 21;
+ 	var max = 31;
  	randNum = parseInt(Math.random()*(max-min+1)+min,10);
  	var bgimgName = "bgImg-"+randNum + ".jpg";
  	
