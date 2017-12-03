@@ -8,7 +8,7 @@ var changeBackgroundFun = function(){
  	var randNum;
  	//生成[min,max]的随机数 Math.floor(Math.random()*(max-min+1)+min);
  	var min = 1;
- 	var max = 31;
+ 	var max = 36;
  	randNum = parseInt(Math.random()*(max-min+1)+min,10);
  	var bgimgName = "bgImg-"+randNum + ".jpg";
  	
@@ -20,13 +20,19 @@ var changeBackgroundFun = function(){
     //获取主机地址，如： http://localhost:4000
     var localhostPath = curWwwPath.substring(0, pos);
 
-    var bgImgFilePath = localhostPath + "/images/background/" + bgimgName;
+    //var bgImgFilePath = localhostPath + "/images/background/" + bgimgName; // 本地背景图片
+
+    //var defaultPath = localhostPath + "/images/background/";// 本地背景图片
+
+    var defaultPath = "http://p0dnihx2r.bkt.clouddn.com/";// 七牛存储背景图片
+
+    var bgImgFilePath = defaultPath + bgimgName; 
+    
 
     //alert(bgImgFilePath);
     
  	document.body.style.backgroundImage="url("+bgImgFilePath+")";//改变背景图片
- 	//document.body.style.backgroundImage="url(images/background/background-1.jpg)";
-
+ 	
 }
 
 
