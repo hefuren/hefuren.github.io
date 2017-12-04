@@ -2068,7 +2068,7 @@ img:hover {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff2a87;
+  background: #eeffb1;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3261,8 +3261,32 @@ img:hover {
     color: #eee;
   }
 }
+.site-brand-wrapper {
+  background: rgba(31,166,122,0.7);
+}
+.site-meta {
+  background: rgba(31,166,122,0.7);
+}
+.site-title {
+  font-weight: 400;
+  font-size: 24px;
+  max-width: 640px;
+  display: inline-block;
+  padding: 12px 20px;
+  margin-bottom: 0;
+  color: #fff;
+}
 .header-inner {
+  background: rgba(255,255,255,0);
+}
+.divide {
   background: rgba(255,255,255,0.9);
+  line-height: 20px;
+}
+.menu {
+  background: rgba(255,255,255,0.9);
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 .sidebar {
   background: rgba(255,255,255,0);
