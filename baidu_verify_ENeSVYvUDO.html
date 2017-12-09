@@ -85,7 +85,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="大数据,Hive," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -101,18 +101,17 @@
 
 
 
-<meta name="description" content="【文件存储格式】在建表语句中通过” STORED AS FILE_FORMAT” 指定。  TEXTFILE：默认格式，数据不做压缩，磁盘开销大，数据解析开销大，结合Gzip/Bizp2使用，采用此种方式不支持对数据进行切分，从而无法实现数据的并行操作。 SEQUENCEFILE：Hadoop API提供的一种二进制文件，使用方便，支持数据切分与压缩。有三种压缩方式，NONE，RECORD（压缩率">
-<meta name="keywords" content="大数据,Hive">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Hive 学习笔记">
-<meta property="og:url" content="http://www.elwinhe.xyz/blog/7ed447e8/index.html">
+<meta name="description" content="ENeSVYvUDO">
+<meta property="og:type" content="website">
+<meta property="og:title" content="艾尔温Blog">
+<meta property="og:url" content="http://www.elwinhe.xyz/baidu_verify_ENeSVYvUDO.html">
 <meta property="og:site_name" content="艾尔温Blog">
-<meta property="og:description" content="【文件存储格式】在建表语句中通过” STORED AS FILE_FORMAT” 指定。  TEXTFILE：默认格式，数据不做压缩，磁盘开销大，数据解析开销大，结合Gzip/Bizp2使用，采用此种方式不支持对数据进行切分，从而无法实现数据的并行操作。 SEQUENCEFILE：Hadoop API提供的一种二进制文件，使用方便，支持数据切分与压缩。有三种压缩方式，NONE，RECORD（压缩率">
+<meta property="og:description" content="ENeSVYvUDO">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-15T15:06:30.117Z">
+<meta property="og:updated_time" content="2017-12-09T06:20:16.972Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hive 学习笔记">
-<meta name="twitter:description" content="【文件存储格式】在建表语句中通过” STORED AS FILE_FORMAT” 指定。  TEXTFILE：默认格式，数据不做压缩，磁盘开销大，数据解析开销大，结合Gzip/Bizp2使用，采用此种方式不支持对数据进行切分，从而无法实现数据的并行操作。 SEQUENCEFILE：Hadoop API提供的一种二进制文件，使用方便，支持数据切分与压缩。有三种压缩方式，NONE，RECORD（压缩率">
+<meta name="twitter:title" content="艾尔温Blog">
+<meta name="twitter:description" content="ENeSVYvUDO">
 
 
 
@@ -141,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="http://www.elwinhe.xyz/blog/7ed447e8/"/>
+  <link rel="canonical" href="http://www.elwinhe.xyz/baidu_verify_ENeSVYvUDO.html"/>
 
 
 
 
 
-  <title>Hive 学习笔记 | 艾尔温Blog</title>
+  <title> | 艾尔温Blog</title>
   
 
 
@@ -365,338 +364,33 @@
 
   <div id="posts" class="posts-expand">
     
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.elwinhe.xyz/blog/7ed447e8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ElwinHe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="艾尔温Blog">
-    </span>
-
     
+    
+    <div class="post-block page">
       <header class="post-header">
 
-        
-        
-          <h1 class="post-title" itemprop="name headline">Hive 学习笔记</h1>
-        
+	<h1 class="post-title" itemprop="name headline"></h1>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:24:25+08:00">
-                2017-10-08
-              </time>
-            
 
-            
 
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-open-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/程序随记/" itemprop="url" rel="index">
-                    <span itemprop="name">程序随记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            <!--noindex-->
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/blog/7ed447e8/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="blog/7ed447e8/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-              <!--/noindex-->
-            
-          
-
-          
-          
-
-          
-	    <span class="post-meta-divider">|</span>
-            <span class="page-pv"><i class="fa fa-thermometer-half">&nbsp;&nbsp;</i>热度
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>°C &nbsp;| &nbsp;
-            </span>
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计</span>
-                
-                <span title="字数统计">
-                  276
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+</header>
 
       
       
-
       
-        <p><strong>【文件存储格式】</strong><br>在建表语句中通过” STORED AS FILE_FORMAT” 指定。</p>
-<ul>
-<li><strong>TEXTFILE：</strong>默认格式，数据不做压缩，磁盘开销大，数据解析开销大，结合Gzip/Bizp2使用，采用此种方式不支持对数据进行切分，从而无法实现数据的并行操作。</li>
-<li><strong>SEQUENCEFILE：</strong>Hadoop API提供的一种二进制文件，使用方便，支持数据切分与压缩。有三种压缩方式，NONE，RECORD（压缩率低）、BLOCK（推荐使用）。</li>
-<li><strong>RCFILE：</strong>一种行列存储相结合的方式。首先将数据按行分块，保证同一行记录在同一个块上；其次将块数据进行行列式存储，这样有利于数据压缩和快速的列存储。采用这种格式在数据加载时耗费的性能较大，但是具备较好的数据压缩比和查询响应，在一次写入多次读取的场景下推荐采用。</li>
-<li><strong>自定义格式：</strong>当用户的数据文件格式不能被Hive识别时，通过实行InputFormat和OutputFormat来自定义输入输出格式。</li>
-</ul>
-
+      <div class="post-body">
+        
+        
+          ENeSVYvUDO
+        
+      </div>
+      
+      
       
     </div>
     
     
     
-
-    
-    <!-- 文章末尾添加“本文结束”标记 -->
-    <div>
-      
-        <div>
-    
-	<br>
-        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-paw"></i>  感谢您的阅读-------------</div>
-	<br>
-    
-</div>
-      
-    </div>
-
-    <!-- 文章结束 footer  -->
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/大数据/" rel="tag"><i class="fa fa-tags"></i> 大数据</a>
-          
-            <a href="/tags/Hive/" rel="tag"><i class="fa fa-tags"></i> Hive</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/blog/459536d7/" rel="next" title="(译)Python关键字yield的解释--下篇(stackoverflow)">
-                <i class="fa fa-chevron-left"></i> (译)Python关键字yield的解释--下篇(stackoverflow)
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/c377d8e0/" rel="prev" title="python学习笔记2">
-                python学习笔记2 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-
-   <!-- 增加版权说明 -->
-   <div>
-      
-        
-<div class="my_post_copyright">
-  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
-
-  <!-- JS库 sweetalert 可修改路径 -->
-  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-  <script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css">
-  <p><span>本文标题:</span><a href="/blog/7ed447e8/">Hive 学习笔记</a></p>
-  <p><span>文章作者:</span><a href="/" title="访问 ElwinHe 的个人博客">ElwinHe</a></p>
-  <p><span>发布时间:</span>2017年10月08日 - 11:10</p>
-  <p><span>最后更新:</span>2017年11月15日 - 23:11</p>
-  <p><span>原始链接:</span><a href="/blog/7ed447e8/" title="Hive 学习笔记">http://www.elwinhe.xyz/blog/7ed447e8/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://www.elwinhe.xyz/blog/7ed447e8/"  aria-label="复制成功！"></i></span>
-  </p>
-  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
-</div>
-<script> 
-    var clipboard = new Clipboard('.fa-clipboard');
-    clipboard.on('success', $(function(){
-      $(".fa-clipboard").click(function(){
-        swal({   
-          title: "",   
-          text: '复制成功',   
-          html: false,
-          timer: 500,   
-          showConfirmButton: false
-        });
-      });
-    }));  
-</script>
-
-      
-   </div>
-
-    
-    <!-- 增加打赏功能 -->
-    
-
-    
-      <div>
-        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-  <div>如果觉得我的文章对您有用，请随意赞赏。您的支持将鼓励我继续创作！</div>
-  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-    <span style="line-height:35px;font-size:14px;"><strong>赞赏支持</strong></span>
-  </button>
-  <div id="QR" style="display: none;">
-
-    
-      <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.png" alt="ElwinHe WeChat Pay"/>
-        <p>微信打赏</p>
-      </div>
-    
-
-    
-      <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.png" alt="ElwinHe Alipay"/>
-        <p>支付宝打赏</p>
-      </div>
-    
-
-    
-
-  </div>
-</div>
-
-      </div>
-    
-
-    
-
-   
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-        <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-  <!--
-  <a class="jiathis_button_tqq"></a>
-  <a class="jiathis_button_renren"></a>
-  <a class="jiathis_button_qzone"></a>
-  <a class="jiathis_button_kaixin001"></a>
-  -->
-  <a class="jiathis_button_tsina"></a>  
-  <a class="jiathis_button_weixin"></a>
-  <a class="jiathis_button_cqq"></a>
-  <a class="jiathis_button_douban"></a>
- 
-  <a class="jiathis_button_copy"></a>
-  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
-  <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" >
-  var jiathis_config={
-    hideMore:false
-  }
-</script>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-
-      
-    </div>
   </div>
 
 
@@ -1059,10 +753,10 @@ show_date_time();
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-
+  
 
   
 
@@ -1087,7 +781,7 @@ show_date_time();
 		_hcwp.push({widget:"Bloggerstream", widget_id: 97910, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 97910, xid: "blog/7ed447e8/"});
+		_hcwp.push({widget:"Stream", widget_id: 97910, xid: "baidu_verify_ENeSVYvUDO.html"});
 		
 
 		(function() {
