@@ -202,8 +202,13 @@ NexT.utils = NexT.$u = {
    */
   addActiveClassToMenuItem: function () {
     var path = window.location.pathname;
+    
+    //path 解码解决菜单对应中文URL匹配问题
+    var path = decodeURI(path);
+    //alert("menuPath : " + menuPath);
+    //path = path === '/' ? path : path.substring(0, path.length - 1);
     path = path === '/' ? path : path.substring(0, path.length - 1);
-    $('.menu-item a[href^="' + path + '"]:first').parent().addClass('menu-item-active');
+    $('.menu-item a[href^="' + path + '"]:first').parent().addClass('menu-item-active');    
   },
 
   hasMobileUA: function () {
