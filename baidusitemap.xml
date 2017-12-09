@@ -1134,6 +1134,46 @@
     
     
   <url>
+    <loc>http://www.elwinhe.xyz/blog/a97c6466/</loc>
+    <lastmod>2017-10-21T15:09:29.615Z</lastmod>
+    <data>
+        <display>
+        <title>项目知识管理</title>
+        <pubTime>2017-10-08T06:32:35.000Z</pubTime>
+        
+        <tag>项目知识管理 </tag>
+         
+         
+           
+             
+              <breadCrumb title="项目管理" url="http://www.elwinhe.xyz/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.elwinhe.xyz/blog/dec0d98a/</loc>
+    <lastmod>2017-10-21T15:09:29.615Z</lastmod>
+    <data>
+        <display>
+        <title>虚拟机中 suse linux 11配置静态IP</title>
+        <pubTime>2017-10-07T15:22:52.000Z</pubTime>
+        
+        <tag>虚拟机 </tag>
+         
+         
+           
+             
+              <breadCrumb title="程序随记" url="http://www.elwinhe.xyz/categories/%E7%A8%8B%E5%BA%8F%E9%9A%8F%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.elwinhe.xyz/blog/9277b68f/</loc>
     <lastmod>2017-10-21T15:09:29.615Z</lastmod>
     <data>
@@ -1194,26 +1234,6 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/a97c6466/</loc>
-    <lastmod>2017-10-21T15:09:29.615Z</lastmod>
-    <data>
-        <display>
-        <title>项目知识管理</title>
-        <pubTime>2017-10-08T06:32:35.000Z</pubTime>
-        
-        <tag>项目知识管理 </tag>
-         
-         
-           
-             
-              <breadCrumb title="项目管理" url="http://www.elwinhe.xyz/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.elwinhe.xyz/blog/b4c12e03/</loc>
     <lastmod>2017-10-21T15:09:29.615Z</lastmod>
     <data>
@@ -1236,14 +1256,40 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/dec0d98a/</loc>
-    <lastmod>2017-10-21T15:09:29.615Z</lastmod>
+    <loc>http://www.elwinhe.xyz/blog/4b4bc643/</loc>
+    <lastmod>2017-10-21T15:09:29.605Z</lastmod>
     <data>
         <display>
-        <title>虚拟机中 suse linux 11配置静态IP</title>
-        <pubTime>2017-10-07T15:22:52.000Z</pubTime>
+        <title>敏捷工作件：完成标准（Definition of Done）</title>
+        <pubTime>2017-10-08T06:48:33.000Z</pubTime>
         
-        <tag>虚拟机 </tag>
+        <tag>敏捷 </tag>
+         
+        <tag>Scrum </tag>
+         
+        <tag>敏捷项目管理 </tag>
+         
+         
+           
+             
+              <breadCrumb title="项目管理" url="http://www.elwinhe.xyz/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.elwinhe.xyz/blog/b3220428/</loc>
+    <lastmod>2017-10-21T15:09:29.605Z</lastmod>
+    <data>
+        <display>
+        <title>元数据驱动成熟度模型</title>
+        <pubTime>2017-10-08T04:14:59.000Z</pubTime>
+        
+        <tag>架构设计 </tag>
+         
+        <tag>元数据 </tag>
          
          
            
@@ -1276,14 +1322,16 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/379f8526/</loc>
+    <loc>http://www.elwinhe.xyz/blog/6df5e6f5/</loc>
     <lastmod>2017-10-21T15:09:29.605Z</lastmod>
     <data>
         <display>
-        <title>浅谈 Python 的 with语句</title>
-        <pubTime>2017-10-08T03:31:30.000Z</pubTime>
+        <title>索引失效</title>
+        <pubTime>2017-10-07T15:09:00.000Z</pubTime>
         
-        <tag>Python </tag>
+        <tag>数据库 </tag>
+         
+        <tag>索引 </tag>
          
          
            
@@ -1296,16 +1344,14 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/6df5e6f5/</loc>
+    <loc>http://www.elwinhe.xyz/blog/379f8526/</loc>
     <lastmod>2017-10-21T15:09:29.605Z</lastmod>
     <data>
         <display>
-        <title>索引失效</title>
-        <pubTime>2017-10-07T15:09:00.000Z</pubTime>
+        <title>浅谈 Python 的 with语句</title>
+        <pubTime>2017-10-08T03:31:30.000Z</pubTime>
         
-        <tag>数据库 </tag>
-         
-        <tag>索引 </tag>
+        <tag>Python </tag>
          
          
            
@@ -1404,28 +1450,6 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/b3220428/</loc>
-    <lastmod>2017-10-21T15:09:29.605Z</lastmod>
-    <data>
-        <display>
-        <title>元数据驱动成熟度模型</title>
-        <pubTime>2017-10-08T04:14:59.000Z</pubTime>
-        
-        <tag>架构设计 </tag>
-         
-        <tag>元数据 </tag>
-         
-         
-           
-             
-              <breadCrumb title="程序随记" url="http://www.elwinhe.xyz/categories/%E7%A8%8B%E5%BA%8F%E9%9A%8F%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.elwinhe.xyz/blog/7df9d698/</loc>
     <lastmod>2017-10-21T15:09:29.605Z</lastmod>
     <data>
@@ -1436,30 +1460,6 @@
         <tag>项目管理 </tag>
          
         <tag>项目挣值 </tag>
-         
-         
-           
-             
-              <breadCrumb title="项目管理" url="http://www.elwinhe.xyz/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.elwinhe.xyz/blog/4b4bc643/</loc>
-    <lastmod>2017-10-21T15:09:29.605Z</lastmod>
-    <data>
-        <display>
-        <title>敏捷工作件：完成标准（Definition of Done）</title>
-        <pubTime>2017-10-08T06:48:33.000Z</pubTime>
-        
-        <tag>敏捷 </tag>
-         
-        <tag>Scrum </tag>
-         
-        <tag>敏捷项目管理 </tag>
          
          
            
@@ -1594,28 +1594,6 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/3cf861a2/</loc>
-    <lastmod>2017-10-21T15:09:29.585Z</lastmod>
-    <data>
-        <display>
-        <title>RestFul概述</title>
-        <pubTime>2017-10-08T04:16:00.000Z</pubTime>
-        
-        <tag>架构设计 </tag>
-         
-        <tag>RestFul </tag>
-         
-         
-           
-             
-              <breadCrumb title="程序随记" url="http://www.elwinhe.xyz/categories/%E7%A8%8B%E5%BA%8F%E9%9A%8F%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.elwinhe.xyz/blog/fb55fc23/</loc>
     <lastmod>2017-10-21T15:09:29.585Z</lastmod>
     <data>
@@ -1716,14 +1694,14 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/65514bcf/</loc>
+    <loc>http://www.elwinhe.xyz/blog/90cf494a/</loc>
     <lastmod>2017-10-21T15:09:29.585Z</lastmod>
     <data>
         <display>
-        <title>Redis学习笔记--list类型及操作</title>
-        <pubTime>2017-10-08T04:25:52.000Z</pubTime>
+        <title>Ubuntu下apt-get命令详解</title>
+        <pubTime>2017-10-07T15:15:43.000Z</pubTime>
         
-        <tag>Redis </tag>
+        <tag>Linux </tag>
          
          
            
@@ -1774,14 +1752,36 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/90cf494a/</loc>
+    <loc>http://www.elwinhe.xyz/blog/65514bcf/</loc>
     <lastmod>2017-10-21T15:09:29.585Z</lastmod>
     <data>
         <display>
-        <title>Ubuntu下apt-get命令详解</title>
-        <pubTime>2017-10-07T15:15:43.000Z</pubTime>
+        <title>Redis学习笔记--list类型及操作</title>
+        <pubTime>2017-10-08T04:25:52.000Z</pubTime>
         
-        <tag>Linux </tag>
+        <tag>Redis </tag>
+         
+         
+           
+             
+              <breadCrumb title="程序随记" url="http://www.elwinhe.xyz/categories/%E7%A8%8B%E5%BA%8F%E9%9A%8F%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.elwinhe.xyz/blog/3cf861a2/</loc>
+    <lastmod>2017-10-21T15:09:29.585Z</lastmod>
+    <data>
+        <display>
+        <title>RestFul概述</title>
+        <pubTime>2017-10-08T04:16:00.000Z</pubTime>
+        
+        <tag>架构设计 </tag>
+         
+        <tag>RestFul </tag>
          
          
            
