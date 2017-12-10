@@ -2068,7 +2068,7 @@ img:hover {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #5b3800;
+  background: #ffff49;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3321,12 +3321,15 @@ img:hover {
   color: #fff;
 }
 .menu .menu-item a:after {
-  background-color: #7eccad;
+  background-color: #fff;
   color: #fff;
 }
 .menu-item-active i {
   background: #7eccad;
   color: #fff;
+}
+.site-state-item {
+  border-left: 1px solid #68c39f;
 }
 .links-of-author i {
   color: #1fa67a;
@@ -3376,6 +3379,9 @@ img:hover {
   color: #1fa67a;
 }
 .links-of-blogroll-list a {
+  color: #1fa67a;
+}
+.links-of-blogroll-item i {
   color: #1fa67a;
 }
 .post-button .btn {
