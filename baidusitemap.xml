@@ -583,9 +583,9 @@
         <title>Hive 学习笔记</title>
         <pubTime>2017-10-08T03:24:25.000Z</pubTime>
         
-        <tag>大数据 </tag>
-         
         <tag>Hive </tag>
+         
+        <tag>大数据 </tag>
          
          
            
@@ -627,9 +627,9 @@
         <title>HBase学习笔记</title>
         <pubTime>2017-10-08T06:57:02.000Z</pubTime>
         
-        <tag>HBase </tag>
-         
         <tag>大数据 </tag>
+         
+        <tag>HBase </tag>
          
          
            
@@ -1256,30 +1256,6 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/4b4bc643/</loc>
-    <lastmod>2017-10-21T15:09:29.605Z</lastmod>
-    <data>
-        <display>
-        <title>敏捷工作件：完成标准（Definition of Done）</title>
-        <pubTime>2017-10-08T06:48:33.000Z</pubTime>
-        
-        <tag>敏捷 </tag>
-         
-        <tag>Scrum </tag>
-         
-        <tag>敏捷项目管理 </tag>
-         
-         
-           
-             
-              <breadCrumb title="项目管理" url="http://www.elwinhe.xyz/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.elwinhe.xyz/blog/b3220428/</loc>
     <lastmod>2017-10-21T15:09:29.605Z</lastmod>
     <data>
@@ -1386,16 +1362,14 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/20ed6df/</loc>
+    <loc>http://www.elwinhe.xyz/blog/f006360f/</loc>
     <lastmod>2017-10-21T15:09:29.605Z</lastmod>
     <data>
         <display>
-        <title>决策树学习</title>
-        <pubTime>2017-10-07T09:56:38.000Z</pubTime>
+        <title>大数据学习随记</title>
+        <pubTime>2017-10-08T06:58:09.000Z</pubTime>
         
-        <tag>AI </tag>
-         
-        <tag>算法 </tag>
+        <tag>大数据 </tag>
          
          
            
@@ -1408,14 +1382,16 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/f006360f/</loc>
+    <loc>http://www.elwinhe.xyz/blog/20ed6df/</loc>
     <lastmod>2017-10-21T15:09:29.605Z</lastmod>
     <data>
         <display>
-        <title>大数据学习随记</title>
-        <pubTime>2017-10-08T06:58:09.000Z</pubTime>
+        <title>决策树学习</title>
+        <pubTime>2017-10-07T09:56:38.000Z</pubTime>
         
-        <tag>大数据 </tag>
+        <tag>AI </tag>
+         
+        <tag>算法 </tag>
          
          
            
@@ -1450,6 +1426,24 @@
 
     
   <url>
+    <loc>http://www.elwinhe.xyz/blog/3119c141/</loc>
+    <lastmod>2017-10-21T15:09:29.605Z</lastmod>
+    <data>
+        <display>
+        <title>我的异常</title>
+        <pubTime>2017-10-07T14:17:26.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="程序随记" url="http://www.elwinhe.xyz/categories/%E7%A8%8B%E5%BA%8F%E9%9A%8F%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.elwinhe.xyz/blog/7df9d698/</loc>
     <lastmod>2017-10-21T15:09:29.605Z</lastmod>
     <data>
@@ -1472,17 +1466,23 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/3119c141/</loc>
+    <loc>http://www.elwinhe.xyz/blog/4b4bc643/</loc>
     <lastmod>2017-10-21T15:09:29.605Z</lastmod>
     <data>
         <display>
-        <title>我的异常</title>
-        <pubTime>2017-10-07T14:17:26.000Z</pubTime>
+        <title>敏捷工作件：完成标准（Definition of Done）</title>
+        <pubTime>2017-10-08T06:48:33.000Z</pubTime>
         
+        <tag>敏捷 </tag>
+         
+        <tag>Scrum </tag>
+         
+        <tag>敏捷项目管理 </tag>
+         
          
            
              
-              <breadCrumb title="程序随记" url="http://www.elwinhe.xyz/categories/%E7%A8%8B%E5%BA%8F%E9%9A%8F%E8%AE%B0/"/>
+              <breadCrumb title="项目管理" url="http://www.elwinhe.xyz/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/"/>
           
         </display>
     </data>
@@ -1552,6 +1552,26 @@
 
     
   <url>
+    <loc>http://www.elwinhe.xyz/blog/b470e876/</loc>
+    <lastmod>2017-10-21T15:09:29.595Z</lastmod>
+    <data>
+        <display>
+        <title>python学习笔记3</title>
+        <pubTime>2017-10-08T04:11:07.000Z</pubTime>
+        
+        <tag>Python </tag>
+         
+         
+           
+             
+              <breadCrumb title="程序随记" url="http://www.elwinhe.xyz/categories/%E7%A8%8B%E5%BA%8F%E9%9A%8F%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.elwinhe.xyz/blog/30ef81f5/</loc>
     <lastmod>2017-10-21T15:09:29.595Z</lastmod>
     <data>
@@ -1574,14 +1594,14 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/b470e876/</loc>
-    <lastmod>2017-10-21T15:09:29.595Z</lastmod>
+    <loc>http://www.elwinhe.xyz/blog/f2670fb0/</loc>
+    <lastmod>2017-10-21T15:09:29.585Z</lastmod>
     <data>
         <display>
-        <title>python学习笔记3</title>
-        <pubTime>2017-10-08T04:11:07.000Z</pubTime>
+        <title>Win7下MongoDB的安装和部署测试</title>
+        <pubTime>2017-10-08T04:17:20.000Z</pubTime>
         
-        <tag>Python </tag>
+        <tag>MongoDB </tag>
          
          
            
@@ -1602,6 +1622,28 @@
         <pubTime>2017-10-08T04:23:56.000Z</pubTime>
         
         <tag>Redis </tag>
+         
+         
+           
+             
+              <breadCrumb title="程序随记" url="http://www.elwinhe.xyz/categories/%E7%A8%8B%E5%BA%8F%E9%9A%8F%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.elwinhe.xyz/blog/3cf861a2/</loc>
+    <lastmod>2017-10-21T15:09:29.585Z</lastmod>
+    <data>
+        <display>
+        <title>RestFul概述</title>
+        <pubTime>2017-10-08T04:16:00.000Z</pubTime>
+        
+        <tag>架构设计 </tag>
+         
+        <tag>RestFul </tag>
          
          
            
@@ -1694,26 +1736,6 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/90cf494a/</loc>
-    <lastmod>2017-10-21T15:09:29.585Z</lastmod>
-    <data>
-        <display>
-        <title>Ubuntu下apt-get命令详解</title>
-        <pubTime>2017-10-07T15:15:43.000Z</pubTime>
-        
-        <tag>Linux </tag>
-         
-         
-           
-             
-              <breadCrumb title="程序随记" url="http://www.elwinhe.xyz/categories/%E7%A8%8B%E5%BA%8F%E9%9A%8F%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.elwinhe.xyz/blog/3781e7a0/</loc>
     <lastmod>2017-10-21T15:09:29.585Z</lastmod>
     <data>
@@ -1721,26 +1743,6 @@
         <title>The Twelve-Factor App</title>
         <pubTime>2017-10-08T03:28:25.000Z</pubTime>
         
-         
-           
-             
-              <breadCrumb title="程序随记" url="http://www.elwinhe.xyz/categories/%E7%A8%8B%E5%BA%8F%E9%9A%8F%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.elwinhe.xyz/blog/f2670fb0/</loc>
-    <lastmod>2017-10-21T15:09:29.585Z</lastmod>
-    <data>
-        <display>
-        <title>Win7下MongoDB的安装和部署测试</title>
-        <pubTime>2017-10-08T04:17:20.000Z</pubTime>
-        
-        <tag>MongoDB </tag>
-         
          
            
              
@@ -1772,16 +1774,14 @@
 
     
   <url>
-    <loc>http://www.elwinhe.xyz/blog/3cf861a2/</loc>
+    <loc>http://www.elwinhe.xyz/blog/90cf494a/</loc>
     <lastmod>2017-10-21T15:09:29.585Z</lastmod>
     <data>
         <display>
-        <title>RestFul概述</title>
-        <pubTime>2017-10-08T04:16:00.000Z</pubTime>
+        <title>Ubuntu下apt-get命令详解</title>
+        <pubTime>2017-10-07T15:15:43.000Z</pubTime>
         
-        <tag>架构设计 </tag>
-         
-        <tag>RestFul </tag>
+        <tag>Linux </tag>
          
          
            
