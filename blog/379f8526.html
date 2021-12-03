@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="转自：http://www.ibm.com/developerworks/cn/opensource/os-cn-pythonwith/ 引言with 语句是从 Python 2.5 开始引入的一种与异常处理相关的功能（2.5 版本中要通过 from future import with_statement 导入后才可以使用），从 2.6 版本开始缺省可用（参考 What’s new in Pyt">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈 Python 的 with语句">
+<meta property="og:url" content="http://www.elwinhe.xyz/blog/379f8526.html">
+<meta property="og:site_name" content="艾尔温Blog">
+<meta property="og:description" content="转自：http://www.ibm.com/developerworks/cn/opensource/os-cn-pythonwith/ 引言with 语句是从 Python 2.5 开始引入的一种与异常处理相关的功能（2.5 版本中要通过 from future import with_statement 导入后才可以使用），从 2.6 版本开始缺省可用（参考 What’s new in Pyt">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-08T14:53:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈 Python 的 with语句">
+<meta name="twitter:description" content="转自：http://www.ibm.com/developerworks/cn/opensource/os-cn-pythonwith/ 引言with 语句是从 Python 2.5 开始引入的一种与异常处理相关的功能（2.5 版本中要通过 from future import with_statement 导入后才可以使用），从 2.6 版本开始缺省可用（参考 What’s new in Pyt">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.elwinhe.xyz/blog/379f8526.html"/>
+
+
+
+
+
+  <title>浅谈 Python 的 with语句 | 艾尔温Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+    <!-- ����GitHub Corners -->
+    <a href="https://github.com/hefuren"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">艾尔温Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">最好不要在夕阳西下时去幻想什么，而应当在旭日东升时投入工作</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-program">
+          <a href="/categories/程序随记/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th-list"></i> <br />
+            
+            程序随记
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-architecture">
+          <a href="/categories/架构设计/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-cubes"></i> <br />
+            
+            架构设计
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-ai">
+          <a href="/categories/人工智能/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-microchip"></i> <br />
+            
+            人工智能
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-project-mgnt">
+          <a href="/categories/项目管理/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tasks"></i> <br />
+            
+            项目管理
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-enterprise-mgnt">
+          <a href="/categories/企业管理/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-building"></i> <br />
+            
+            企业管理
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-mood-notes">
+          <a href="/categories/心情札记/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            心情札记
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.elwinhe.xyz/blog/379f8526.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ElwinHe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="艾尔温Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">浅谈 Python 的 with语句</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T11:31:30+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-open-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序随记/" itemprop="url" rel="index">
+                    <span itemprop="name">程序随记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/blog/379f8526.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="blog/379f8526.html" itemprop="commentsCount"></span>
+                </a> 
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-thermometer-half"></i>&nbsp;&nbsp;热度
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>°C
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+		<span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  3,407
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  13
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>转自：<a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-pythonwith/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/opensource/os-cn-pythonwith/</a></p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>with 语句是从 Python 2.5 开始引入的一种与异常处理相关的功能（2.5 版本中要通过 from <strong>future</strong> import with_statement 导入后才可以使用），从 2.6 版本开始缺省可用（参考 What’s new in Python 2.6? 中 with 语句相关部分介绍）。with 语句适用于对资源进行访问的场合，确保不管使用过程中是否发生异常都会执行必要的“清理”操作，释放资源，比如文件使用后自动关闭、线程中锁的自动获取和释放等。</p>
+<h1 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h1><p>要使用 with 语句，首先要明白上下文管理器这一概念。有了上下文管理器，with 语句才能工作。</p>
+<p>下面是一组与上下文管理器和with 语句有关的概念。</p>
+<p><strong>上下文管理协议（Context Management Protocol）</strong>：包含方法<code>__enter__()</code> 和 <code>__exit__()</code>，支持<br>该协议的对象要实现这两个方法。</p>
+<p><strong>上下文管理器（Context Manager）</strong>：支持上下文管理协议的对象，这种对象实现了<br><code>__enter__()</code> 和 <code>__exit__()</code>方法。上下文管理器定义执行 with 语句时要建立的运行时上下文，<br>负责执行 with 语句块上下文中的进入与退出操作。通常使用 with 语句调用上下文管理器，<br>也可以通过直接调用其方法来使用。</p>
+<p><strong>运行时上下文（runtime context）</strong>：由上下文管理器创建，通过上下文管理器的 <code>__enter__()</code> 和<br><code>__exit__()</code>方法实现，<code>__enter__()</code>方法在语句体执行之前进入运行时上下文，<code>__exit__()</code> 在<br>语句体执行完后从运行时上下文退出。with 语句支持运行时上下文这一概念。</p>
+<p><strong>上下文表达式（Context Expression）</strong>：with 语句中跟在关键字 with 之后的表达式，该表达式<br>要返回一个上下文管理器对象。</p>
+<p><strong>语句体（with-body）</strong>：with 语句包裹起来的代码块，在执行语句体之前会调用上下文管<br>理器的 <strong>enter</strong>() 方法，执行完语句体之后会执行 <strong>exit</strong>() 方法。</p>
+<p>#基本语法和工作原理<br>with 语句的语法格式如下：</p>
+<blockquote>
+<p>清单 1. with 语句的语法格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">with context_expression [as target(s)]:</div><div class="line">    with-body</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这里 context_expression 要返回一个上下文管理器对象，该对象并不赋值给 as 子句中的 target(s) ，如果指定了 as 子句的话，会将上下文管理器的 <strong>enter</strong>() 方法的返回值赋值给 target(s)。target(s) 可以是单个变量，或者由“()”括起来的元组（不能是仅仅由“,”分隔的变量列表，必须加“()”）。</p>
+<p>Python 对一些内建对象进行改进，加入了对上下文管理器的支持，可以用于 with 语句中，比如可以自动关闭文件、线程锁的自动获取和释放等。假设要对一个文件进行操作，使用 with 语句可以有如下代码：</p>
+<blockquote>
+<p>清单 2. 使用 with 语句操作文件对象<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">with open(r&apos;somefileName&apos;) as somefile:</div><div class="line">    for line in somefile:</div><div class="line">        print line</div><div class="line">        # ...more code</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这里使用了 with 语句，不管在处理文件过程中是否发生异常，都能保证 with 语句执行完毕后已经关闭了打开的文件句柄。如果使用传统的 try/finally 范式，则要使用类似如下代码：</p>
+<blockquote>
+<p><strong>清单 3. try/finally 方式操作文件对象</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">somefile = open(r&apos;somefileName&apos;)</div><div class="line">try:</div><div class="line">    for line in somefile:</div><div class="line">        print line</div><div class="line">        # ...more code</div><div class="line">finally:</div><div class="line">    somefile.close()</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>比较起来，使用 with 语句可以减少编码量。已经加入对上下文管理协议支持的还有模块 threading、decimal 等。</p>
+<p>PEP 0343 对 with 语句的实现进行了描述。with 语句的执行过程类似如下代码块：</p>
+<blockquote>
+<p><strong>清单 4. with 语句执行过程</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">context_manager = context_expression</div><div class="line">exit = type(context_manager).__exit__  </div><div class="line">value = type(context_manager).__enter__(context_manager)</div><div class="line">exc = True   # True 表示正常执行，即便有异常也忽略；False 表示重新抛出异常，需要对异常进行处理</div><div class="line">try:</div><div class="line">    try:</div><div class="line">        target = value  # 如果使用了 as 子句</div><div class="line">        with-body     # 执行 with-body</div><div class="line">    except:</div><div class="line">        # 执行过程中有异常发生</div><div class="line">        exc = False</div><div class="line">        # 如果 __exit__ 返回 True，则异常被忽略；如果返回 False，则重新抛出异常</div><div class="line">        # 由外层代码对异常进行处理</div><div class="line">        if not exit(context_manager, *sys.exc_info()):</div><div class="line">            raise</div><div class="line">finally:</div><div class="line">    # 正常退出，或者通过 statement-body 中的 break/continue/return 语句退出</div><div class="line">    # 或者忽略异常退出</div><div class="line">    if exc:</div><div class="line">        exit(context_manager, None, None, None) </div><div class="line">    # 缺省返回 None，None 在布尔上下文中看做是 False</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>1.执行 context_expression，生成上下文管理器 context_manager<br>2.调用上下文管理器的<code>__enter__()</code>方法；如果使用了 as 子句，则将<code>__enter__()</code>方法的返回值赋值给 as 子句中的 target(s)<br>3.执行语句体 with-body<br>4.不管是否执行过程中是否发生了异常，执行上下文管理器的<code>__exit__()</code>方法，<code>__exit__()</code>方法负责执行“清理”工作，如释放资源等。如果执行过程中没有出现异常，或者语句体中执行了语句 <code>break/continue/return</code>则以 None 作为参数调用<code>__exit__(None, None, None)</code>；如果执行过程中出现异常，则使用<code>sys.exc_info</code>得到的异常信息为参数调用 <code>__exit__(exc_type, exc_value, exc_traceback)</code><br>5.出现异常时，如果 <code>__exit__(type, value, traceback)</code>返回 False，则会重新抛出异常，让with 之外的语句逻辑来处理异常，这也是通用做法；如果返回 True，则忽略异常，不再对异常进行处理。</p>
+<h1 id="自定义上下文管理器"><a href="#自定义上下文管理器" class="headerlink" title="自定义上下文管理器"></a>自定义上下文管理器</h1><p>开发人员可以自定义支持上下文管理协议的类。自定义的上下文管理器要实现上下文管理协议所需要的 <code>__enter__()</code>和<code>__exit__()</code>两个方法：</p>
+<ul>
+<li><code>context_manager.__enter__()</code>：进入上下文管理器的运行时上下文，在语句体执行前调用。with 语句将该方法的返回值赋值给 as 子句中的 target，如果指定了 as 子句的话</li>
+<li><p><code>context_manager.__exit__(exc_type, exc_value, exc_traceback)</code>：退出与上下文管理器相关的运行时上下文，返回一个布尔值表示是否对发生的异常进行处理。参数表示引起退出操作的异常，如果退出时没有发生异常，则3个参数都为None。如果发生异常，返回</p>
+<p>True 表示不处理异常，否则会在退出该方法后重新抛出异常以由 with 语句之外的代码逻辑进行处理。如果该方法内部产生异常，则会取代由 statement-body 中语句产生的异常。要处理异常时，不要显示重新抛出异常，即不能重新抛出通过参数传递进来的异常，只需要将返回值设置为 False 就可以了。之后，上下文管理代码会检测是否<code>__exit__()</code>失败来处理异常</p>
+</li>
+</ul>
+<p>下面通过一个简单的示例来演示如何构建自定义的上下文管理器。注意，上下文管理器必须同时提供 <code>__enter__()</code>和<code>__exit__()</code> 方法的定义，缺少任何一个都会导致 AttributeError；with 语句会先检查是否提供了<code>__exit__()</code>方法，然后检查是否定义了<code>__enter__()</code> 方法。</p>
+<p>假设有一个资源 DummyResource，这种资源需要在访问前先分配，使用完后再释放掉；分配操作可以放到 <strong>enter</strong>() 方法中，释放操作可以放到 <strong>exit</strong>() 方法中。简单起见，这里只通过打印语句来表明当前的操作，并没有实际的资源分配与释放。</p>
+<blockquote>
+<p><strong>清单 5. 自定义支持 with 语句的对象</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class DummyResource:</div><div class="line">def __init__(self, tag):</div><div class="line">        self.tag = tag</div><div class="line">        print &apos;Resource [%s]&apos; % tag</div><div class="line">    def __enter__(self):</div><div class="line">        print &apos;[Enter %s]: Allocate resource.&apos; % self.tag</div><div class="line">        return self   # 可以返回不同的对象</div><div class="line">    def __exit__(self, exc_type, exc_value, exc_tb):</div><div class="line">        print &apos;[Exit %s]: Free resource.&apos; % self.tag</div><div class="line">        if exc_tb is None:</div><div class="line">            print &apos;[Exit %s]: Exited without exception.&apos; % self.tag</div><div class="line">        else:</div><div class="line">            print &apos;[Exit %s]: Exited with exception raised.&apos; % self.tag</div><div class="line">            return False   # 可以省略，缺省的None也是被看做是False</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>DummyResource 中的 <strong>enter</strong>() 返回的是自身的引用，这个引用可以赋值给 as 子句中的 target 变量；返回值的类型可以根据实际需要设置为不同的类型，不必是上下文管理器对象本身。</p>
+<p><code>__exit__()</code>方法中对变量 exc_tb 进行检测，如果不为 None，表示发生了异常，返回 False 表示需要由外部代码逻辑对异常进行处理；注意到如果没有发生异常，缺省的返回值为 None，在布尔环境中也是被看做 False，但是由于没有异常发生，<code>__exit__()</code>的三个参数都为 None，上下文管理代码可以检测这种情况，做正常处理。</p>
+<p>下面在 with 语句中访问 DummyResource ：</p>
+<blockquote>
+<p><strong>清单 6. 使用自定义的支持 with 语句的对象*</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">with DummyResource(&apos;Normal&apos;):</div><div class="line">    print &apos;[with-body] Run without exceptions.&apos;    </div><div class="line">with DummyResource(&apos;With-Exception&apos;):</div><div class="line">    print &apos;[with-body] Run with exception.&apos;</div><div class="line">    raise Exception</div><div class="line">    print &apos;[with-body] Run with exception. Failed to finish statement-body!&apos;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>第1个 with 语句的执行结果如下：</p>
+<blockquote>
+<p><strong>清单 7. with 语句1执行结果</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Resource [Normal]</div><div class="line">[Enter Normal]: Allocate resource.</div><div class="line">[with-body] Run without exceptions.</div><div class="line">[Exit Normal]: Free resource.</div><div class="line">[Exit Normal]: Exited without exception.</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>可以看到，正常执行时会先执行完语句体 with-body，然后执行 <code>__exit__()</code> 方法释放资源。</p>
+<p>第2个 with 语句的执行结果如下：</p>
+<blockquote>
+<p><strong>清单 8. with 语句2执行结果</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Resource [With-Exception]</div><div class="line">[Enter With-Exception]: Allocate resource.</div><div class="line">[with-body] Run with exception.</div><div class="line">[Exit With-Exception]: Free resource.</div><div class="line">[Exit With-Exception]: Exited with exception raised. </div><div class="line">Traceback (most recent call last):</div><div class="line">  File &quot;G:/demo&quot;, line 20, in &lt;module&gt;</div><div class="line">   raise Exception</div><div class="line">Exception</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>可以看到，with-body 中发生异常时with-body 并没有执行完，但资源会保证被释放掉，同时产生的异常由 with 语句之外的代码逻辑来捕获处理。</p>
+<p>可以自定义上下文管理器来对软件系统中的资源进行管理，比如数据库连接、共享资源的访问控制等。Python 在线文档 Writing Context Managers 提供了一个针对数据库连接进行管理的上下文管理器的简单范例。</p>
+<h1 id="contextlib-模块"><a href="#contextlib-模块" class="headerlink" title="contextlib 模块"></a>contextlib 模块</h1><p>contextlib 模块提供了3个对象：装饰器 contextmanager、函数 nested 和上下文管理器 closing。使用这些对象，可以对已有的生成器函数或者对象进行包装，加入对上下文管理协议的支持，避免了专门编写上下文管理器来支持 with 语句。</p>
+<h1 id="装饰器-contextmanager"><a href="#装饰器-contextmanager" class="headerlink" title="装饰器 contextmanager"></a>装饰器 contextmanager</h1><p>contextmanager 用于对生成器函数进行装饰，生成器函数被装饰以后，返回的是一个上下文管理器，其 <code>__enter__()</code>和 <code>__exit__()</code>方法由 contextmanager 负责提供，而不再是之前的迭代子。被装饰的生成器函数只能产生一个值，否则会导致异常 RuntimeError；产生的值会赋值给 as 子句中的 target，如果使用了 as 子句的话。下面看一个简单的例子。</p>
+<blockquote>
+<p><strong>清单 9. 装饰器 contextmanager 使用示例</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">from contextlib import contextmanager </div><div class="line">@contextmanager</div><div class="line">def demo():</div><div class="line">    print &apos;[Allocate resources]&apos;</div><div class="line">    print &apos;Code before yield-statement executes in __enter__&apos;</div><div class="line">    yield &apos;*** contextmanager demo ***&apos;</div><div class="line">    print &apos;Code after yield-statement executes in __exit__&apos;</div><div class="line">    print &apos;[Free resources]&apos; </div><div class="line">with demo() as value:</div><div class="line">    print &apos;Assigned Value: %s&apos; % value</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>结果输出如下：</p>
+<blockquote>
+<p>清单 10. contextmanager 使用示例执行结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[Allocate resources]</div><div class="line">Code before yield-statement executes in __enter__</div><div class="line">Assigned Value: *** contextmanager demo ***</div><div class="line">Code after yield-statement executes in __exit__</div><div class="line">[Free resources]</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>可以看到，生成器函数中 yield 之前的语句在<code>__enter__()</code> 方法中执行，yield 之后的语句在 <code>__exit__()</code> 中执行，而 yield 产生的值赋给了 as 子句中的 value 变量。<br>需要注意的是，contextmanager 只是省略了 <code>__enter__() / __exit__()</code> 的编写，但并不负责实现资源的“获取”和“清理”工作；“获取”操作需要定义在 yield 语句之前，“清理”操作需要定义 yield 语句之后，这样 with 语句在执行 <code>__enter__() / __exit__()</code>方法时会执行这些语句以获取/释放资源，即生成器函数中需要实现必要的逻辑控制，包括资源访问出现错误时抛出适当的异常。<br>函数 nested<br>nested 可以将多个上下文管理器组织在一起，避免使用嵌套 with 语句。</p>
+<blockquote>
+<p><strong>清单 11. nested 语法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">with nested(A(), B(), C()) as (X, Y, Z):</div><div class="line">     # with-body code here</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>类似于：<br>清单 12. nested 执行过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">with A() as X:</div><div class="line">    with B() as Y:</div><div class="line">        with C() as Z:</div><div class="line">             # with-body code here</div></pre></td></tr></table></figure></p>
+<p>需要注意的是，发生异常后，如果某个上下文管理器的 <strong>exit</strong>() 方法对异常处理返回 False，则更外层的上下文管理器不会监测到异常。<br>上下文管理器 closing<br>closing 的实现如下：<br>清单 13. 上下文管理 closing 实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class closing(object):</div><div class="line">    # help doc here</div><div class="line">    def __init__(self, thing):</div><div class="line">        self.thing = thing</div><div class="line">    def __enter__(self):</div><div class="line">        return self.thing</div><div class="line">    def __exit__(self, *exc_info):</div><div class="line">        self.thing.close()</div></pre></td></tr></table></figure></p>
+<p>上下文管理器会将包装的对象赋值给 as 子句的 target 变量，同时保证打开的对象在 with-body 执行完后会关闭掉。closing 上下文管理器包装起来的对象必须提供 close() 方法的定义，否则执行时会报 AttributeError 错误。</p>
+<blockquote>
+<p><strong>清单 14. 自定义支持 closing 的对象</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">class ClosingDemo(object):</div><div class="line">    def __init__(self):</div><div class="line">        self.acquire()</div><div class="line">    def acquire(self):</div><div class="line">        print &apos;Acquire resources.&apos;</div><div class="line">    def free(self):</div><div class="line">        print &apos;Clean up any resources acquired.&apos;</div><div class="line">    def close(self):</div><div class="line">        self.free() </div><div class="line">with closing(ClosingDemo()):</div><div class="line">    print &apos;Using resources&apos;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>结果输出如下：</p>
+<blockquote>
+<p><strong>清单 15. 自定义 closing 对象的输出结果</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Acquire resources.</div><div class="line">Using resources</div><div class="line">Clean up any resources acquired.</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>closing 适用于提供了 close() 实现的对象，比如网络连接、数据库连接等，也可以在自定义类时通过接口 close() 来执行所需要的资源“清理”工作。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文对 with 语句的语法和工作机理进行了介绍，并通过示例介绍了如何实现自定义的上下文管理器，最后介绍了如何使用 contextlib 模块来简化上下文管理器的编写。</p>
+
+      
+    </div>
+    
+    
+    
+
+     <!-- 增加本文结束 -->
+     <div>
+	  
+	    
+<!-- 增加本文结束 -->
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+     </div>
+
+     <!-- 增加版权信息 -->
+     <div>
+      
+        <!-- 增加版权信息 -->
+
+      
+     </div>
+    
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"><i class="fa fa-tags"></i> Python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/3781e7a0.html" rel="next" title="The Twelve-Factor App">
+                <i class="fa fa-chevron-left"></i> The Twelve-Factor App
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/b470e876.html" rel="prev" title="python学习笔记3">
+                python学习笔记3 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="hypercomments_widget"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="ElwinHe" />
+          <p class="site-author-name" itemprop="name">ElwinHe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">92</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/hefuren" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github-square"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/%E5%AF%8C%E4%BB%81-%E4%BD%95-61493991/" target="_blank" title="LinkedIn">
+                  
+                    <i class="fa fa-fw fa-linkedin"></i>
+                  
+                    
+                      LinkedIn
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/hefuren1984" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.jianshu.com/u/995408936953" target="_blank" title="简书">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      简书
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/ElwinHe" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/elwinhe" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook-square"></i>
+                  
+                    
+                      Facebook
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://about.me/elwinhe/" target="_blank" title="About.me">
+                  
+                    <i class="fa fa-fw fa-address-card-o"></i>
+                  
+                    
+                      About.me
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-link"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+		  <i class="fa fa-fw">&nbsp;</i><a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+		  <i class="fa fa-fw">&nbsp;</i><a href="http://blog.damonare.cn/" title="Damonare" target="_blank">Damonare</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#术语"><span class="nav-number">2.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义上下文管理器"><span class="nav-number">3.</span> <span class="nav-text">自定义上下文管理器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contextlib-模块"><span class="nav-number">4.</span> <span class="nav-text">contextlib 模块</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装饰器-contextmanager"><span class="nav-number">5.</span> <span class="nav-text">装饰器 contextmanager</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ElwinHe</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+<!-- 网站底部字数统计 -->
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共85.4k字</span>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>&nbsp;&nbsp;访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>&nbsp;&nbsp;总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+		<script type="text/javascript">
+		_hcwp = window._hcwp || [];
+
+		_hcwp.push({widget:"Bloggerstream", widget_id: 97910, selector:".hc-comment-count", label: "{\%COUNT%\}" });
+
+		
+		_hcwp.push({widget:"Stream", widget_id: 97910, xid: "blog/379f8526.html"});
+		
+
+		(function() {
+		if("HC_LOAD_INIT" in window)return;
+		HC_LOAD_INIT = true;
+		var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
+		var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
+		hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/97910/"+lang+"/widget.js";
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(hcc, s.nextSibling);
+		})();
+		</script>
+
+	
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <!-- ҳ����С���� -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+  <!-- �����������ͼƬ -->
+  <script type="text/javascript" src="/js/src/changeBgimg.js"></script>
+
+</body>
+</html>
