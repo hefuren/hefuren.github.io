@@ -219,8 +219,8 @@
         <category>程序随记</category>
       </categories>
       <tags>
-        <tag>HBase</tag>
         <tag>大数据</tag>
+        <tag>HBase</tag>
       </tags>
   </entry>
   <entry>
@@ -544,8 +544,8 @@
         <category>程序随记</category>
       </categories>
       <tags>
-        <tag>大数据</tag>
         <tag>Hive</tag>
+        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
