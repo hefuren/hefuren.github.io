@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Hello World]]></title>
-    <url>%2Fblog%2F4a17b156.html</url>
-    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
-      <categories>
-        <category>程序随记</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>github</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[PMO建设的思考]]></title>
     <url>%2Fblog%2Fee47eef0.html</url>
-    <content type="text"><![CDATA[PMO，即项目管理办公室的简称。行业里面，PMO类型一般分为如下三种： 支持型：担当顾问的角色，向项目提供模板、最佳实践、培训、信息通道、以及来自其他经验教训。它对项目的控制程度很低，甚至对项目无控制权。（在企业中，支持型PMO大多数对项目无控制权） 控制型：不仅给项目提供支持，而且通过各种手段要求项目服从，它对项目的控制程度属于中等。 指令型：直接管理或控制项目，它对项目的控制程度很高；项目经理由PMO指定并向其报告。 之前从事研发项目管理工作，担任项目经理角色，最近转身从事PMO工作，简单谈下个人对PMO工作的理解和认识。PMO主要工作职责：项目管理能力建设、项目治理、项目管理IT系统建设。 项目管理能力建设公司组织级项目管理能力建设，包括：项目管理流程建设、项目经理能力培养、项目运营/监控、项目治理。 #####1、项目管理流程建设 每个公司有不同的业务形态，不同的组织阵型，需根据实际业务，建设或选择合适的业务流程和项目管理流程。项目管理流程的建设，不能脱离和独立于业务，需对业务服务。项目管理流程的建设，可参考PMI PMBOK中项目管理十大知识域来定义各角色的参与的活动。 项目管理活动定义示意： 序号 阶段 活动 角色 活动描述 输入 交付件 1 项目启动 创建项目 项目经理 在xx项目管理系统中填写项目基本信息，完成项目创建。 项目立项决策函、项目立项材料等 完成项目创建 2 项目启动 项目编码申请 项目经理 完善项目人力、费用、项目里程碑计划等信息，提交并完成项目编码申请 项目立项材料等 完成项目编码申请 3 项目启动 组建项目核心团队 项目经理 组建项目核心团队，发布项目任命，明确项目各关键角色职责 4 …… …… …… …… …… …… 5 …… …… …… …… …… …… 注：项目管理流程活动，属于业务流程活动的子集。项目管理流程活动侧重在与项目管理业务相关的活动上，流程定义时，注意区别。 流程建设并非一蹴而就，流程成熟度一般分为5个等级（初始级、已管理级、已定义级、已量化级、可持续优化级），因此企业需要持续运营、持续优化。 项目管理流程定义后，通过项目管理办公室（PMO）进行流程正式发布。流程发布后，各部门遵照执行。建议每年针对项目管理流程或业务流程开展1 ~ 2次流程过程和交付件审核，同时每年11~12月可以组织进行一次流程成熟度评估。通过流程过程&amp;交付件审核和流程成熟度评估，识别问题并持续改进。 小经验：企业项目管理流程建设一般会涉及：《项目管理过程与交付件》、《代码分支管理规范》、《项目编码/命名规范》、《项目变更管理PCR规范》、《分层授权规范》、《项目管理流程成熟度评估问卷》等定义。 未完，待补充。]]></content>
+    <content type="text"><![CDATA[PMO，即项目管理办公室的简称。行业里面，PMO类型一般分为如下三种： 支持型：担当顾问的角色，向项目提供模板、最佳实践、培训、信息通道、以及来自其他经验教训。它对项目的控制程度很低，甚至对项目无控制权。（在企业中，支持型PMO大多数对项目无控制权） 控制型：不仅给项目提供支持，而且通过各种手段要求项目服从，它对项目的控制程度属于中等。 指令型：直接管理或控制项目，它对项目的控制程度很高；项目经理由PMO指定并向其报告。 之前从事研发项目管理工作，担任项目经理角色，最近转身从事PMO工作，简单谈下个人对PMO工作的理解和认识。PMO主要工作职责：项目管理能力建设、项目治理、项目管理IT系统建设。 项目管理能力建设公司组织级项目管理能力建设，包括：项目管理流程建设、项目经理能力建设、项目运营/监控、项目治理。 1、项目管理流程建设每个公司有不同的业务形态，不同的组织阵型，需根据实际业务，建设或选择合适的业务流程和项目管理流程。项目管理流程的建设，不能脱离和独立于业务，需对业务服务。项目管理流程的建设，可参考PMI PMBOK中项目管理十大知识域来定义各角色的参与的活动。 项目管理活动定义示意： 序号 阶段 活动 角色 活动描述 输入 交付件 1 项目启动 创建项目 项目经理 在xx项目管理系统中填写项目基本信息，完成项目创建。 项目立项决策函、项目立项材料等 完成项目创建 2 项目启动 项目编码申请 项目经理 完善项目人力、费用、项目里程碑计划等信息，提交并完成项目编码申请 项目立项材料等 完成项目编码申请 3 项目启动 组建项目核心团队 项目经理 组建项目核心团队，发布项目任命，明确项目各关键角色职责 4 …… …… …… …… …… …… 5 …… …… …… …… …… …… 注：项目管理流程活动，属于业务流程活动的子集。项目管理流程活动侧重在与项目管理业务相关的活动上，流程定义时，注意区别。 流程建设并非一蹴而就，流程成熟度一般分为5个等级（初始级、已管理级、已定义级、已量化级、可持续优化级），因此企业需要持续运营、持续优化。 项目管理流程定义后，通过项目管理办公室（PMO）进行流程正式发布。流程发布后，各部门遵照执行。建议每年针对项目管理流程或业务流程开展1 ~ 2次流程过程和交付件审核，同时每年11~12月可以组织进行一次流程成熟度评估。通过流程过程&amp;交付件审核和流程成熟度评估，识别问题并持续改进。 小经验：企业项目管理流程建设一般会涉及：《项目管理过程与交付件》、《代码分支管理规范》、《项目编码/命名规范》、《项目变更管理PCR规范》、《分层授权规范》、《项目管理流程成熟度评估问卷》、《项目绩效/合同评估方案》等定义。 2、项目经理能力建设组织运作一般包括日常运营和项目执行。项目经理能力一定程度影响项目执行的绩效和结果。因此项目经理能力建设和提高，有着重要的意义。 项目经理能力建设，一般分为几步: 首先，对项目经理岗位、职责进行定义，明确项目经理角色认知。 其次，明确各类项目经理能力要求和标准，如：研发项目经理各级别（1~5）能力要求，集成交付项目经理、变更项目经理、售前/市场项目经理等能力要求； 第三，根据各类项目经理能力要求和标准，系统化的编制项目经理学习课程（PMP考试/prince2考试、领导力、沟通技巧、冲突管理），或制定培训要求（如：敏捷Scrum培训等）。 第四，梳理PM资源池，识别当前项目经理的能力，制定学习和培养计划； 第五，根据PM学习和培养计划，开展项目经理能力培养。 第六，开展项目经理能力建设评估，识别问题并持续优化项目经理能力培养的机制和流程。 小经验：项目经理能力建设一般会涉及：《项目经理任用和选拔机制》、《XX项目经理能力标准和要求》、《项目经理能力建设成熟度评估模型和问卷》等文件和标准制定。 未完，待补充。]]></content>
       <categories>
         <category>项目管理</category>
       </categories>
@@ -47,6 +35,18 @@
       <categories>
         <category>心情札记</category>
       </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2Fblog%2F4a17b156.html</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+      <categories>
+        <category>程序随记</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>github</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[开启“潘多拉魔盒”之旅——启章]]></title>
@@ -219,8 +219,8 @@
         <category>程序随记</category>
       </categories>
       <tags>
-        <tag>大数据</tag>
         <tag>HBase</tag>
+        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -544,8 +544,8 @@
         <category>程序随记</category>
       </categories>
       <tags>
-        <tag>Hive</tag>
         <tag>大数据</tag>
+        <tag>Hive</tag>
       </tags>
   </entry>
   <entry>
